@@ -1,5 +1,25 @@
 \documentclass[12pt]{article}
+\usepackage[british,polish]{babel} % Dodanie pakietu dla języka polskiego powoduje, że słowa będą dzielone wg reguł j. polskiego.
 \usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+
+%%%% TODO LIST GENERATOR %%%%%%%%%
+\usepackage{color}
+\definecolor{brickred}      {cmyk}{0   , 0.89, 0.94, 0.28}
+
+\makeatletter \newcommand \kslistofremarks{\section*{Uwagi} \@starttoc{rks}}
+  \newcommand\l@uwagas[2]
+    {\par\noindent \textbf{#2:} %\parbox{10cm}
+{#1}\par} \makeatother
+
+
+\newcommand{\ksremark}[1]{%
+{%\marginpar{\textdbend}
+{\color{brickred}{[#1]}}}%
+\addcontentsline{rks}{uwagas}{\protect{#1}}%
+}
+%%%%%%%%%%%%%% END OF TODO LIST GENERATOR %%%%%%%%%%%
+
 \begin{document}
-Celem dyplomu jest zaprojektowanie języka programowania oraz napisanie dla niego kompilatora. Program pisany w danym języku ma być kompilowany do kodu maszynowego. Za docelową architekturę obrano mikrokontrolery AVR. Język ten ma spełniać cechę kompletności Turinga, posiadać znane dla współczesnych języków programowania funkcjonalności, systemy zapobiegające powstawaniu błędów w programie (tj. garbage collector) i podstawowe algorytmy optymalizacji zmniejszające kod wynikowy oraz czasy wykonania.
+Celem dyplomu jest zaprojektowanie języka programowania oraz napisanie dla niego kompilatora. Program pisany w danym języku ma być kompilowany do kodu maszynowego. Za docelową architekturę obrano mikrokontrolery AVR. \ksremark{Może: Celem dyplomu jest zaprojektowanie języka programowania oraz napisanie kompilatora dla mikrokontrolera AVR.} Język ten ma spełniać cechę kompletności Turinga, posiadać znane dla współczesnych języków programowania funkcjonalności, systemy zapobiegające powstawaniu błędów w programie (tj. \ksremark{Może: ,,np.'' zamiast ,,tj.''?} \foreignlanguage{british}{\emph{garbage collector}}) i~podstawowe algorytmy optymalizacji zmniejszające kod wynikowy oraz czas wykonania \ksremark{programów}.
 \end{document}
