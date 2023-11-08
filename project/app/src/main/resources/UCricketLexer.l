@@ -51,6 +51,8 @@ FLOAT = \d*\.\d+d
 import {return UCricketParser.Lexer.IMPORT;}
 scope {return UCricketParser.Lexer.SCOPE;}
 func {return UCricketParser.Lexer.FUNC;}
+if {return UCricketParser.Lexer.IF;}
+while {return UCricketParser.Lexer.WHILE;}
 var {return UCricketParser.Lexer.VAR;}
 return {return UCricketParser.Lexer.RETURN;}
 

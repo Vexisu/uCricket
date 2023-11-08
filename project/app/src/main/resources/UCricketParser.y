@@ -8,32 +8,75 @@ package pl.polsl.student.maciwal866.ucricket;
 %define api.parser.class {UCricketParser}
 %define api.parser.public
 %define parse.error verbose
+%verbose
 
-%token IDENTIFIER INTEGER FLOAT IMPORT SCOPE FUNC VAR RETURN
+%token IDENTIFIER INTEGER FLOAT IMPORT SCOPE IF WHILE FUNC VAR RETURN
 
 %start program
+%left "==" "!=" "<=" ">=" "<" ">" 
 %left "+" "-"
 %left "*" "/"
-%precedence PAREN
-%precedence PRIMARY
+%precedence ARITHM_NEGATION
+%precedence LOGICAL_NEGATION
 
 %%
 program:
-        program statement
-    |   statement 
+        program IMPORT IDENTIFIER ";"
+    |   program scope
+    |   
+;
+
+scope:
+        SCOPE IDENTIFIER "{" functions "}"
+;
+
+functions:
+        functions function
+    |   function
+;
+
+function:
+        FUNC returnedType IDENTIFIER "(" ")" "{" statements "}"
+;
+
+returnedType:
+        "<" IDENTIFIER ">"
+    |   
+;
+
+statements:
+        statements statement 
+    |   statement
 ;
 
 statement: 
         expression ";"
+    |   IF "(" condition ")" "{" statements "}" 
+    |   WHILE "(" condition ")" "{" statements "}"
+    |   VAR returnedType IDENTIFIER ";"
+    |   VAR returnedType IDENTIFIER "=" expression ";"
+    |   RETURN expression ";"
+;
+
+condition:
+        expression
 ;
 
 expression:
-        expression "+" expression
+        expression "==" expression
+    |   expression "!=" expression
+    |   expression "<" expression
+    |   expression ">" expression
+    |   expression "<=" expression
+    |   expression ">=" expression
+    |   expression "+" expression
     |   expression "-" expression
     |   expression "*" expression
     |   expression "/" expression
-    |   "(" expression ")" %prec PAREN
-    |   primary %prec PRIMARY
+    |   "(" expression ")"
+    |   "!" expression %prec LOGICAL_NEGATION
+    |   "-" expression %prec ARITHM_NEGATION
+    |   primary
 ;
 
 primary:
