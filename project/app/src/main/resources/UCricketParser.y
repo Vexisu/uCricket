@@ -2,6 +2,8 @@
 
 %{
 package pl.polsl.student.maciwal866.ucricket;
+
+import pl.polsl.student.maciwal866.ucricket.ast.ASTNode;
 %}
 
 %define api.prefix {UCricket}

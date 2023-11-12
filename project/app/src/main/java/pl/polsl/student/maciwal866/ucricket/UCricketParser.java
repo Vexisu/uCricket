@@ -40,7 +40,9 @@
 
 package pl.polsl.student.maciwal866.ucricket;
 
-/* "./src/main/java/pl/polsl/student/maciwal866/ucricket/UCricketParser.java":44  */
+import pl.polsl.student.maciwal866.ucricket.ast.ASTNode;
+
+/* "./src/main/java/pl/polsl/student/maciwal866/ucricket/UCricketParser.java":46  */
 
 
 import java.text.MessageFormat;
@@ -486,7 +488,7 @@ public class UCricketParser
     switch (yyn)
       {
         
-/* "./src/main/java/pl/polsl/student/maciwal866/ucricket/UCricketParser.java":490  */
+/* "./src/main/java/pl/polsl/student/maciwal866/ucricket/UCricketParser.java":492  */
 
         default: break;
       }
@@ -1132,4 +1134,4 @@ private static final byte[] yycheck_ = yycheck_init();
 
 
 }
-/* "./src/main/resources/UCricketParser.y":98  */
+/* "./src/main/resources/UCricketParser.y":100  */
