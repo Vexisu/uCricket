@@ -41,8 +41,11 @@
 package pl.polsl.student.maciwal866.ucricket;
 
 import pl.polsl.student.maciwal866.ucricket.ast.ASTNode;
+import pl.polsl.student.maciwal866.ucricket.ast.Expression;
+import pl.polsl.student.maciwal866.ucricket.ast.expression.BinaryExpression;
+import pl.polsl.student.maciwal866.ucricket.ast.expression.UnaryExpression;
 
-/* "./src/main/java/pl/polsl/student/maciwal866/ucricket/UCricketParser.java":46  */
+/* "./src/main/java/pl/polsl/student/maciwal866/ucricket/UCricketParser.java":49  */
 
 
 import java.text.MessageFormat;
@@ -115,22 +118,25 @@ public class UCricketParser
     S_27_(27),                     /* "}"  */
     S_28_(28),                     /* "("  */
     S_29_(29),                     /* ")"  */
-    S_30_(30),                     /* "="  */
-    S_31_(31),                     /* "!"  */
-    S_32_(32),                     /* ","  */
+    S_30_(30),                     /* ","  */
+    S_31_(31),                     /* "="  */
+    S_32_(32),                     /* "!"  */
     S_YYACCEPT(33),                /* $accept  */
     S_program(34),                 /* program  */
     S_scope(35),                   /* scope  */
     S_functions(36),               /* functions  */
     S_function(37),                /* function  */
-    S_returnedType(38),            /* returnedType  */
-    S_statements(39),              /* statements  */
-    S_statement(40),               /* statement  */
-    S_condition(41),               /* condition  */
-    S_expression(42),              /* expression  */
-    S_primary(43),                 /* primary  */
-    S_functionCall(44),            /* functionCall  */
-    S_arguments(45);               /* arguments  */
+    S_argumentsDeclaration(38),    /* argumentsDeclaration  */
+    S_returnedType(39),            /* returnedType  */
+    S_statements(40),              /* statements  */
+    S_statement(41),               /* statement  */
+    S_condition(42),               /* condition  */
+    S_expression(43),              /* expression  */
+    S_binary(44),                  /* binary  */
+    S_unary(45),                   /* unary  */
+    S_primary(46),                 /* primary  */
+    S_functionCall(47),            /* functionCall  */
+    S_arguments(48);               /* arguments  */
 
 
     private final int yycode_;
@@ -178,11 +184,14 @@ public class UCricketParser
       SymbolKind.S_scope,
       SymbolKind.S_functions,
       SymbolKind.S_function,
+      SymbolKind.S_argumentsDeclaration,
       SymbolKind.S_returnedType,
       SymbolKind.S_statements,
       SymbolKind.S_statement,
       SymbolKind.S_condition,
       SymbolKind.S_expression,
+      SymbolKind.S_binary,
+      SymbolKind.S_unary,
       SymbolKind.S_primary,
       SymbolKind.S_functionCall,
       SymbolKind.S_arguments
@@ -239,10 +248,11 @@ public class UCricketParser
   "INTEGER", "FLOAT", "IMPORT", "SCOPE", "IF", "WHILE", "FUNC", "VAR",
   "RETURN", "\"==\"", "\"!=\"", "\"<=\"", "\">=\"", "\"<\"", "\">\"",
   "\"+\"", "\"-\"", "\"*\"", "\"/\"", "ARITHM_NEGATION",
-  "LOGICAL_NEGATION", "\";\"", "\"{\"", "\"}\"", "\"(\"", "\")\"", "\"=\"",
-  "\"!\"", "\",\"", "$accept", "program", "scope", "functions", "function",
-  "returnedType", "statements", "statement", "condition", "expression",
-  "primary", "functionCall", "arguments", null
+  "LOGICAL_NEGATION", "\";\"", "\"{\"", "\"}\"", "\"(\"", "\")\"", "\",\"",
+  "\"=\"", "\"!\"", "$accept", "program", "scope", "functions", "function",
+  "argumentsDeclaration", "returnedType", "statements", "statement",
+  "condition", "expression", "binary", "unary", "primary", "functionCall",
+  "arguments", null
     };
   }
 
@@ -487,8 +497,99 @@ public class UCricketParser
 
     switch (yyn)
       {
-        
-/* "./src/main/java/pl/polsl/student/maciwal866/ucricket/UCricketParser.java":492  */
+          case 28: /* binary: expression "==" expression  */
+  if (yyn == 28)
+    /* "./src/main/resources/UCricketParser.y":86  */
+                                   { yyval = new BinaryExpression(((Expression)(yystack.valueAt (2))), BinaryExpression.Operator.EQUAL, ((Expression)(yystack.valueAt (0)))); };
+  break;
+
+
+  case 29: /* binary: expression "!=" expression  */
+  if (yyn == 29)
+    /* "./src/main/resources/UCricketParser.y":87  */
+                                   { yyval = new BinaryExpression(((Expression)(yystack.valueAt (2))), BinaryExpression.Operator.NOT_EQUAL, ((Expression)(yystack.valueAt (0)))); };
+  break;
+
+
+  case 30: /* binary: expression "<" expression  */
+  if (yyn == 30)
+    /* "./src/main/resources/UCricketParser.y":88  */
+                                  { yyval = new BinaryExpression(((Expression)(yystack.valueAt (2))), BinaryExpression.Operator.LESS, ((Expression)(yystack.valueAt (0)))); };
+  break;
+
+
+  case 31: /* binary: expression ">" expression  */
+  if (yyn == 31)
+    /* "./src/main/resources/UCricketParser.y":89  */
+                                  { yyval = new BinaryExpression(((Expression)(yystack.valueAt (2))), BinaryExpression.Operator.GREATER, ((Expression)(yystack.valueAt (0)))); };
+  break;
+
+
+  case 32: /* binary: expression "<=" expression  */
+  if (yyn == 32)
+    /* "./src/main/resources/UCricketParser.y":90  */
+                                   { yyval = new BinaryExpression(((Expression)(yystack.valueAt (2))), BinaryExpression.Operator.LESS_EQUAL, ((Expression)(yystack.valueAt (0)))); };
+  break;
+
+
+  case 33: /* binary: expression ">=" expression  */
+  if (yyn == 33)
+    /* "./src/main/resources/UCricketParser.y":91  */
+                                   { yyval = new BinaryExpression(((Expression)(yystack.valueAt (2))), BinaryExpression.Operator.GREATER_EQUAL, ((Expression)(yystack.valueAt (0)))); };
+  break;
+
+
+  case 34: /* binary: expression "+" expression  */
+  if (yyn == 34)
+    /* "./src/main/resources/UCricketParser.y":92  */
+                                  { yyval = new BinaryExpression(((Expression)(yystack.valueAt (2))), BinaryExpression.Operator.ADD, ((Expression)(yystack.valueAt (0)))); };
+  break;
+
+
+  case 35: /* binary: expression "-" expression  */
+  if (yyn == 35)
+    /* "./src/main/resources/UCricketParser.y":93  */
+                                  { yyval = new BinaryExpression(((Expression)(yystack.valueAt (2))), BinaryExpression.Operator.SUBTRACT, ((Expression)(yystack.valueAt (0)))); };
+  break;
+
+
+  case 36: /* binary: expression "*" expression  */
+  if (yyn == 36)
+    /* "./src/main/resources/UCricketParser.y":94  */
+                                  { yyval = new BinaryExpression(((Expression)(yystack.valueAt (2))), BinaryExpression.Operator.MULTIPLY, ((Expression)(yystack.valueAt (0)))); };
+  break;
+
+
+  case 37: /* binary: expression "/" expression  */
+  if (yyn == 37)
+    /* "./src/main/resources/UCricketParser.y":95  */
+                                  { yyval = new BinaryExpression(((Expression)(yystack.valueAt (2))), BinaryExpression.Operator.DIVIDE, ((Expression)(yystack.valueAt (0)))); };
+  break;
+
+
+  case 38: /* unary: "(" expression ")"  */
+  if (yyn == 38)
+    /* "./src/main/resources/UCricketParser.y":99  */
+                           { yyval = new UnaryExpression(((Expression)(yystack.valueAt (1))), UnaryExpression.Type.PARENTHESIS); };
+  break;
+
+
+  case 39: /* unary: "!" expression  */
+  if (yyn == 39)
+    /* "./src/main/resources/UCricketParser.y":100  */
+                                              { yyval = new UnaryExpression(((Expression)(yystack.valueAt (0))), UnaryExpression.Type.LOGICAL_NEGATION); };
+  break;
+
+
+  case 40: /* unary: "-" expression  */
+  if (yyn == 40)
+    /* "./src/main/resources/UCricketParser.y":101  */
+                                             { yyval = new UnaryExpression(((Expression)(yystack.valueAt (0))), UnaryExpression.Type.ARITHMETICAL_NEGATION); };
+  break;
+
+
+
+/* "./src/main/java/pl/polsl/student/maciwal866/ucricket/UCricketParser.java":593  */
 
         default: break;
       }
@@ -900,7 +1001,7 @@ public class UCricketParser
     return yyvalue == yytable_ninf_;
   }
 
-  private static final short yypact_ninf_ = -49;
+  private static final short yypact_ninf_ = -54;
   private static final byte yytable_ninf_ = -1;
 
 /* YYPACT[STATE-NUM] -- Index in YYTABLE of the portion describing
@@ -910,16 +1011,17 @@ public class UCricketParser
   {
     return new short[]
     {
-     -49,     1,   -49,     6,     8,   -49,     7,    24,   -49,    44,
-      43,    -8,   -49,    58,    63,   -49,   -49,    49,    42,   -49,
-      47,    51,    91,    55,   -49,   -49,    56,    57,    43,    13,
-      13,    13,    13,    31,   -49,   137,   -49,   -49,   101,    13,
-      13,    83,   150,   -49,   120,   -49,   -49,   -49,    13,    13,
-      13,    13,    13,    13,    13,    13,    13,    13,   -49,   -49,
-     176,    20,    64,   176,    78,   -15,   -49,   -49,    26,    26,
-      26,    26,    26,    26,    -1,    -1,   -49,   -49,   -49,    13,
-      66,    82,   -49,    13,   176,    91,    91,   163,    60,    70,
-     -49,   -49,   -49
+     -54,     1,   -54,    10,    18,   -54,    27,    30,   -54,    49,
+      43,    -8,   -54,    67,    70,   -54,   -54,    61,    52,   -54,
+      83,    84,    -4,   -54,    62,    86,    99,    89,    22,   -54,
+     -54,    66,    68,    43,    19,    19,    19,    19,    37,   -54,
+     136,   -54,   -54,   -54,   -54,   -54,    19,    19,    19,    19,
+      94,    71,   149,   -54,   119,   -54,   -54,   -54,    19,    19,
+      19,    19,    19,    19,    19,    19,    19,    19,   -54,   188,
+       8,   162,    69,   188,    77,   -11,   -54,   -54,   -10,   -10,
+     -10,   -10,   -10,   -10,    33,    33,   -54,   -54,   -54,    19,
+     -54,    87,    88,   -54,    19,   188,    99,    99,   175,    63,
+      73,   -54,   -54,   -54
     };
   }
 
@@ -932,15 +1034,16 @@ public class UCricketParser
     return new byte[]
     {
        4,     0,     1,     0,     0,     3,     0,     0,     2,     0,
-      10,     0,     7,     0,     0,     5,     6,     0,     0,     9,
-       0,     0,     0,    36,    34,    35,     0,     0,    10,     0,
-       0,     0,     0,     0,    12,     0,    33,    37,     0,     0,
-       0,     0,     0,    32,     0,    31,     8,    11,     0,     0,
-       0,     0,     0,     0,     0,     0,     0,     0,    13,    39,
-      41,     0,     0,    19,     0,     0,    18,    30,    20,    21,
-      24,    25,    22,    23,    26,    27,    28,    29,    38,     0,
-       0,     0,    16,     0,    40,     0,     0,     0,     0,     0,
-      17,    14,    15
+      13,     0,     7,     0,     0,     5,     6,     0,     0,    12,
+      11,     0,     0,    10,     0,     0,     0,     0,    43,    41,
+      42,     0,     0,    13,     0,     0,     0,     0,     0,    15,
+       0,    24,    25,    26,    27,     9,    47,     0,     0,     0,
+       0,    43,     0,    40,     0,    39,     8,    14,     0,     0,
+       0,     0,     0,     0,     0,     0,     0,     0,    16,    46,
+       0,     0,     0,    23,     0,     0,    22,    38,    28,    29,
+      32,    33,    30,    31,    34,    35,    36,    37,    44,     0,
+      21,     0,     0,    19,     0,    45,     0,     0,     0,     0,
+       0,    20,    17,    18
     };
   }
 
@@ -950,8 +1053,8 @@ public class UCricketParser
   {
     return new byte[]
     {
-     -49,   -49,   -49,   -49,    98,    61,   -48,   -33,    72,   -26,
-     -49,   -49,   -49
+     -54,   -54,   -54,   -54,    98,   -54,    79,   -53,   -38,    72,
+     -31,   -54,   -54,   -54,   -54,   -54
     };
   }
 
@@ -961,8 +1064,8 @@ public class UCricketParser
   {
     return new byte[]
     {
-       0,     1,     5,    11,    12,    14,    33,    34,    62,    35,
-      36,    37,    61
+       0,     1,     5,    11,    12,    22,    14,    38,    39,    72,
+      40,    41,    42,    43,    44,    70
     };
   }
 
@@ -974,26 +1077,28 @@ public class UCricketParser
   {
     return new byte[]
     {
-      47,     2,    10,    42,    43,    44,    45,     3,     4,     6,
-      82,     7,    60,    63,    63,    83,    23,    24,    25,    15,
-      56,    57,    68,    69,    70,    71,    72,    73,    74,    75,
-      76,    77,     8,    30,    23,    24,    25,    88,    89,    26,
-      27,    31,    28,    29,    32,    54,    55,    56,    57,    78,
-       9,    30,    79,    84,    10,    47,    47,    87,    46,    31,
-      13,    17,    32,    23,    24,    25,    18,    19,    26,    27,
-      20,    28,    29,    23,    24,    25,    21,    22,    26,    27,
-      30,    28,    29,    38,    39,    40,    65,    91,    31,    41,
-      30,    32,    85,    80,    23,    24,    25,    92,    31,    26,
-      27,    32,    28,    29,    23,    24,    25,    81,    86,    16,
-       0,    30,    64,     0,     0,     0,     0,     0,     0,    31,
-       0,    30,    32,     0,     0,     0,     0,     0,     0,    31,
-      59,     0,    32,    48,    49,    50,    51,    52,    53,    54,
-      55,    56,    57,     0,     0,     0,     0,     0,     0,    67,
-      48,    49,    50,    51,    52,    53,    54,    55,    56,    57,
-       0,     0,    58,    48,    49,    50,    51,    52,    53,    54,
-      55,    56,    57,     0,     0,    66,    48,    49,    50,    51,
-      52,    53,    54,    55,    56,    57,     0,     0,    90,    48,
-      49,    50,    51,    52,    53,    54,    55,    56,    57
+      57,     2,    10,    52,    53,    54,    55,     3,     4,    64,
+      65,    66,    67,     6,    93,    69,    71,    73,    73,    15,
+      94,     7,    51,    29,    30,    24,    25,    78,    79,    80,
+      81,    82,    83,    84,    85,    86,    87,    88,    89,    35,
+      28,    29,    30,    99,   100,    31,    32,    36,    33,    34,
+      46,    37,     8,    47,    66,    67,     9,    35,    95,    10,
+      13,    57,    57,    98,    56,    36,    28,    29,    30,    37,
+      17,    31,    32,    18,    33,    34,    28,    29,    30,    19,
+      20,    31,    32,    35,    33,    34,    21,    23,    26,    27,
+     102,    36,    45,    35,    48,    37,    49,    75,    91,    46,
+     103,    36,    28,    29,    30,    37,    92,    31,    32,    16,
+      33,    34,    50,    96,    97,     0,     0,     0,     0,    35,
+       0,    74,     0,     0,     0,     0,     0,    36,     0,     0,
+       0,    37,    58,    59,    60,    61,    62,    63,    64,    65,
+      66,    67,     0,     0,     0,     0,     0,     0,    77,    58,
+      59,    60,    61,    62,    63,    64,    65,    66,    67,     0,
+       0,    68,    58,    59,    60,    61,    62,    63,    64,    65,
+      66,    67,     0,     0,    76,    58,    59,    60,    61,    62,
+      63,    64,    65,    66,    67,     0,     0,    90,    58,    59,
+      60,    61,    62,    63,    64,    65,    66,    67,     0,     0,
+     101,    58,    59,    60,    61,    62,    63,    64,    65,    66,
+      67
     };
   }
 
@@ -1002,26 +1107,28 @@ private static final byte[] yycheck_ = yycheck_init();
   {
     return new byte[]
     {
-      33,     0,    10,    29,    30,    31,    32,     6,     7,     3,
-      25,     3,    38,    39,    40,    30,     3,     4,     5,    27,
-      21,    22,    48,    49,    50,    51,    52,    53,    54,    55,
-      56,    57,    25,    20,     3,     4,     5,    85,    86,     8,
-       9,    28,    11,    12,    31,    19,    20,    21,    22,    29,
-      26,    20,    32,    79,    10,    88,    89,    83,    27,    28,
-      17,     3,    31,     3,     4,     5,     3,    18,     8,     9,
-      28,    11,    12,     3,     4,     5,    29,    26,     8,     9,
-      20,    11,    12,    28,    28,    28,     3,    27,    28,    28,
-      20,    31,    26,    29,     3,     4,     5,    27,    28,     8,
-       9,    31,    11,    12,     3,     4,     5,    29,    26,    11,
-      -1,    20,    40,    -1,    -1,    -1,    -1,    -1,    -1,    28,
-      -1,    20,    31,    -1,    -1,    -1,    -1,    -1,    -1,    28,
-      29,    -1,    31,    13,    14,    15,    16,    17,    18,    19,
-      20,    21,    22,    -1,    -1,    -1,    -1,    -1,    -1,    29,
-      13,    14,    15,    16,    17,    18,    19,    20,    21,    22,
-      -1,    -1,    25,    13,    14,    15,    16,    17,    18,    19,
-      20,    21,    22,    -1,    -1,    25,    13,    14,    15,    16,
-      17,    18,    19,    20,    21,    22,    -1,    -1,    25,    13,
-      14,    15,    16,    17,    18,    19,    20,    21,    22
+      38,     0,    10,    34,    35,    36,    37,     6,     7,    19,
+      20,    21,    22,     3,    25,    46,    47,    48,    49,    27,
+      31,     3,     3,     4,     5,    29,    30,    58,    59,    60,
+      61,    62,    63,    64,    65,    66,    67,    29,    30,    20,
+       3,     4,     5,    96,    97,     8,     9,    28,    11,    12,
+      28,    32,    25,    31,    21,    22,    26,    20,    89,    10,
+      17,    99,   100,    94,    27,    28,     3,     4,     5,    32,
+       3,     8,     9,     3,    11,    12,     3,     4,     5,    18,
+      28,     8,     9,    20,    11,    12,     3,     3,    26,     3,
+      27,    28,     3,    20,    28,    32,    28,     3,    29,    28,
+      27,    28,     3,     4,     5,    32,    29,     8,     9,    11,
+      11,    12,    33,    26,    26,    -1,    -1,    -1,    -1,    20,
+      -1,    49,    -1,    -1,    -1,    -1,    -1,    28,    -1,    -1,
+      -1,    32,    13,    14,    15,    16,    17,    18,    19,    20,
+      21,    22,    -1,    -1,    -1,    -1,    -1,    -1,    29,    13,
+      14,    15,    16,    17,    18,    19,    20,    21,    22,    -1,
+      -1,    25,    13,    14,    15,    16,    17,    18,    19,    20,
+      21,    22,    -1,    -1,    25,    13,    14,    15,    16,    17,
+      18,    19,    20,    21,    22,    -1,    -1,    25,    13,    14,
+      15,    16,    17,    18,    19,    20,    21,    22,    -1,    -1,
+      25,    13,    14,    15,    16,    17,    18,    19,    20,    21,
+      22
     };
   }
 
@@ -1033,15 +1140,16 @@ private static final byte[] yycheck_ = yycheck_init();
     return new byte[]
     {
        0,    34,     0,     6,     7,    35,     3,     3,    25,    26,
-      10,    36,    37,    17,    38,    27,    37,     3,     3,    18,
-      28,    29,    26,     3,     4,     5,     8,     9,    11,    12,
-      20,    28,    31,    39,    40,    42,    43,    44,    28,    28,
-      28,    38,    42,    42,    42,    42,    27,    40,    13,    14,
-      15,    16,    17,    18,    19,    20,    21,    22,    25,    29,
-      42,    45,    41,    42,    41,     3,    25,    29,    42,    42,
-      42,    42,    42,    42,    42,    42,    42,    42,    29,    32,
-      29,    29,    25,    30,    42,    26,    26,    42,    39,    39,
-      25,    27,    27
+      10,    36,    37,    17,    39,    27,    37,     3,     3,    18,
+      28,     3,    38,     3,    29,    30,    26,     3,     3,     4,
+       5,     8,     9,    11,    12,    20,    28,    32,    40,    41,
+      43,    44,    45,    46,    47,     3,    28,    31,    28,    28,
+      39,     3,    43,    43,    43,    43,    27,    41,    13,    14,
+      15,    16,    17,    18,    19,    20,    21,    22,    25,    43,
+      48,    43,    42,    43,    42,     3,    25,    29,    43,    43,
+      43,    43,    43,    43,    43,    43,    43,    43,    29,    30,
+      25,    29,    29,    25,    31,    43,    26,    26,    43,    40,
+      40,    25,    27,    27
     };
   }
 
@@ -1052,10 +1160,10 @@ private static final byte[] yycheck_ = yycheck_init();
     return new byte[]
     {
        0,    33,    34,    34,    34,    35,    36,    36,    37,    38,
-      38,    39,    39,    40,    40,    40,    40,    40,    40,    41,
-      42,    42,    42,    42,    42,    42,    42,    42,    42,    42,
-      42,    42,    42,    42,    43,    43,    43,    43,    44,    44,
-      45,    45
+      38,    38,    39,    39,    40,    40,    41,    41,    41,    41,
+      41,    41,    41,    42,    43,    43,    43,    43,    44,    44,
+      44,    44,    44,    44,    44,    44,    44,    44,    45,    45,
+      45,    46,    46,    46,    47,    48,    48,    48
     };
   }
 
@@ -1065,11 +1173,11 @@ private static final byte[] yycheck_ = yycheck_init();
   {
     return new byte[]
     {
-       0,     2,     4,     2,     0,     5,     2,     1,     8,     3,
-       0,     2,     1,     2,     7,     7,     4,     6,     3,     1,
-       3,     3,     3,     3,     3,     3,     3,     3,     3,     3,
-       3,     2,     2,     1,     1,     1,     1,     1,     4,     3,
-       3,     1
+       0,     2,     4,     2,     0,     5,     2,     1,     9,     4,
+       2,     0,     3,     0,     2,     1,     2,     7,     7,     4,
+       6,     4,     3,     1,     1,     1,     1,     1,     3,     3,
+       3,     3,     3,     3,     3,     3,     3,     3,     3,     2,
+       2,     1,     1,     1,     4,     3,     1,     0
     };
   }
 
@@ -1127,11 +1235,11 @@ private static final byte[] yycheck_ = yycheck_init();
   }
 
 
-  private static final int YYLAST_ = 198;
+  private static final int YYLAST_ = 210;
   private static final int YYEMPTY_ = -2;
   private static final int YYFINAL_ = 2;
   private static final int YYNTOKENS_ = 33;
 
 
 }
-/* "./src/main/resources/UCricketParser.y":100  */
+/* "./src/main/resources/UCricketParser.y":119  */
