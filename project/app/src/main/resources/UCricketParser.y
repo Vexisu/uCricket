@@ -7,6 +7,10 @@ import pl.polsl.student.maciwal866.ucricket.ast.ASTNode;
 import pl.polsl.student.maciwal866.ucricket.ast.Expression;
 import pl.polsl.student.maciwal866.ucricket.ast.expression.BinaryExpression;
 import pl.polsl.student.maciwal866.ucricket.ast.expression.UnaryExpression;
+import pl.polsl.student.maciwal866.ucricket.ast.expression.ValueExpression;
+import pl.polsl.student.maciwal866.ucricket.ast.expression.VariableExpression;
+import pl.polsl.student.maciwal866.ucricket.ast.expression.ArgumentsExpression;
+import pl.polsl.student.maciwal866.ucricket.ast.expression.FunctionCallExpression;
 %}
 
 %define api.prefix {UCricket}
@@ -17,7 +21,7 @@ import pl.polsl.student.maciwal866.ucricket.ast.expression.UnaryExpression;
 
 %token IDENTIFIER INTEGER FLOAT IMPORT SCOPE IF WHILE FUNC VAR RETURN
 
-%nterm <Expression> expression binary unary primary functionCall
+%nterm <Expression> expression binary unary primary functionCall arguments
 
 %start program
 %left "==" "!=" "<=" ">=" "<" ">" 
@@ -102,18 +106,18 @@ unary:
 ;
 
 primary:
-        INTEGER 
-    |   FLOAT
-    |   IDENTIFIER
+        INTEGER { $$ = new ValueExpression($<String>1, ValueExpression.ValueType.INTEGER); }
+    |   FLOAT { $$ = new ValueExpression($<String>1, ValueExpression.ValueType.FLOAT); }
+    |   IDENTIFIER { $$ = new VariableExpression($<String>1); }
 ;
 
 functionCall:
-        IDENTIFIER "(" arguments ")"
+        IDENTIFIER "(" arguments ")" { $$ = new FunctionCallExpression($<String>1, $3); }
 ;
 
 arguments: 
-        arguments "," expression
-    |   expression
-    |
+        arguments "," expression { $$ = new ArgumentsExpression($1, $3); }
+    |   expression { $$ = $1; }
+    |   { $$ = null; }
 ;
 %%

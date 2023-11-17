@@ -44,8 +44,12 @@ import pl.polsl.student.maciwal866.ucricket.ast.ASTNode;
 import pl.polsl.student.maciwal866.ucricket.ast.Expression;
 import pl.polsl.student.maciwal866.ucricket.ast.expression.BinaryExpression;
 import pl.polsl.student.maciwal866.ucricket.ast.expression.UnaryExpression;
+import pl.polsl.student.maciwal866.ucricket.ast.expression.ValueExpression;
+import pl.polsl.student.maciwal866.ucricket.ast.expression.VariableExpression;
+import pl.polsl.student.maciwal866.ucricket.ast.expression.ArgumentsExpression;
+import pl.polsl.student.maciwal866.ucricket.ast.expression.FunctionCallExpression;
 
-/* "./src/main/java/pl/polsl/student/maciwal866/ucricket/UCricketParser.java":49  */
+/* "./src/main/java/pl/polsl/student/maciwal866/ucricket/UCricketParser.java":53  */
 
 
 import java.text.MessageFormat;
@@ -499,97 +503,146 @@ public class UCricketParser
       {
           case 28: /* binary: expression "==" expression  */
   if (yyn == 28)
-    /* "./src/main/resources/UCricketParser.y":86  */
+    /* "./src/main/resources/UCricketParser.y":90  */
                                    { yyval = new BinaryExpression(((Expression)(yystack.valueAt (2))), BinaryExpression.Operator.EQUAL, ((Expression)(yystack.valueAt (0)))); };
   break;
 
 
   case 29: /* binary: expression "!=" expression  */
   if (yyn == 29)
-    /* "./src/main/resources/UCricketParser.y":87  */
+    /* "./src/main/resources/UCricketParser.y":91  */
                                    { yyval = new BinaryExpression(((Expression)(yystack.valueAt (2))), BinaryExpression.Operator.NOT_EQUAL, ((Expression)(yystack.valueAt (0)))); };
   break;
 
 
   case 30: /* binary: expression "<" expression  */
   if (yyn == 30)
-    /* "./src/main/resources/UCricketParser.y":88  */
+    /* "./src/main/resources/UCricketParser.y":92  */
                                   { yyval = new BinaryExpression(((Expression)(yystack.valueAt (2))), BinaryExpression.Operator.LESS, ((Expression)(yystack.valueAt (0)))); };
   break;
 
 
   case 31: /* binary: expression ">" expression  */
   if (yyn == 31)
-    /* "./src/main/resources/UCricketParser.y":89  */
+    /* "./src/main/resources/UCricketParser.y":93  */
                                   { yyval = new BinaryExpression(((Expression)(yystack.valueAt (2))), BinaryExpression.Operator.GREATER, ((Expression)(yystack.valueAt (0)))); };
   break;
 
 
   case 32: /* binary: expression "<=" expression  */
   if (yyn == 32)
-    /* "./src/main/resources/UCricketParser.y":90  */
+    /* "./src/main/resources/UCricketParser.y":94  */
                                    { yyval = new BinaryExpression(((Expression)(yystack.valueAt (2))), BinaryExpression.Operator.LESS_EQUAL, ((Expression)(yystack.valueAt (0)))); };
   break;
 
 
   case 33: /* binary: expression ">=" expression  */
   if (yyn == 33)
-    /* "./src/main/resources/UCricketParser.y":91  */
+    /* "./src/main/resources/UCricketParser.y":95  */
                                    { yyval = new BinaryExpression(((Expression)(yystack.valueAt (2))), BinaryExpression.Operator.GREATER_EQUAL, ((Expression)(yystack.valueAt (0)))); };
   break;
 
 
   case 34: /* binary: expression "+" expression  */
   if (yyn == 34)
-    /* "./src/main/resources/UCricketParser.y":92  */
+    /* "./src/main/resources/UCricketParser.y":96  */
                                   { yyval = new BinaryExpression(((Expression)(yystack.valueAt (2))), BinaryExpression.Operator.ADD, ((Expression)(yystack.valueAt (0)))); };
   break;
 
 
   case 35: /* binary: expression "-" expression  */
   if (yyn == 35)
-    /* "./src/main/resources/UCricketParser.y":93  */
+    /* "./src/main/resources/UCricketParser.y":97  */
                                   { yyval = new BinaryExpression(((Expression)(yystack.valueAt (2))), BinaryExpression.Operator.SUBTRACT, ((Expression)(yystack.valueAt (0)))); };
   break;
 
 
   case 36: /* binary: expression "*" expression  */
   if (yyn == 36)
-    /* "./src/main/resources/UCricketParser.y":94  */
+    /* "./src/main/resources/UCricketParser.y":98  */
                                   { yyval = new BinaryExpression(((Expression)(yystack.valueAt (2))), BinaryExpression.Operator.MULTIPLY, ((Expression)(yystack.valueAt (0)))); };
   break;
 
 
   case 37: /* binary: expression "/" expression  */
   if (yyn == 37)
-    /* "./src/main/resources/UCricketParser.y":95  */
+    /* "./src/main/resources/UCricketParser.y":99  */
                                   { yyval = new BinaryExpression(((Expression)(yystack.valueAt (2))), BinaryExpression.Operator.DIVIDE, ((Expression)(yystack.valueAt (0)))); };
   break;
 
 
   case 38: /* unary: "(" expression ")"  */
   if (yyn == 38)
-    /* "./src/main/resources/UCricketParser.y":99  */
+    /* "./src/main/resources/UCricketParser.y":103  */
                            { yyval = new UnaryExpression(((Expression)(yystack.valueAt (1))), UnaryExpression.Type.PARENTHESIS); };
   break;
 
 
   case 39: /* unary: "!" expression  */
   if (yyn == 39)
-    /* "./src/main/resources/UCricketParser.y":100  */
+    /* "./src/main/resources/UCricketParser.y":104  */
                                               { yyval = new UnaryExpression(((Expression)(yystack.valueAt (0))), UnaryExpression.Type.LOGICAL_NEGATION); };
   break;
 
 
   case 40: /* unary: "-" expression  */
   if (yyn == 40)
-    /* "./src/main/resources/UCricketParser.y":101  */
+    /* "./src/main/resources/UCricketParser.y":105  */
                                              { yyval = new UnaryExpression(((Expression)(yystack.valueAt (0))), UnaryExpression.Type.ARITHMETICAL_NEGATION); };
   break;
 
 
+  case 41: /* primary: INTEGER  */
+  if (yyn == 41)
+    /* "./src/main/resources/UCricketParser.y":109  */
+                { yyval = new ValueExpression(((String)(yystack.valueAt (0))), ValueExpression.ValueType.INTEGER); };
+  break;
 
-/* "./src/main/java/pl/polsl/student/maciwal866/ucricket/UCricketParser.java":593  */
+
+  case 42: /* primary: FLOAT  */
+  if (yyn == 42)
+    /* "./src/main/resources/UCricketParser.y":110  */
+              { yyval = new ValueExpression(((String)(yystack.valueAt (0))), ValueExpression.ValueType.FLOAT); };
+  break;
+
+
+  case 43: /* primary: IDENTIFIER  */
+  if (yyn == 43)
+    /* "./src/main/resources/UCricketParser.y":111  */
+                   { yyval = new VariableExpression(((String)(yystack.valueAt (0)))); };
+  break;
+
+
+  case 44: /* functionCall: IDENTIFIER "(" arguments ")"  */
+  if (yyn == 44)
+    /* "./src/main/resources/UCricketParser.y":115  */
+                                     { yyval = new FunctionCallExpression(((String)(yystack.valueAt (3))), ((Expression)(yystack.valueAt (1)))); };
+  break;
+
+
+  case 45: /* arguments: arguments "," expression  */
+  if (yyn == 45)
+    /* "./src/main/resources/UCricketParser.y":119  */
+                                 { yyval = new ArgumentsExpression(((Expression)(yystack.valueAt (2))), ((Expression)(yystack.valueAt (0)))); };
+  break;
+
+
+  case 46: /* arguments: expression  */
+  if (yyn == 46)
+    /* "./src/main/resources/UCricketParser.y":120  */
+                   { yyval = ((Expression)(yystack.valueAt (0))); };
+  break;
+
+
+  case 47: /* arguments: %empty  */
+  if (yyn == 47)
+    /* "./src/main/resources/UCricketParser.y":121  */
+        { yyval = null; };
+  break;
+
+
+
+/* "./src/main/java/pl/polsl/student/maciwal866/ucricket/UCricketParser.java":646  */
 
         default: break;
       }
@@ -1242,4 +1295,4 @@ private static final byte[] yycheck_ = yycheck_init();
 
 
 }
-/* "./src/main/resources/UCricketParser.y":119  */
+/* "./src/main/resources/UCricketParser.y":123  */
