@@ -34,13 +34,19 @@
    especially those whose name start with YY_ or yy_.  They are
    private implementation details that can be changed or removed.  */
 
-
-/* First part of user prologue.  */
-/* "./src/main/resources/UCricketParser.y":3  */
-
 package pl.polsl.student.maciwal866.ucricket;
 
+
+
+import java.text.MessageFormat;
+import java.util.ArrayList;
+/* "%code imports" blocks.  */
+/* "./src/main/resources/UCricketParser.y":3  */
+
 import pl.polsl.student.maciwal866.ucricket.ast.ASTNode;
+import pl.polsl.student.maciwal866.ucricket.ast.Program;
+import pl.polsl.student.maciwal866.ucricket.ast.Scope;
+import pl.polsl.student.maciwal866.ucricket.ast.Function;
 import pl.polsl.student.maciwal866.ucricket.ast.Expression;
 import pl.polsl.student.maciwal866.ucricket.ast.Statement;
 import pl.polsl.student.maciwal866.ucricket.ast.ValueType;
@@ -51,11 +57,7 @@ import pl.polsl.student.maciwal866.ucricket.ast.expression.VariableExpression;
 import pl.polsl.student.maciwal866.ucricket.ast.expression.ArgumentsExpression;
 import pl.polsl.student.maciwal866.ucricket.ast.expression.FunctionCallExpression;
 
-/* "./src/main/java/pl/polsl/student/maciwal866/ucricket/UCricketParser.java":55  */
-
-
-import java.text.MessageFormat;
-import java.util.ArrayList;
+/* "./src/main/java/pl/polsl/student/maciwal866/ucricket/UCricketParser.java":61  */
 
 /**
  * A Bison parser, automatically generated from <tt>./src/main/resources/UCricketParser.y</tt>.
@@ -360,6 +362,12 @@ public class UCricketParser
    */
   public UCricketParser(Lexer yylexer)
   {
+/* "%code init" blocks.  */
+/* "./src/main/resources/UCricketParser.y":41  */
+
+    program = new Program();
+
+/* "./src/main/java/pl/polsl/student/maciwal866/ucricket/UCricketParser.java":371  */
 
     this.yylexer = yylexer;
 
@@ -513,174 +521,174 @@ public class UCricketParser
       {
           case 13: /* returnedType: "<" IDENTIFIER ">"  */
   if (yyn == 13)
-    /* "./src/main/resources/UCricketParser.y":63  */
+    /* "./src/main/resources/UCricketParser.y":73  */
                            { yyval = ((String)(yystack.valueAt (1))); };
   break;
 
 
   case 14: /* returnedType: %empty  */
   if (yyn == 14)
-    /* "./src/main/resources/UCricketParser.y":64  */
+    /* "./src/main/resources/UCricketParser.y":74  */
         { yyval = null; };
   break;
 
 
   case 30: /* binary: expression "==" expression  */
   if (yyn == 30)
-    /* "./src/main/resources/UCricketParser.y":95  */
+    /* "./src/main/resources/UCricketParser.y":105  */
                                    { yyval = new BinaryExpression(((Expression)(yystack.valueAt (2))), BinaryExpression.Operator.EQUAL, ((Expression)(yystack.valueAt (0)))); };
   break;
 
 
   case 31: /* binary: expression "!=" expression  */
   if (yyn == 31)
-    /* "./src/main/resources/UCricketParser.y":96  */
+    /* "./src/main/resources/UCricketParser.y":106  */
                                    { yyval = new BinaryExpression(((Expression)(yystack.valueAt (2))), BinaryExpression.Operator.NOT_EQUAL, ((Expression)(yystack.valueAt (0)))); };
   break;
 
 
   case 32: /* binary: expression "<" expression  */
   if (yyn == 32)
-    /* "./src/main/resources/UCricketParser.y":97  */
+    /* "./src/main/resources/UCricketParser.y":107  */
                                   { yyval = new BinaryExpression(((Expression)(yystack.valueAt (2))), BinaryExpression.Operator.LESS, ((Expression)(yystack.valueAt (0)))); };
   break;
 
 
   case 33: /* binary: expression ">" expression  */
   if (yyn == 33)
-    /* "./src/main/resources/UCricketParser.y":98  */
+    /* "./src/main/resources/UCricketParser.y":108  */
                                   { yyval = new BinaryExpression(((Expression)(yystack.valueAt (2))), BinaryExpression.Operator.GREATER, ((Expression)(yystack.valueAt (0)))); };
   break;
 
 
   case 34: /* binary: expression "<=" expression  */
   if (yyn == 34)
-    /* "./src/main/resources/UCricketParser.y":99  */
+    /* "./src/main/resources/UCricketParser.y":109  */
                                    { yyval = new BinaryExpression(((Expression)(yystack.valueAt (2))), BinaryExpression.Operator.LESS_EQUAL, ((Expression)(yystack.valueAt (0)))); };
   break;
 
 
   case 35: /* binary: expression ">=" expression  */
   if (yyn == 35)
-    /* "./src/main/resources/UCricketParser.y":100  */
+    /* "./src/main/resources/UCricketParser.y":110  */
                                    { yyval = new BinaryExpression(((Expression)(yystack.valueAt (2))), BinaryExpression.Operator.GREATER_EQUAL, ((Expression)(yystack.valueAt (0)))); };
   break;
 
 
   case 36: /* binary: expression "+" expression  */
   if (yyn == 36)
-    /* "./src/main/resources/UCricketParser.y":101  */
+    /* "./src/main/resources/UCricketParser.y":111  */
                                   { yyval = new BinaryExpression(((Expression)(yystack.valueAt (2))), BinaryExpression.Operator.ADD, ((Expression)(yystack.valueAt (0)))); };
   break;
 
 
   case 37: /* binary: expression "-" expression  */
   if (yyn == 37)
-    /* "./src/main/resources/UCricketParser.y":102  */
+    /* "./src/main/resources/UCricketParser.y":112  */
                                   { yyval = new BinaryExpression(((Expression)(yystack.valueAt (2))), BinaryExpression.Operator.SUBTRACT, ((Expression)(yystack.valueAt (0)))); };
   break;
 
 
   case 38: /* binary: expression "*" expression  */
   if (yyn == 38)
-    /* "./src/main/resources/UCricketParser.y":103  */
+    /* "./src/main/resources/UCricketParser.y":113  */
                                   { yyval = new BinaryExpression(((Expression)(yystack.valueAt (2))), BinaryExpression.Operator.MULTIPLY, ((Expression)(yystack.valueAt (0)))); };
   break;
 
 
   case 39: /* binary: expression "/" expression  */
   if (yyn == 39)
-    /* "./src/main/resources/UCricketParser.y":104  */
+    /* "./src/main/resources/UCricketParser.y":114  */
                                   { yyval = new BinaryExpression(((Expression)(yystack.valueAt (2))), BinaryExpression.Operator.DIVIDE, ((Expression)(yystack.valueAt (0)))); };
   break;
 
 
   case 40: /* unary: "(" expression ")"  */
   if (yyn == 40)
-    /* "./src/main/resources/UCricketParser.y":108  */
+    /* "./src/main/resources/UCricketParser.y":118  */
                            { yyval = new UnaryExpression(((Expression)(yystack.valueAt (1))), UnaryExpression.Type.PARENTHESIS); };
   break;
 
 
   case 41: /* unary: "!" expression  */
   if (yyn == 41)
-    /* "./src/main/resources/UCricketParser.y":109  */
+    /* "./src/main/resources/UCricketParser.y":119  */
                                               { yyval = new UnaryExpression(((Expression)(yystack.valueAt (0))), UnaryExpression.Type.LOGICAL_NEGATION); };
   break;
 
 
   case 42: /* unary: "-" expression  */
   if (yyn == 42)
-    /* "./src/main/resources/UCricketParser.y":110  */
+    /* "./src/main/resources/UCricketParser.y":120  */
                                              { yyval = new UnaryExpression(((Expression)(yystack.valueAt (0))), UnaryExpression.Type.ARITHMETICAL_NEGATION); };
   break;
 
 
   case 43: /* primary: INTEGER  */
   if (yyn == 43)
-    /* "./src/main/resources/UCricketParser.y":114  */
+    /* "./src/main/resources/UCricketParser.y":124  */
                 { yyval = new ValueExpression(((String)(yystack.valueAt (0))), ValueType.INTEGER); };
   break;
 
 
   case 44: /* primary: FLOAT  */
   if (yyn == 44)
-    /* "./src/main/resources/UCricketParser.y":115  */
+    /* "./src/main/resources/UCricketParser.y":125  */
               { yyval = new ValueExpression(((String)(yystack.valueAt (0))), ValueType.FLOAT); };
   break;
 
 
   case 45: /* primary: TRUE  */
   if (yyn == 45)
-    /* "./src/main/resources/UCricketParser.y":116  */
+    /* "./src/main/resources/UCricketParser.y":126  */
              { yyval = new ValueExpression(((String)(yystack.valueAt (0))), ValueType.BOOLEAN); };
   break;
 
 
   case 46: /* primary: FALSE  */
   if (yyn == 46)
-    /* "./src/main/resources/UCricketParser.y":117  */
+    /* "./src/main/resources/UCricketParser.y":127  */
               { yyval = new ValueExpression(((String)(yystack.valueAt (0))), ValueType.BOOLEAN); };
   break;
 
 
   case 47: /* primary: IDENTIFIER  */
   if (yyn == 47)
-    /* "./src/main/resources/UCricketParser.y":118  */
+    /* "./src/main/resources/UCricketParser.y":128  */
                    { yyval = new VariableExpression(((String)(yystack.valueAt (0)))); };
   break;
 
 
   case 48: /* functionCall: IDENTIFIER "(" arguments ")"  */
   if (yyn == 48)
-    /* "./src/main/resources/UCricketParser.y":122  */
+    /* "./src/main/resources/UCricketParser.y":132  */
                                      { yyval = new FunctionCallExpression(((String)(yystack.valueAt (3))), ((Expression)(yystack.valueAt (1)))); };
   break;
 
 
   case 49: /* arguments: arguments "," expression  */
   if (yyn == 49)
-    /* "./src/main/resources/UCricketParser.y":126  */
+    /* "./src/main/resources/UCricketParser.y":136  */
                                  { yyval = new ArgumentsExpression(((Expression)(yystack.valueAt (2))), ((Expression)(yystack.valueAt (0)))); };
   break;
 
 
   case 50: /* arguments: expression  */
   if (yyn == 50)
-    /* "./src/main/resources/UCricketParser.y":127  */
+    /* "./src/main/resources/UCricketParser.y":137  */
                    { yyval = ((Expression)(yystack.valueAt (0))); };
   break;
 
 
   case 51: /* arguments: %empty  */
   if (yyn == 51)
-    /* "./src/main/resources/UCricketParser.y":128  */
+    /* "./src/main/resources/UCricketParser.y":138  */
         { yyval = null; };
   break;
 
 
 
-/* "./src/main/java/pl/polsl/student/maciwal866/ucricket/UCricketParser.java":684  */
+/* "./src/main/java/pl/polsl/student/maciwal866/ucricket/UCricketParser.java":692  */
 
         default: break;
       }
@@ -1337,6 +1345,12 @@ private static final byte[] yycheck_ = yycheck_init();
   private static final int YYFINAL_ = 2;
   private static final int YYNTOKENS_ = 35;
 
+/* Unqualified %code blocks.  */
+/* "./src/main/resources/UCricketParser.y":37  */
+
+    private Program program;
+
+/* "./src/main/java/pl/polsl/student/maciwal866/ucricket/UCricketParser.java":1354  */
 
 }
-/* "./src/main/resources/UCricketParser.y":130  */
+/* "./src/main/resources/UCricketParser.y":140  */

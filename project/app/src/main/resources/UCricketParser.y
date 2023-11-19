@@ -1,9 +1,10 @@
 %language "Java"
 
-%{
-package pl.polsl.student.maciwal866.ucricket;
-
+%code imports {
 import pl.polsl.student.maciwal866.ucricket.ast.ASTNode;
+import pl.polsl.student.maciwal866.ucricket.ast.Program;
+import pl.polsl.student.maciwal866.ucricket.ast.Scope;
+import pl.polsl.student.maciwal866.ucricket.ast.Function;
 import pl.polsl.student.maciwal866.ucricket.ast.Expression;
 import pl.polsl.student.maciwal866.ucricket.ast.Statement;
 import pl.polsl.student.maciwal866.ucricket.ast.ValueType;
@@ -13,8 +14,9 @@ import pl.polsl.student.maciwal866.ucricket.ast.expression.ValueExpression;
 import pl.polsl.student.maciwal866.ucricket.ast.expression.VariableExpression;
 import pl.polsl.student.maciwal866.ucricket.ast.expression.ArgumentsExpression;
 import pl.polsl.student.maciwal866.ucricket.ast.expression.FunctionCallExpression;
-%}
+}
 
+%define api.package {pl.polsl.student.maciwal866.ucricket}
 %define api.prefix {UCricket}
 %define api.parser.class {UCricketParser}
 %define api.parser.public
@@ -31,6 +33,14 @@ import pl.polsl.student.maciwal866.ucricket.ast.expression.FunctionCallExpressio
 %left "+" "-"
 %left "*" "/"
 %right ARITHM_NEGATION LOGICAL_NEGATION
+
+%code {
+    private Program program;
+}
+
+%code init {
+    program = new Program();
+}
 
 %%
 program:
