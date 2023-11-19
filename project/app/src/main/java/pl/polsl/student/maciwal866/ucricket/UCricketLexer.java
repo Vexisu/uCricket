@@ -64,12 +64,13 @@ public class UCricketLexer implements UCricketParser.Lexer {
   private static final String ZZ_ACTION_PACKED_0 =
     "\1\0\1\1\1\2\1\3\1\4\1\5\1\6\1\7"+
     "\1\10\1\11\1\12\1\13\1\14\1\15\1\16\1\17"+
-    "\1\20\1\21\1\22\1\23\1\24\1\25\1\26\6\3"+
-    "\2\0\1\3\1\27\5\3\1\30\5\3\1\31\3\3"+
-    "\1\32\3\3\1\33\1\34\1\35\1\36";
+    "\1\20\1\21\1\22\1\23\1\24\1\25\1\26\7\3"+
+    "\2\0\1\3\1\27\7\3\1\30\7\3\1\31\2\3"+
+    "\1\32\1\3\1\33\4\3\1\34\1\35\1\36\1\37"+
+    "\1\40";
 
   private static int [] zzUnpackAction() {
-    int [] result = new int[56];
+    int [] result = new int[64];
     int offset = 0;
     offset = zzUnpackAction(ZZ_ACTION_PACKED_0, offset, result);
     return result;
@@ -97,13 +98,14 @@ public class UCricketLexer implements UCricketParser.Lexer {
     "\0\0\0\51\0\51\0\122\0\173\0\244\0\51\0\51"+
     "\0\51\0\51\0\51\0\51\0\51\0\51\0\51\0\51"+
     "\0\51\0\51\0\51\0\51\0\51\0\51\0\51\0\315"+
-    "\0\366\0\u011f\0\u0148\0\u0171\0\u019a\0\244\0\u01c3\0\u01ec"+
-    "\0\122\0\u0215\0\u023e\0\u0267\0\u0290\0\u02b9\0\51\0\u02e2"+
-    "\0\u030b\0\u0334\0\u035d\0\u0386\0\122\0\u03af\0\u03d8\0\u0401"+
-    "\0\122\0\u042a\0\u0453\0\u047c\0\122\0\122\0\122\0\122";
+    "\0\366\0\u011f\0\u0148\0\u0171\0\u019a\0\u01c3\0\244\0\u01ec"+
+    "\0\u0215\0\122\0\u023e\0\u0267\0\u0290\0\u02b9\0\u02e2\0\u030b"+
+    "\0\u0334\0\51\0\u035d\0\u0386\0\u03af\0\u03d8\0\u0401\0\u042a"+
+    "\0\u0453\0\122\0\u047c\0\u04a5\0\122\0\u04ce\0\122\0\u04f7"+
+    "\0\u0520\0\u0549\0\u0572\0\122\0\122\0\122\0\122\0\122";
 
   private static int [] zzUnpackRowMap() {
-    int [] result = new int[56];
+    int [] result = new int[64];
     int offset = 0;
     offset = zzUnpackRowMap(ZZ_ROWMAP_PACKED_0, offset, result);
     return result;
@@ -129,36 +131,42 @@ public class UCricketLexer implements UCricketParser.Lexer {
     "\1\2\1\3\1\4\2\5\1\6\1\4\1\7\1\10"+
     "\1\11\1\12\1\13\1\14\1\15\1\16\1\17\1\20"+
     "\1\21\1\22\1\23\1\24\1\25\1\26\1\27\1\30"+
-    "\3\4\1\31\1\4\1\32\2\4\1\33\2\4\1\34"+
-    "\2\4\1\35\1\4\53\0\2\4\2\0\1\4\21\0"+
-    "\21\4\3\0\2\5\1\36\46\0\2\37\46\0\2\4"+
-    "\2\0\1\4\21\0\1\4\1\40\7\4\1\41\7\4"+
-    "\2\0\2\4\2\0\1\4\21\0\10\4\1\42\10\4"+
-    "\2\0\2\4\2\0\1\4\21\0\7\4\1\43\11\4"+
-    "\2\0\2\4\2\0\1\4\21\0\12\4\1\44\6\4"+
-    "\2\0\2\4\2\0\1\4\21\0\15\4\1\45\3\4"+
-    "\2\0\2\4\2\0\1\4\21\0\20\4\1\46\3\0"+
-    "\2\37\1\0\1\47\44\0\2\4\2\0\1\4\21\0"+
-    "\2\4\1\50\16\4\2\0\2\4\2\0\1\4\21\0"+
-    "\5\4\1\51\13\4\2\0\2\4\2\0\1\4\21\0"+
-    "\3\4\1\52\15\4\2\0\2\4\2\0\1\4\21\0"+
-    "\13\4\1\53\5\4\2\0\2\4\2\0\1\4\21\0"+
-    "\1\54\20\4\2\0\2\4\2\0\1\4\21\0\4\4"+
-    "\1\55\14\4\2\0\2\4\2\0\1\4\21\0\3\4"+
-    "\1\56\15\4\2\0\2\4\2\0\1\4\21\0\12\4"+
-    "\1\57\6\4\2\0\2\4\2\0\1\4\21\0\2\4"+
-    "\1\60\16\4\2\0\2\4\2\0\1\4\21\0\7\4"+
-    "\1\61\11\4\2\0\2\4\2\0\1\4\21\0\16\4"+
-    "\1\62\2\4\2\0\2\4\2\0\1\4\21\0\4\4"+
-    "\1\63\14\4\2\0\2\4\2\0\1\4\21\0\4\4"+
-    "\1\64\14\4\2\0\2\4\2\0\1\4\21\0\10\4"+
-    "\1\65\10\4\2\0\2\4\2\0\1\4\21\0\10\4"+
-    "\1\66\10\4\2\0\2\4\2\0\1\4\21\0\5\4"+
-    "\1\67\13\4\2\0\2\4\2\0\1\4\21\0\13\4"+
-    "\1\70\5\4";
+    "\3\4\1\31\1\32\1\33\2\4\1\34\2\4\1\35"+
+    "\2\4\1\36\1\4\53\0\2\4\2\0\1\4\21\0"+
+    "\21\4\3\0\2\5\1\37\46\0\2\40\46\0\2\4"+
+    "\2\0\1\4\21\0\1\4\1\41\7\4\1\42\7\4"+
+    "\2\0\2\4\2\0\1\4\21\0\10\4\1\43\10\4"+
+    "\2\0\2\4\2\0\1\4\21\0\4\4\1\44\14\4"+
+    "\2\0\2\4\2\0\1\4\21\0\7\4\1\45\11\4"+
+    "\2\0\2\4\2\0\1\4\21\0\12\4\1\46\5\4"+
+    "\1\47\2\0\2\4\2\0\1\4\21\0\15\4\1\50"+
+    "\3\4\2\0\2\4\2\0\1\4\21\0\20\4\1\51"+
+    "\3\0\2\40\1\0\1\52\44\0\2\4\2\0\1\4"+
+    "\21\0\2\4\1\53\16\4\2\0\2\4\2\0\1\4"+
+    "\21\0\5\4\1\54\13\4\2\0\2\4\2\0\1\4"+
+    "\21\0\12\4\1\55\6\4\2\0\2\4\2\0\1\4"+
+    "\21\0\3\4\1\56\15\4\2\0\2\4\2\0\1\4"+
+    "\21\0\13\4\1\57\5\4\2\0\2\4\2\0\1\4"+
+    "\21\0\16\4\1\60\2\4\2\0\2\4\2\0\1\4"+
+    "\21\0\1\61\20\4\2\0\2\4\2\0\1\4\21\0"+
+    "\4\4\1\62\14\4\2\0\2\4\2\0\1\4\21\0"+
+    "\3\4\1\63\15\4\2\0\2\4\2\0\1\4\21\0"+
+    "\12\4\1\64\6\4\2\0\2\4\2\0\1\4\21\0"+
+    "\10\4\1\65\10\4\2\0\2\4\2\0\1\4\21\0"+
+    "\2\4\1\66\16\4\2\0\2\4\2\0\1\4\21\0"+
+    "\7\4\1\67\11\4\2\0\2\4\2\0\1\4\21\0"+
+    "\6\4\1\70\12\4\2\0\2\4\2\0\1\4\21\0"+
+    "\16\4\1\71\2\4\2\0\2\4\2\0\1\4\21\0"+
+    "\4\4\1\72\14\4\2\0\2\4\2\0\1\4\21\0"+
+    "\4\4\1\73\14\4\2\0\2\4\2\0\1\4\21\0"+
+    "\10\4\1\74\10\4\2\0\2\4\2\0\1\4\21\0"+
+    "\10\4\1\75\10\4\2\0\2\4\2\0\1\4\21\0"+
+    "\10\4\1\76\10\4\2\0\2\4\2\0\1\4\21\0"+
+    "\5\4\1\77\13\4\2\0\2\4\2\0\1\4\21\0"+
+    "\13\4\1\100\5\4";
 
   private static int [] zzUnpackTrans() {
-    int [] result = new int[1189];
+    int [] result = new int[1435];
     int offset = 0;
     offset = zzUnpackTrans(ZZ_TRANS_PACKED_0, offset, result);
     return result;
@@ -196,11 +204,11 @@ public class UCricketLexer implements UCricketParser.Lexer {
   private static final int [] ZZ_ATTRIBUTE = zzUnpackAttribute();
 
   private static final String ZZ_ATTRIBUTE_PACKED_0 =
-    "\1\0\2\11\3\1\21\11\6\1\2\0\7\1\1\11"+
-    "\21\1";
+    "\1\0\2\11\3\1\21\11\7\1\2\0\11\1\1\11"+
+    "\26\1";
 
   private static int [] zzUnpackAttribute() {
-    int [] result = new int[56];
+    int [] result = new int[64];
     int offset = 0;
     offset = zzUnpackAttribute(ZZ_ATTRIBUTE_PACKED_0, offset, result);
     return result;
@@ -662,152 +670,162 @@ public class UCricketLexer implements UCricketParser.Lexer {
             { System.out.print(yytext());
             } 
             // fall through
-          case 31: break;
+          case 33: break;
           case 2: 
             { return '/';
             } 
             // fall through
-          case 32: break;
+          case 34: break;
           case 3: 
             { return UCricketParser.Lexer.IDENTIFIER;
             } 
             // fall through
-          case 33: break;
+          case 35: break;
           case 4: 
             { return UCricketParser.Lexer.INTEGER;
             } 
             // fall through
-          case 34: break;
+          case 36: break;
           case 5: 
             { return '.';
             } 
             // fall through
-          case 35: break;
+          case 37: break;
           case 6: 
             { return '+';
             } 
             // fall through
-          case 36: break;
+          case 38: break;
           case 7: 
             { return '-';
             } 
             // fall through
-          case 37: break;
+          case 39: break;
           case 8: 
             { return '*';
             } 
             // fall through
-          case 38: break;
+          case 40: break;
           case 9: 
             { return '%';
             } 
             // fall through
-          case 39: break;
+          case 41: break;
           case 10: 
             { return '(';
             } 
             // fall through
-          case 40: break;
+          case 42: break;
           case 11: 
             { return ')';
             } 
             // fall through
-          case 41: break;
+          case 43: break;
           case 12: 
             { return '<';
             } 
             // fall through
-          case 42: break;
+          case 44: break;
           case 13: 
             { return '>';
             } 
             // fall through
-          case 43: break;
+          case 45: break;
           case 14: 
             { return '{';
             } 
             // fall through
-          case 44: break;
+          case 46: break;
           case 15: 
             { return '}';
             } 
             // fall through
-          case 45: break;
+          case 47: break;
           case 16: 
             { return '[';
             } 
             // fall through
-          case 46: break;
+          case 48: break;
           case 17: 
             { return ']';
             } 
             // fall through
-          case 47: break;
+          case 49: break;
           case 18: 
             { return ',';
             } 
             // fall through
-          case 48: break;
+          case 50: break;
           case 19: 
             { return ':';
             } 
             // fall through
-          case 49: break;
+          case 51: break;
           case 20: 
             { return ';';
             } 
             // fall through
-          case 50: break;
+          case 52: break;
           case 21: 
             { return '\'';
             } 
             // fall through
-          case 51: break;
+          case 53: break;
           case 22: 
             { return '\"';
             } 
             // fall through
-          case 52: break;
+          case 54: break;
           case 23: 
             { return UCricketParser.Lexer.IF;
             } 
             // fall through
-          case 53: break;
+          case 55: break;
           case 24: 
             { return UCricketParser.Lexer.FLOAT;
             } 
             // fall through
-          case 54: break;
+          case 56: break;
           case 25: 
             { return UCricketParser.Lexer.VAR;
             } 
             // fall through
-          case 55: break;
-          case 26: 
-            { return UCricketParser.Lexer.FUNC;
-            } 
-            // fall through
-          case 56: break;
-          case 27: 
-            { return UCricketParser.Lexer.SCOPE;
-            } 
-            // fall through
           case 57: break;
-          case 28: 
-            { return UCricketParser.Lexer.WHILE;
+          case 26: 
+            { return UCricketParser.Lexer.TRUE;
             } 
             // fall through
           case 58: break;
-          case 29: 
-            { return UCricketParser.Lexer.IMPORT;
+          case 27: 
+            { return UCricketParser.Lexer.FUNC;
             } 
             // fall through
           case 59: break;
-          case 30: 
-            { return UCricketParser.Lexer.RETURN;
+          case 28: 
+            { return UCricketParser.Lexer.SCOPE;
             } 
             // fall through
           case 60: break;
+          case 29: 
+            { return UCricketParser.Lexer.FALSE;
+            } 
+            // fall through
+          case 61: break;
+          case 30: 
+            { return UCricketParser.Lexer.WHILE;
+            } 
+            // fall through
+          case 62: break;
+          case 31: 
+            { return UCricketParser.Lexer.IMPORT;
+            } 
+            // fall through
+          case 63: break;
+          case 32: 
+            { return UCricketParser.Lexer.RETURN;
+            } 
+            // fall through
+          case 64: break;
           default:
             zzScanError(ZZ_NO_MATCH);
         }

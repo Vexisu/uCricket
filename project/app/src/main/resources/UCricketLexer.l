@@ -55,6 +55,8 @@ if {return UCricketParser.Lexer.IF;}
 while {return UCricketParser.Lexer.WHILE;}
 var {return UCricketParser.Lexer.VAR;}
 return {return UCricketParser.Lexer.RETURN;}
+true {return UCricketParser.Lexer.TRUE;}
+false {return UCricketParser.Lexer.FALSE;}
 
 {IDENTIFIER} {
     return UCricketParser.Lexer.IDENTIFIER;

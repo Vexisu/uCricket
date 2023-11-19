@@ -5,6 +5,8 @@ package pl.polsl.student.maciwal866.ucricket;
 
 import pl.polsl.student.maciwal866.ucricket.ast.ASTNode;
 import pl.polsl.student.maciwal866.ucricket.ast.Expression;
+import pl.polsl.student.maciwal866.ucricket.ast.Statement;
+import pl.polsl.student.maciwal866.ucricket.ast.ValueType;
 import pl.polsl.student.maciwal866.ucricket.ast.expression.BinaryExpression;
 import pl.polsl.student.maciwal866.ucricket.ast.expression.UnaryExpression;
 import pl.polsl.student.maciwal866.ucricket.ast.expression.ValueExpression;
@@ -19,9 +21,10 @@ import pl.polsl.student.maciwal866.ucricket.ast.expression.FunctionCallExpressio
 %define parse.error verbose
 %verbose
 
-%token IDENTIFIER INTEGER FLOAT IMPORT SCOPE IF WHILE FUNC VAR RETURN
+%token IDENTIFIER INTEGER FLOAT IMPORT SCOPE IF WHILE FUNC VAR RETURN TRUE FALSE
 
 %nterm <Expression> expression binary unary primary functionCall arguments
+%nterm <String> returnedType
 
 %start program
 %left "==" "!=" "<=" ">=" "<" ">" 
@@ -43,6 +46,7 @@ scope:
 functions:
         functions function
     |   function
+    |
 ;
 
 function:
@@ -56,13 +60,14 @@ argumentsDeclaration:
 ;
 
 returnedType:
-        "<" IDENTIFIER ">"
-    |   
+        "<" IDENTIFIER ">" { $$ = $<String>2; }
+    |   { $$ = null; }
 ;
 
 statements:
         statements statement 
     |   statement
+    |
 ;
 
 statement: 
@@ -106,8 +111,10 @@ unary:
 ;
 
 primary:
-        INTEGER { $$ = new ValueExpression($<String>1, ValueExpression.ValueType.INTEGER); }
-    |   FLOAT { $$ = new ValueExpression($<String>1, ValueExpression.ValueType.FLOAT); }
+        INTEGER { $$ = new ValueExpression($<String>1, ValueType.INTEGER); }
+    |   FLOAT { $$ = new ValueExpression($<String>1, ValueType.FLOAT); }
+    |   TRUE { $$ = new ValueExpression($<String>1, ValueType.BOOLEAN); }
+    |   FALSE { $$ = new ValueExpression($<String>1, ValueType.BOOLEAN); }
     |   IDENTIFIER { $$ = new VariableExpression($<String>1); }
 ;
 
