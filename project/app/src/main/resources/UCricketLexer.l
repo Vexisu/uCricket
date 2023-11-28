@@ -23,6 +23,7 @@ package pl.polsl.student.maciwal866.ucricket;
 %}
 
 COMMENT = \/\/.*
+WHITESPACE = \ +|\n+|\r+|\t+
 IDENTIFIER = [a-zA-Z][a-zA-Z0-9]*
 INTEGER = \d+
 FLOAT = \d*\.\d+d
@@ -49,6 +50,11 @@ FLOAT = \d*\.\d+d
 "\'" {return '\'';}
 "\"" {return '\"';}
 
+"==" {return UCricketParser.Lexer.EQUAL_EQUAL;}
+"!=" {return UCricketParser.Lexer.BANG_EQUAL;}
+"<=" {return UCricketParser.Lexer.LESS_EQUAL;} 
+">=" {return UCricketParser.Lexer.GREATER_EQUAL;}
+
 import {return UCricketParser.Lexer.IMPORT;}
 scope {return UCricketParser.Lexer.SCOPE;}
 func {return UCricketParser.Lexer.FUNC;}
@@ -70,3 +76,6 @@ false {return UCricketParser.Lexer.FALSE;}
 {FLOAT} {
     return UCricketParser.Lexer.FLOAT;
 }
+
+{COMMENT} {}
+{WHITESPACE} {}

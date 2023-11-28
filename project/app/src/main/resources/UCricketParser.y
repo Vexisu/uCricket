@@ -29,7 +29,7 @@ import pl.polsl.student.maciwal866.ucricket.ast.expression.FunctionCallExpressio
 %define parse.error verbose
 %verbose
 
-%token IDENTIFIER INTEGER FLOAT IMPORT SCOPE IF WHILE FUNC VAR RETURN TRUE FALSE
+%token IDENTIFIER INTEGER FLOAT IMPORT SCOPE IF WHILE FUNC VAR RETURN TRUE FALSE EQUAL_EQUAL BANG_EQUAL LESS_EQUAL GREATER_EQUAL
 
 %nterm <ValueType> returnedType
 %nterm <StatementChain> statements
@@ -74,12 +74,12 @@ scopeContent:
 
 function:
         FUNC returnedType IDENTIFIER '(' argumentsChain ')' '{' statements '}' { $$ = new Function($2, $<String>3, $5, $8); }
+    |   FUNC returnedType IDENTIFIER '(' ')' '{' statements '}' { $$ = new Function($2, $<String>3, null, $7); }
 ;
 
 argumentsChain:
         argumentsChain ',' IDENTIFIER IDENTIFIER { $$ = new Function.ArgumentsChain(ValueType.parse($<String>3), $<String>4, $1); }
     |   IDENTIFIER IDENTIFIER { $$ = new Function.ArgumentsChain(ValueType.parse($<String>1), $<String>2, null); }
-    |   { $$ = null; }
 ;
 
 returnedType:
@@ -118,12 +118,12 @@ expression:
 ;
 
 binary:
-        expression "==" expression { $$ = new BinaryExpression($1, BinaryExpression.Operator.EQUAL, $3); }
-    |   expression "!=" expression { $$ = new BinaryExpression($1, BinaryExpression.Operator.NOT_EQUAL, $3); }
-    |   expression "<" expression { $$ = new BinaryExpression($1, BinaryExpression.Operator.LESS, $3); }
-    |   expression ">" expression { $$ = new BinaryExpression($1, BinaryExpression.Operator.GREATER, $3); }
-    |   expression "<=" expression { $$ = new BinaryExpression($1, BinaryExpression.Operator.LESS_EQUAL, $3); }
-    |   expression ">=" expression { $$ = new BinaryExpression($1, BinaryExpression.Operator.GREATER_EQUAL, $3); }
+        expression EQUAL_EQUAL expression { $$ = new BinaryExpression($1, BinaryExpression.Operator.EQUAL, $3); }
+    |   expression BANG_EQUAL expression { $$ = new BinaryExpression($1, BinaryExpression.Operator.NOT_EQUAL, $3); }
+    |   expression '<' expression { $$ = new BinaryExpression($1, BinaryExpression.Operator.LESS, $3); }
+    |   expression '>' expression { $$ = new BinaryExpression($1, BinaryExpression.Operator.GREATER, $3); }
+    |   expression LESS_EQUAL expression { $$ = new BinaryExpression($1, BinaryExpression.Operator.LESS_EQUAL, $3); }
+    |   expression GREATER_EQUAL expression { $$ = new BinaryExpression($1, BinaryExpression.Operator.GREATER_EQUAL, $3); }
     |   expression '+' expression { $$ = new BinaryExpression($1, BinaryExpression.Operator.ADD, $3); }
     |   expression '-' expression { $$ = new BinaryExpression($1, BinaryExpression.Operator.SUBTRACT, $3); }
     |   expression '*' expression { $$ = new BinaryExpression($1, BinaryExpression.Operator.MULTIPLY, $3); }
@@ -146,11 +146,11 @@ primary:
 
 functionCall:
         IDENTIFIER '(' arguments ')' { $$ = new FunctionCallExpression($<String>1, $3); }
+    |   IDENTIFIER '(' ')' { $$ = new FunctionCallExpression($<String>1, null); }
 ;
 
 arguments: 
         arguments ',' expression { $$ = new ArgumentsExpression($1, $3); }
     |   expression { $$ = $1; }
-    |   { $$ = null; }
 ;
 %%
