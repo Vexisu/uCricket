@@ -7,4 +7,17 @@ import lombok.Getter;
 @Getter
 public class Program {
     private ArrayList<Scope> scopes = new ArrayList<>();
+
+    public void addScope(Scope scope) {
+        scopes.add(scope);
+    }
+
+    public Scope getScopeByName(String name) {
+        for (Scope scope : scopes) {
+            if (scope.getName().equalsIgnoreCase(name)) {
+                return scope;
+            }
+        }
+        return null;
+    }
 }

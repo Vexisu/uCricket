@@ -1,13 +1,19 @@
 %language "Java"
 
 %code imports {
-import pl.polsl.student.maciwal866.ucricket.ast.ASTNode;
 import pl.polsl.student.maciwal866.ucricket.ast.Program;
 import pl.polsl.student.maciwal866.ucricket.ast.Scope;
 import pl.polsl.student.maciwal866.ucricket.ast.Function;
 import pl.polsl.student.maciwal866.ucricket.ast.Expression;
 import pl.polsl.student.maciwal866.ucricket.ast.Statement;
 import pl.polsl.student.maciwal866.ucricket.ast.ValueType;
+import pl.polsl.student.maciwal866.ucricket.ast.StatementChain;
+import pl.polsl.student.maciwal866.ucricket.ast.statement.AssignmentStatement;
+import pl.polsl.student.maciwal866.ucricket.ast.statement.ExpressionStatement;
+import pl.polsl.student.maciwal866.ucricket.ast.statement.IfStatement;
+import pl.polsl.student.maciwal866.ucricket.ast.statement.ReturnStatement;
+import pl.polsl.student.maciwal866.ucricket.ast.statement.VariableStatement;
+import pl.polsl.student.maciwal866.ucricket.ast.statement.WhileStatement;
 import pl.polsl.student.maciwal866.ucricket.ast.expression.BinaryExpression;
 import pl.polsl.student.maciwal866.ucricket.ast.expression.UnaryExpression;
 import pl.polsl.student.maciwal866.ucricket.ast.expression.ValueExpression;
@@ -25,13 +31,20 @@ import pl.polsl.student.maciwal866.ucricket.ast.expression.FunctionCallExpressio
 
 %token IDENTIFIER INTEGER FLOAT IMPORT SCOPE IF WHILE FUNC VAR RETURN TRUE FALSE
 
-%nterm <Expression> expression binary unary primary functionCall arguments
-%nterm <String> returnedType
+%nterm <ValueType> returnedType
+%nterm <StatementChain> statements
+%nterm <Statement> statement
+%nterm <VariableStatement> variableStatement
+%nterm <Expression> expression binary unary primary functionCall arguments condition
+%nterm <Scope> scope
+%nterm <Function> function
+%nterm <Scope.ScopeContent> scopeContent
+%nterm <Function.ArgumentsChain> argumentsChain
 
 %start program
 %left "==" "!=" "<=" ">=" "<" ">" 
-%left "+" "-"
-%left "*" "/"
+%left '+' '-'
+%left '*' '/'
 %right ARITHM_NEGATION LOGICAL_NEGATION
 
 %code {
@@ -44,50 +57,53 @@ import pl.polsl.student.maciwal866.ucricket.ast.expression.FunctionCallExpressio
 
 %%
 program:
-        program IMPORT IDENTIFIER ";"
-    |   program scope
+        program IMPORT IDENTIFIER ';'
+    |   program scope { program.addScope($2); }
     |   
 ;
 
 scope:
-        SCOPE IDENTIFIER "{" functions "}"
+        SCOPE IDENTIFIER '{' scopeContent '}' { $$ = new Scope($<String>2, $4); }
 ;
 
-functions:
-        functions function
-    |   function
-    |
+scopeContent:
+        scopeContent function { $$ = new Scope.ScopeContent<Function>($2, $1); }
+    |   scopeContent variableStatement { $$ = new Scope.ScopeContent<VariableStatement>($2, $1); }
+    |   { $$ = null; }
 ;
 
 function:
-        FUNC returnedType IDENTIFIER "(" argumentsDeclaration ")" "{" statements "}"
+        FUNC returnedType IDENTIFIER '(' argumentsChain ')' '{' statements '}' { $$ = new Function($2, $<String>3, $5, $8); }
 ;
 
-argumentsDeclaration:
-        argumentsDeclaration "," IDENTIFIER IDENTIFIER
-    |   IDENTIFIER IDENTIFIER
-    |   
+argumentsChain:
+        argumentsChain ',' IDENTIFIER IDENTIFIER { $$ = new Function.ArgumentsChain(ValueType.parse($<String>3), $<String>4, $1); }
+    |   IDENTIFIER IDENTIFIER { $$ = new Function.ArgumentsChain(ValueType.parse($<String>1), $<String>2, null); }
+    |   { $$ = null; }
 ;
 
 returnedType:
-        "<" IDENTIFIER ">" { $$ = $<String>2; }
+        '<' IDENTIFIER '>' { $$ = ValueType.parse($<String>2); }
     |   { $$ = null; }
 ;
 
 statements:
-        statements statement 
-    |   statement
-    |
+        statements statement { $$ = new StatementChain($2, $1); }
+    |   { $$ = null; }
 ;
 
 statement: 
-        expression ";"
-    |   IF "(" condition ")" "{" statements "}" 
-    |   WHILE "(" condition ")" "{" statements "}"
-    |   VAR returnedType IDENTIFIER ";"
-    |   VAR returnedType IDENTIFIER "=" expression ";"
-    |   IDENTIFIER "=" expression ";"
-    |   RETURN expression ";"
+        expression ';' {$$ = new ExpressionStatement($1); }
+    |   IF '(' condition ')' '{' statements '}' { $$ = new IfStatement($3, $6); }
+    |   WHILE '(' condition ')' '{' statements '}' { $$ = new WhileStatement($3, $6); }
+    |   variableStatement { $$ = $1; }
+    |   IDENTIFIER '=' expression ';' { $$ = new AssignmentStatement($<String>1, $3); }
+    |   RETURN expression ';' { $$ = new ReturnStatement($2); }
+;
+
+variableStatement:
+        VAR returnedType IDENTIFIER ';' { $$ = new VariableStatement($2, $<String>3, null); }
+    |   VAR returnedType IDENTIFIER '=' expression ';' { $$ = new VariableStatement($2, $<String>3, $5); }
 ;
 
 condition:
@@ -108,16 +124,16 @@ binary:
     |   expression ">" expression { $$ = new BinaryExpression($1, BinaryExpression.Operator.GREATER, $3); }
     |   expression "<=" expression { $$ = new BinaryExpression($1, BinaryExpression.Operator.LESS_EQUAL, $3); }
     |   expression ">=" expression { $$ = new BinaryExpression($1, BinaryExpression.Operator.GREATER_EQUAL, $3); }
-    |   expression "+" expression { $$ = new BinaryExpression($1, BinaryExpression.Operator.ADD, $3); }
-    |   expression "-" expression { $$ = new BinaryExpression($1, BinaryExpression.Operator.SUBTRACT, $3); }
-    |   expression "*" expression { $$ = new BinaryExpression($1, BinaryExpression.Operator.MULTIPLY, $3); }
-    |   expression "/" expression { $$ = new BinaryExpression($1, BinaryExpression.Operator.DIVIDE, $3); }
+    |   expression '+' expression { $$ = new BinaryExpression($1, BinaryExpression.Operator.ADD, $3); }
+    |   expression '-' expression { $$ = new BinaryExpression($1, BinaryExpression.Operator.SUBTRACT, $3); }
+    |   expression '*' expression { $$ = new BinaryExpression($1, BinaryExpression.Operator.MULTIPLY, $3); }
+    |   expression '/' expression { $$ = new BinaryExpression($1, BinaryExpression.Operator.DIVIDE, $3); }
 ;
 
 unary:
-        "(" expression ")" { $$ = new UnaryExpression($2, UnaryExpression.Type.PARENTHESIS); }
-    |   "!" expression %prec LOGICAL_NEGATION { $$ = new UnaryExpression($2, UnaryExpression.Type.LOGICAL_NEGATION); }
-    |   "-" expression %prec ARITHM_NEGATION { $$ = new UnaryExpression($2, UnaryExpression.Type.ARITHMETICAL_NEGATION); }
+        '(' expression ')' { $$ = new UnaryExpression($2, UnaryExpression.Type.PARENTHESIS); }
+    |   '!' expression %prec LOGICAL_NEGATION { $$ = new UnaryExpression($2, UnaryExpression.Type.LOGICAL_NEGATION); }
+    |   '-' expression %prec ARITHM_NEGATION { $$ = new UnaryExpression($2, UnaryExpression.Type.ARITHMETICAL_NEGATION); }
 ;
 
 primary:
@@ -129,11 +145,11 @@ primary:
 ;
 
 functionCall:
-        IDENTIFIER "(" arguments ")" { $$ = new FunctionCallExpression($<String>1, $3); }
+        IDENTIFIER '(' arguments ')' { $$ = new FunctionCallExpression($<String>1, $3); }
 ;
 
 arguments: 
-        arguments "," expression { $$ = new ArgumentsExpression($1, $3); }
+        arguments ',' expression { $$ = new ArgumentsExpression($1, $3); }
     |   expression { $$ = $1; }
     |   { $$ = null; }
 ;

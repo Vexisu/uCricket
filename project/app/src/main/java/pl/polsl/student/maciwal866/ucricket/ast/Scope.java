@@ -2,16 +2,26 @@ package pl.polsl.student.maciwal866.ucricket.ast;
 
 import java.util.ArrayList;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import pl.polsl.student.maciwal866.ucricket.ast.statement.VariableStatement;
 
 @Getter
-@RequiredArgsConstructor
 public class Scope {
-    @NonNull
     private String name;
+    private ScopeContent<?> content;
     private ArrayList<VariableStatement> globalVariables = new ArrayList<>();
     private ArrayList<Function> functions = new ArrayList<>();
+
+    public Scope(String name, ScopeContent<?> content) {
+        this.name = name;
+        this.content = content;
+    }
+
+    @Getter
+    @AllArgsConstructor
+    public static class ScopeContent<T> {
+        private T element;
+        private ScopeContent<?> next;
+    }
 }

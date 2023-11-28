@@ -4,15 +4,12 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import pl.polsl.student.maciwal866.ucricket.ast.ASTNode;
 import pl.polsl.student.maciwal866.ucricket.ast.Expression;
-import pl.polsl.student.maciwal866.ucricket.ast.Statement;
-import pl.polsl.student.maciwal866.ucricket.ast.StatementChain;
 
 @Getter
 @AllArgsConstructor
-public class WhileStatement implements Statement{
-    private Expression condition;
-    private StatementChain statements;
-
+public class ExpressionStatement implements Expression {
+    private Expression expression;
+    
     @Override
     public ASTNode solve() {
         // TODO Auto-generated method stub
