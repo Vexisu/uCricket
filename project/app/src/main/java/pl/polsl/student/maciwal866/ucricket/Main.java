@@ -13,6 +13,8 @@ public class Main {
             var lexer = new UCricketLexer(new FileReader(args[0]));
             var parser = new UCricketParser(lexer);
             parser.parse();
+            var program = parser.getProgram();
+            program.resolve();
             System.out.println(":)");
         } catch (IOException e) {
             System.err.printf("Can't read file: %s\n", args[0]);

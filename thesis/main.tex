@@ -69,30 +69,30 @@
 
 % TODO
 % dane autora
-\newcommand{\FirstNameAuthor}{Imię}
-\newcommand{\SurnameAuthor}{Nazwisko}
-\newcommand{\IdAuthor}{$\langle$wpisać właściwy$\rangle$}   % numer albumu  (bez $\langle$ i $\rangle$)
+\newcommand{\FirstNameAuthor}{Maciej}
+\newcommand{\SurnameAuthor}{Waleryn}
+\newcommand{\IdAuthor}{296441}   % numer albumu  (bez $\langle$ i $\rangle$)
 
 % drugi autor:
 %\newcommand{\FirstNameCoauthor}{Imię}   % Jeżeli jest drugi autor, to tutaj należy podać imię.
 %\newcommand{\SurnameCoauthor}{Nazwisko} % Jeżeli jest drugi autor, to tutaj należy podać nazwisko.
 %\newcommand{\IdCoauthor}{$\langle$wpisać właściwy$\rangle$}  % numer albumu drugiego autora (bez $\langle$ i $\rangle$)
-% Gdy nie ma drugiego autora, należy zostawić poniższe definicje puste, jak poniżej. Gdy jest drugi autor, należy zakomentować te linie.
+% Gdy nie ma drugiego autora, należy zostawić poniższe definicje puste, jak poniżej. Gdy jest drugi autor, należy zakomentować te linie.
 \newcommand{\FirstNameCoauthor}{} % Jeżeli praca ma tylko jednego autora, to dane drugiego autora zostają puste.
 \newcommand{\SurnameCoauthor}{}   % Jeżeli praca ma tylko jednego autora, to dane drugiego autora zostają puste.
 \newcommand{\IdCoauthor}{}  % Jeżeli praca ma tylko jednego autora, to dane drugiego autora zostają puste.
 %%%%%%%%%%
 
-\newcommand{\Supervisor}{$\langle$tytuł lub stopień naukowy oraz imię i nazwisko$\rangle$}     % dane promotora (bez $\langle$ i $\rangle$)
-\newcommand{\Title}{Tytuł pracy dyplomowej inżynierskiej}           % tytuł pracy po polsku
-\newcommand{\TitleAlt}{Thesis title in English}                     % thesis title in English
-\newcommand{\Program}{$\langle$wpisać właściwy$\rangle$}            % kierunek studiów  (bez $\langle$ i $\rangle$)
-\newcommand{\Specialisation}{$\langle$wpisać właściwą$\rangle$}     % specjalność  (bez $\langle$ i $\rangle$)
-\newcommand{\Departament}{$\langle$wpisać właściwą$\rangle$}        % katedra promotora  (bez $\langle$ i $\rangle$)
+\newcommand{\Supervisor}{dr hab. inż. Krzysztof Simiński}     % dane promotora (bez $\langle$ i $\rangle$)
+\newcommand{\Title}{Język programowania dla mikrokontrolerów AVR}           % tytuł pracy po polsku
+\newcommand{\TitleAlt}{Programming language for AVR microcontrollers}                     % thesis title in English
+\newcommand{\Program}{Informatyka}            % kierunek studiów  (bez $\langle$ i $\rangle$)
+\newcommand{\Specialisation}{Grafika komputerowa}     % specjalność  (bez $\langle$ i $\rangle$)
+\newcommand{\Departament}{Algorytmiki i Oprogramowania}        % katedra promotora  (bez $\langle$ i $\rangle$)
 
 % Jeżeli został wyznaczony promotor pomocniczy lub opiekun, proszę go/ją wpisać ...
 \newcommand{\Consultant}{$\langle$stopień naukowy imię i nazwisko$\rangle$} % dane promotora pomocniczego, opiekuna (bez $\langle$ i $\rangle$)
-% ... w przeciwnym razie proszę zostawić puste miejsce jak poniżej:
+% ... w przeciwnym razie proszę zostawić puste miejsce jak poniżej:
 %\newcommand{\Consultant}{} % brak promotowa pomocniczego / opiekuna
 
 % koniec fragmentu do modyfikacji
@@ -113,7 +113,7 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-
+\pgfplotsset{compat=1.18} 
 \begin{document}
 %\kslistofremarks
 
@@ -126,7 +126,7 @@
 \pagestyle{empty}
 
 
-%%% No to zaczynamy pisać pracę :-) %%%%
+%%% No to zaczynamy pisać pracę :-) %%%%
 
 % TODO
 \input{chapters/00.tex} % informacje redakcyjne

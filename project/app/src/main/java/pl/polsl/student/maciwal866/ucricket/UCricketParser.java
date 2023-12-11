@@ -63,7 +63,9 @@ import pl.polsl.student.maciwal866.ucricket.ast.expression.VariableExpression;
 import pl.polsl.student.maciwal866.ucricket.ast.expression.ArgumentsExpression;
 import pl.polsl.student.maciwal866.ucricket.ast.expression.FunctionCallExpression;
 
-/* "./src/main/java/pl/polsl/student/maciwal866/ucricket/UCricketParser.java":67  */
+import lombok.Getter;
+
+/* "./src/main/java/pl/polsl/student/maciwal866/ucricket/UCricketParser.java":69  */
 
 /**
  * A Bison parser, automatically generated from <tt>./src/main/resources/UCricketParser.y</tt>.
@@ -148,7 +150,7 @@ public class UCricketParser
     S_scope(43),                   /* scope  */
     S_scopeContent(44),            /* scopeContent  */
     S_function(45),                /* function  */
-    S_argumentsChain(46),          /* argumentsChain  */
+    S_argumentChain(46),           /* argumentChain  */
     S_returnedType(47),            /* returnedType  */
     S_statements(48),              /* statements  */
     S_statement(49),               /* statement  */
@@ -215,7 +217,7 @@ public class UCricketParser
       SymbolKind.S_scope,
       SymbolKind.S_scopeContent,
       SymbolKind.S_function,
-      SymbolKind.S_argumentsChain,
+      SymbolKind.S_argumentChain,
       SymbolKind.S_returnedType,
       SymbolKind.S_statements,
       SymbolKind.S_statement,
@@ -283,7 +285,7 @@ public class UCricketParser
   "\">\"", "'+'", "'-'", "'*'", "'/'", "ARITHM_NEGATION",
   "LOGICAL_NEGATION", "';'", "'{'", "'}'", "'('", "')'", "','", "'<'",
   "'>'", "'='", "'!'", "$accept", "program", "scope", "scopeContent",
-  "function", "argumentsChain", "returnedType", "statements", "statement",
+  "function", "argumentChain", "returnedType", "statements", "statement",
   "variableStatement", "condition", "expression", "binary", "unary",
   "primary", "functionCall", "arguments", null
     };
@@ -392,11 +394,11 @@ public class UCricketParser
   public UCricketParser(Lexer yylexer)
   {
 /* "%code init" blocks.  */
-/* "./src/main/resources/UCricketParser.y":54  */
+/* "./src/main/resources/UCricketParser.y":58  */
 
     program = new Program();
 
-/* "./src/main/java/pl/polsl/student/maciwal866/ucricket/UCricketParser.java":400  */
+/* "./src/main/java/pl/polsl/student/maciwal866/ucricket/UCricketParser.java":402  */
 
     this.yylexer = yylexer;
 
@@ -550,307 +552,307 @@ public class UCricketParser
       {
           case 3: /* program: program scope  */
   if (yyn == 3)
-    /* "./src/main/resources/UCricketParser.y":61  */
+    /* "./src/main/resources/UCricketParser.y":65  */
                       { program.addScope(((Scope)(yystack.valueAt (0)))); };
   break;
 
 
   case 5: /* scope: SCOPE IDENTIFIER '{' scopeContent '}'  */
   if (yyn == 5)
-    /* "./src/main/resources/UCricketParser.y":66  */
+    /* "./src/main/resources/UCricketParser.y":70  */
                                               { yyval = new Scope(((String)(yystack.valueAt (3))), ((Scope.ScopeContent)(yystack.valueAt (1)))); };
   break;
 
 
   case 6: /* scopeContent: scopeContent function  */
   if (yyn == 6)
-    /* "./src/main/resources/UCricketParser.y":70  */
+    /* "./src/main/resources/UCricketParser.y":74  */
                               { yyval = new Scope.ScopeContent<Function>(((Function)(yystack.valueAt (0))), ((Scope.ScopeContent)(yystack.valueAt (1)))); };
   break;
 
 
   case 7: /* scopeContent: scopeContent variableStatement  */
   if (yyn == 7)
-    /* "./src/main/resources/UCricketParser.y":71  */
+    /* "./src/main/resources/UCricketParser.y":75  */
                                        { yyval = new Scope.ScopeContent<VariableStatement>(((VariableStatement)(yystack.valueAt (0))), ((Scope.ScopeContent)(yystack.valueAt (1)))); };
   break;
 
 
   case 8: /* scopeContent: %empty  */
   if (yyn == 8)
-    /* "./src/main/resources/UCricketParser.y":72  */
+    /* "./src/main/resources/UCricketParser.y":76  */
         { yyval = null; };
   break;
 
 
-  case 9: /* function: FUNC returnedType IDENTIFIER '(' argumentsChain ')' '{' statements '}'  */
+  case 9: /* function: FUNC returnedType IDENTIFIER '(' argumentChain ')' '{' statements '}'  */
   if (yyn == 9)
-    /* "./src/main/resources/UCricketParser.y":76  */
-                                                                               { yyval = new Function(((ValueType)(yystack.valueAt (7))), ((String)(yystack.valueAt (6))), ((Function.ArgumentsChain)(yystack.valueAt (4))), ((StatementChain)(yystack.valueAt (1)))); };
+    /* "./src/main/resources/UCricketParser.y":80  */
+                                                                              { yyval = new Function(((ValueType)(yystack.valueAt (7))), ((String)(yystack.valueAt (6))), ((Function.ArgumentChain)(yystack.valueAt (4))), ((StatementChain)(yystack.valueAt (1)))); };
   break;
 
 
   case 10: /* function: FUNC returnedType IDENTIFIER '(' ')' '{' statements '}'  */
   if (yyn == 10)
-    /* "./src/main/resources/UCricketParser.y":77  */
+    /* "./src/main/resources/UCricketParser.y":81  */
                                                                 { yyval = new Function(((ValueType)(yystack.valueAt (6))), ((String)(yystack.valueAt (5))), null, ((StatementChain)(yystack.valueAt (1)))); };
   break;
 
 
-  case 11: /* argumentsChain: argumentsChain ',' IDENTIFIER IDENTIFIER  */
+  case 11: /* argumentChain: argumentChain ',' IDENTIFIER IDENTIFIER  */
   if (yyn == 11)
-    /* "./src/main/resources/UCricketParser.y":81  */
-                                                 { yyval = new Function.ArgumentsChain(ValueType.parse(((String)(yystack.valueAt (1)))), ((String)(yystack.valueAt (0))), ((Function.ArgumentsChain)(yystack.valueAt (3)))); };
+    /* "./src/main/resources/UCricketParser.y":85  */
+                                                { yyval = new Function.ArgumentChain(ValueType.parse(((String)(yystack.valueAt (1)))), ((String)(yystack.valueAt (0))), ((Function.ArgumentChain)(yystack.valueAt (3)))); };
   break;
 
 
-  case 12: /* argumentsChain: IDENTIFIER IDENTIFIER  */
+  case 12: /* argumentChain: IDENTIFIER IDENTIFIER  */
   if (yyn == 12)
-    /* "./src/main/resources/UCricketParser.y":82  */
-                              { yyval = new Function.ArgumentsChain(ValueType.parse(((String)(yystack.valueAt (1)))), ((String)(yystack.valueAt (0))), null); };
+    /* "./src/main/resources/UCricketParser.y":86  */
+                              { yyval = new Function.ArgumentChain(ValueType.parse(((String)(yystack.valueAt (1)))), ((String)(yystack.valueAt (0))), null); };
   break;
 
 
   case 13: /* returnedType: '<' IDENTIFIER '>'  */
   if (yyn == 13)
-    /* "./src/main/resources/UCricketParser.y":86  */
+    /* "./src/main/resources/UCricketParser.y":90  */
                            { yyval = ValueType.parse(((String)(yystack.valueAt (1)))); };
   break;
 
 
   case 14: /* returnedType: %empty  */
   if (yyn == 14)
-    /* "./src/main/resources/UCricketParser.y":87  */
+    /* "./src/main/resources/UCricketParser.y":91  */
         { yyval = null; };
   break;
 
 
   case 15: /* statements: statements statement  */
   if (yyn == 15)
-    /* "./src/main/resources/UCricketParser.y":91  */
+    /* "./src/main/resources/UCricketParser.y":95  */
                              { yyval = new StatementChain(((Statement)(yystack.valueAt (0))), ((StatementChain)(yystack.valueAt (1)))); };
   break;
 
 
   case 16: /* statements: %empty  */
   if (yyn == 16)
-    /* "./src/main/resources/UCricketParser.y":92  */
+    /* "./src/main/resources/UCricketParser.y":96  */
         { yyval = null; };
   break;
 
 
   case 17: /* statement: expression ';'  */
   if (yyn == 17)
-    /* "./src/main/resources/UCricketParser.y":96  */
+    /* "./src/main/resources/UCricketParser.y":100  */
                        {yyval = new ExpressionStatement(((Expression)(yystack.valueAt (1)))); };
   break;
 
 
   case 18: /* statement: IF '(' condition ')' '{' statements '}'  */
   if (yyn == 18)
-    /* "./src/main/resources/UCricketParser.y":97  */
+    /* "./src/main/resources/UCricketParser.y":101  */
                                                 { yyval = new IfStatement(((Expression)(yystack.valueAt (4))), ((StatementChain)(yystack.valueAt (1)))); };
   break;
 
 
   case 19: /* statement: WHILE '(' condition ')' '{' statements '}'  */
   if (yyn == 19)
-    /* "./src/main/resources/UCricketParser.y":98  */
+    /* "./src/main/resources/UCricketParser.y":102  */
                                                    { yyval = new WhileStatement(((Expression)(yystack.valueAt (4))), ((StatementChain)(yystack.valueAt (1)))); };
   break;
 
 
   case 20: /* statement: variableStatement  */
   if (yyn == 20)
-    /* "./src/main/resources/UCricketParser.y":99  */
+    /* "./src/main/resources/UCricketParser.y":103  */
                           { yyval = ((VariableStatement)(yystack.valueAt (0))); };
   break;
 
 
   case 21: /* statement: IDENTIFIER '=' expression ';'  */
   if (yyn == 21)
-    /* "./src/main/resources/UCricketParser.y":100  */
+    /* "./src/main/resources/UCricketParser.y":104  */
                                       { yyval = new AssignmentStatement(((String)(yystack.valueAt (3))), ((Expression)(yystack.valueAt (1)))); };
   break;
 
 
   case 22: /* statement: RETURN expression ';'  */
   if (yyn == 22)
-    /* "./src/main/resources/UCricketParser.y":101  */
+    /* "./src/main/resources/UCricketParser.y":105  */
                               { yyval = new ReturnStatement(((Expression)(yystack.valueAt (1)))); };
   break;
 
 
   case 23: /* variableStatement: VAR returnedType IDENTIFIER ';'  */
   if (yyn == 23)
-    /* "./src/main/resources/UCricketParser.y":105  */
+    /* "./src/main/resources/UCricketParser.y":109  */
                                         { yyval = new VariableStatement(((ValueType)(yystack.valueAt (2))), ((String)(yystack.valueAt (1))), null); };
   break;
 
 
   case 24: /* variableStatement: VAR returnedType IDENTIFIER '=' expression ';'  */
   if (yyn == 24)
-    /* "./src/main/resources/UCricketParser.y":106  */
+    /* "./src/main/resources/UCricketParser.y":110  */
                                                        { yyval = new VariableStatement(((ValueType)(yystack.valueAt (4))), ((String)(yystack.valueAt (3))), ((Expression)(yystack.valueAt (1)))); };
   break;
 
 
   case 30: /* binary: expression EQUAL_EQUAL expression  */
   if (yyn == 30)
-    /* "./src/main/resources/UCricketParser.y":121  */
+    /* "./src/main/resources/UCricketParser.y":125  */
                                           { yyval = new BinaryExpression(((Expression)(yystack.valueAt (2))), BinaryExpression.Operator.EQUAL, ((Expression)(yystack.valueAt (0)))); };
   break;
 
 
   case 31: /* binary: expression BANG_EQUAL expression  */
   if (yyn == 31)
-    /* "./src/main/resources/UCricketParser.y":122  */
+    /* "./src/main/resources/UCricketParser.y":126  */
                                          { yyval = new BinaryExpression(((Expression)(yystack.valueAt (2))), BinaryExpression.Operator.NOT_EQUAL, ((Expression)(yystack.valueAt (0)))); };
   break;
 
 
   case 32: /* binary: expression '<' expression  */
   if (yyn == 32)
-    /* "./src/main/resources/UCricketParser.y":123  */
+    /* "./src/main/resources/UCricketParser.y":127  */
                                   { yyval = new BinaryExpression(((Expression)(yystack.valueAt (2))), BinaryExpression.Operator.LESS, ((Expression)(yystack.valueAt (0)))); };
   break;
 
 
   case 33: /* binary: expression '>' expression  */
   if (yyn == 33)
-    /* "./src/main/resources/UCricketParser.y":124  */
+    /* "./src/main/resources/UCricketParser.y":128  */
                                   { yyval = new BinaryExpression(((Expression)(yystack.valueAt (2))), BinaryExpression.Operator.GREATER, ((Expression)(yystack.valueAt (0)))); };
   break;
 
 
   case 34: /* binary: expression LESS_EQUAL expression  */
   if (yyn == 34)
-    /* "./src/main/resources/UCricketParser.y":125  */
+    /* "./src/main/resources/UCricketParser.y":129  */
                                          { yyval = new BinaryExpression(((Expression)(yystack.valueAt (2))), BinaryExpression.Operator.LESS_EQUAL, ((Expression)(yystack.valueAt (0)))); };
   break;
 
 
   case 35: /* binary: expression GREATER_EQUAL expression  */
   if (yyn == 35)
-    /* "./src/main/resources/UCricketParser.y":126  */
+    /* "./src/main/resources/UCricketParser.y":130  */
                                             { yyval = new BinaryExpression(((Expression)(yystack.valueAt (2))), BinaryExpression.Operator.GREATER_EQUAL, ((Expression)(yystack.valueAt (0)))); };
   break;
 
 
   case 36: /* binary: expression '+' expression  */
   if (yyn == 36)
-    /* "./src/main/resources/UCricketParser.y":127  */
+    /* "./src/main/resources/UCricketParser.y":131  */
                                   { yyval = new BinaryExpression(((Expression)(yystack.valueAt (2))), BinaryExpression.Operator.ADD, ((Expression)(yystack.valueAt (0)))); };
   break;
 
 
   case 37: /* binary: expression '-' expression  */
   if (yyn == 37)
-    /* "./src/main/resources/UCricketParser.y":128  */
+    /* "./src/main/resources/UCricketParser.y":132  */
                                   { yyval = new BinaryExpression(((Expression)(yystack.valueAt (2))), BinaryExpression.Operator.SUBTRACT, ((Expression)(yystack.valueAt (0)))); };
   break;
 
 
   case 38: /* binary: expression '*' expression  */
   if (yyn == 38)
-    /* "./src/main/resources/UCricketParser.y":129  */
+    /* "./src/main/resources/UCricketParser.y":133  */
                                   { yyval = new BinaryExpression(((Expression)(yystack.valueAt (2))), BinaryExpression.Operator.MULTIPLY, ((Expression)(yystack.valueAt (0)))); };
   break;
 
 
   case 39: /* binary: expression '/' expression  */
   if (yyn == 39)
-    /* "./src/main/resources/UCricketParser.y":130  */
+    /* "./src/main/resources/UCricketParser.y":134  */
                                   { yyval = new BinaryExpression(((Expression)(yystack.valueAt (2))), BinaryExpression.Operator.DIVIDE, ((Expression)(yystack.valueAt (0)))); };
   break;
 
 
   case 40: /* unary: '(' expression ')'  */
   if (yyn == 40)
-    /* "./src/main/resources/UCricketParser.y":134  */
+    /* "./src/main/resources/UCricketParser.y":138  */
                            { yyval = new UnaryExpression(((Expression)(yystack.valueAt (1))), UnaryExpression.Type.PARENTHESIS); };
   break;
 
 
   case 41: /* unary: '!' expression  */
   if (yyn == 41)
-    /* "./src/main/resources/UCricketParser.y":135  */
+    /* "./src/main/resources/UCricketParser.y":139  */
                                               { yyval = new UnaryExpression(((Expression)(yystack.valueAt (0))), UnaryExpression.Type.LOGICAL_NEGATION); };
   break;
 
 
   case 42: /* unary: '-' expression  */
   if (yyn == 42)
-    /* "./src/main/resources/UCricketParser.y":136  */
+    /* "./src/main/resources/UCricketParser.y":140  */
                                              { yyval = new UnaryExpression(((Expression)(yystack.valueAt (0))), UnaryExpression.Type.ARITHMETICAL_NEGATION); };
   break;
 
 
   case 43: /* primary: INTEGER  */
   if (yyn == 43)
-    /* "./src/main/resources/UCricketParser.y":140  */
+    /* "./src/main/resources/UCricketParser.y":144  */
                 { yyval = new ValueExpression(((String)(yystack.valueAt (0))), ValueType.INTEGER); };
   break;
 
 
   case 44: /* primary: FLOAT  */
   if (yyn == 44)
-    /* "./src/main/resources/UCricketParser.y":141  */
+    /* "./src/main/resources/UCricketParser.y":145  */
               { yyval = new ValueExpression(((String)(yystack.valueAt (0))), ValueType.FLOAT); };
   break;
 
 
   case 45: /* primary: TRUE  */
   if (yyn == 45)
-    /* "./src/main/resources/UCricketParser.y":142  */
+    /* "./src/main/resources/UCricketParser.y":146  */
              { yyval = new ValueExpression(((String)(yystack.valueAt (0))), ValueType.BOOLEAN); };
   break;
 
 
   case 46: /* primary: FALSE  */
   if (yyn == 46)
-    /* "./src/main/resources/UCricketParser.y":143  */
+    /* "./src/main/resources/UCricketParser.y":147  */
               { yyval = new ValueExpression(((String)(yystack.valueAt (0))), ValueType.BOOLEAN); };
   break;
 
 
   case 47: /* primary: IDENTIFIER  */
   if (yyn == 47)
-    /* "./src/main/resources/UCricketParser.y":144  */
+    /* "./src/main/resources/UCricketParser.y":148  */
                    { yyval = new VariableExpression(((String)(yystack.valueAt (0)))); };
   break;
 
 
   case 48: /* functionCall: IDENTIFIER '(' arguments ')'  */
   if (yyn == 48)
-    /* "./src/main/resources/UCricketParser.y":148  */
-                                     { yyval = new FunctionCallExpression(((String)(yystack.valueAt (3))), ((Expression)(yystack.valueAt (1)))); };
+    /* "./src/main/resources/UCricketParser.y":152  */
+                                     { yyval = new FunctionCallExpression(((String)(yystack.valueAt (3))), ((ArgumentsExpression)(yystack.valueAt (1)))); };
   break;
 
 
   case 49: /* functionCall: IDENTIFIER '(' ')'  */
   if (yyn == 49)
-    /* "./src/main/resources/UCricketParser.y":149  */
+    /* "./src/main/resources/UCricketParser.y":153  */
                            { yyval = new FunctionCallExpression(((String)(yystack.valueAt (2))), null); };
   break;
 
 
   case 50: /* arguments: arguments ',' expression  */
   if (yyn == 50)
-    /* "./src/main/resources/UCricketParser.y":153  */
-                                 { yyval = new ArgumentsExpression(((Expression)(yystack.valueAt (2))), ((Expression)(yystack.valueAt (0)))); };
+    /* "./src/main/resources/UCricketParser.y":157  */
+                                 { yyval = new ArgumentsExpression(((Expression)(yystack.valueAt (0))), ((ArgumentsExpression)(yystack.valueAt (2)))); };
   break;
 
 
   case 51: /* arguments: expression  */
   if (yyn == 51)
-    /* "./src/main/resources/UCricketParser.y":154  */
-                   { yyval = ((Expression)(yystack.valueAt (0))); };
+    /* "./src/main/resources/UCricketParser.y":158  */
+                   { yyval = new ArgumentsExpression(((Expression)(yystack.valueAt (0))), null); };
   break;
 
 
 
-/* "./src/main/java/pl/polsl/student/maciwal866/ucricket/UCricketParser.java":854  */
+/* "./src/main/java/pl/polsl/student/maciwal866/ucricket/UCricketParser.java":856  */
 
         default: break;
       }
@@ -1517,11 +1519,12 @@ private static final byte[] yycheck_ = yycheck_init();
   private static final int YYNTOKENS_ = 41;
 
 /* Unqualified %code blocks.  */
-/* "./src/main/resources/UCricketParser.y":50  */
+/* "./src/main/resources/UCricketParser.y":53  */
 
-    private Program program;
+    @Getter
+    private static Program program;
 
-/* "./src/main/java/pl/polsl/student/maciwal866/ucricket/UCricketParser.java":1525  */
+/* "./src/main/java/pl/polsl/student/maciwal866/ucricket/UCricketParser.java":1528  */
 
 }
-/* "./src/main/resources/UCricketParser.y":156  */
+/* "./src/main/resources/UCricketParser.y":160  */

@@ -20,4 +20,11 @@ public class Program {
         }
         return null;
     }
+
+    public Object resolve() {
+        for (Scope scope : scopes) {
+            scope.resolve(null);
+        }
+        return null;
+    }
 }

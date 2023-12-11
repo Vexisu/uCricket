@@ -20,6 +20,8 @@ import pl.polsl.student.maciwal866.ucricket.ast.expression.ValueExpression;
 import pl.polsl.student.maciwal866.ucricket.ast.expression.VariableExpression;
 import pl.polsl.student.maciwal866.ucricket.ast.expression.ArgumentsExpression;
 import pl.polsl.student.maciwal866.ucricket.ast.expression.FunctionCallExpression;
+
+import lombok.Getter;
 }
 
 %define api.package {pl.polsl.student.maciwal866.ucricket}
@@ -35,11 +37,12 @@ import pl.polsl.student.maciwal866.ucricket.ast.expression.FunctionCallExpressio
 %nterm <StatementChain> statements
 %nterm <Statement> statement
 %nterm <VariableStatement> variableStatement
-%nterm <Expression> expression binary unary primary functionCall arguments condition
+%nterm <Expression> expression binary unary primary functionCall condition
+%nterm <ArgumentsExpression> arguments
 %nterm <Scope> scope
 %nterm <Function> function
 %nterm <Scope.ScopeContent> scopeContent
-%nterm <Function.ArgumentsChain> argumentsChain
+%nterm <Function.ArgumentChain> argumentChain
 
 %start program
 %left "==" "!=" "<=" ">=" "<" ">" 
@@ -48,7 +51,8 @@ import pl.polsl.student.maciwal866.ucricket.ast.expression.FunctionCallExpressio
 %right ARITHM_NEGATION LOGICAL_NEGATION
 
 %code {
-    private Program program;
+    @Getter
+    private static Program program;
 }
 
 %code init {
@@ -73,13 +77,13 @@ scopeContent:
 ;
 
 function:
-        FUNC returnedType IDENTIFIER '(' argumentsChain ')' '{' statements '}' { $$ = new Function($2, $<String>3, $5, $8); }
+        FUNC returnedType IDENTIFIER '(' argumentChain ')' '{' statements '}' { $$ = new Function($2, $<String>3, $5, $8); }
     |   FUNC returnedType IDENTIFIER '(' ')' '{' statements '}' { $$ = new Function($2, $<String>3, null, $7); }
 ;
 
-argumentsChain:
-        argumentsChain ',' IDENTIFIER IDENTIFIER { $$ = new Function.ArgumentsChain(ValueType.parse($<String>3), $<String>4, $1); }
-    |   IDENTIFIER IDENTIFIER { $$ = new Function.ArgumentsChain(ValueType.parse($<String>1), $<String>2, null); }
+argumentChain:
+        argumentChain ',' IDENTIFIER IDENTIFIER { $$ = new Function.ArgumentChain(ValueType.parse($<String>3), $<String>4, $1); }
+    |   IDENTIFIER IDENTIFIER { $$ = new Function.ArgumentChain(ValueType.parse($<String>1), $<String>2, null); }
 ;
 
 returnedType:
@@ -150,7 +154,7 @@ functionCall:
 ;
 
 arguments: 
-        arguments ',' expression { $$ = new ArgumentsExpression($1, $3); }
-    |   expression { $$ = $1; }
+        arguments ',' expression { $$ = new ArgumentsExpression($3, $1); }
+    |   expression { $$ = new ArgumentsExpression($1, null); }
 ;
 %%
