@@ -20,8 +20,7 @@ public class ReturnStatement implements Statement {
 
     @Override
     public Object resolve(Scoped parent) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'resolve'");
+        return expression.resolve(parent);
     }
     
 }

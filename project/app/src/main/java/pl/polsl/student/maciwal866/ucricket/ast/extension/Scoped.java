@@ -11,9 +11,9 @@ public interface Scoped {
 
     void addVariable(VariableStatement statement);
 
-    Function getFunction(String name, ValueType[] argumenTypes);
+    Function getFunction(String name, ValueType[] argumentTypes);
 
-    boolean hasFunction(String name, ValueType[] argumenTypes);
+    boolean hasFunction(String name, ValueType[] argumentTypes);
 
     void addFunction(Function function);
 }

@@ -2,8 +2,6 @@ package pl.polsl.student.maciwal866.ucricket.ast.expression;
 
 import java.util.stream.Stream;
 
-import com.google.common.collect.Streams;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import pl.polsl.student.maciwal866.ucricket.ast.ASTNode;

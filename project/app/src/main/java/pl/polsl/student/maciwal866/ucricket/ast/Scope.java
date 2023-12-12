@@ -32,7 +32,6 @@ public class Scope implements Resolvable, Scoped {
         var currentContent = content;
         while (currentContent != null) {
             if (currentContent.getElement() instanceof Function function) {
-                functions.add(function);
                 function.resolve(this);
             } else if (currentContent.getElement() instanceof VariableStatement variable) {
                 variable.resolve(this);
@@ -56,9 +55,9 @@ public class Scope implements Resolvable, Scoped {
     }
 
     @Override
-    public Function getFunction(String name, ValueType[] argumenTypes) {
+    public Function getFunction(String name, ValueType[] argumentTypes) {
         for (var function : functions) {
-            if (function.getName().equalsIgnoreCase(name)) {
+            if (function.isEquivalent(name, argumentTypes)) {
                 return function;
             }
         }
@@ -79,9 +78,9 @@ public class Scope implements Resolvable, Scoped {
     }
 
     @Override
-    public boolean hasFunction(String name, ValueType[] argumenTypes) {
+    public boolean hasFunction(String name, ValueType[] argumentTypes) {
         for (var function : functions) {
-            if (function.getName().equalsIgnoreCase(name)) {
+            if (function.isEquivalent(name, argumentTypes)) {
                 return true;
             }
         }

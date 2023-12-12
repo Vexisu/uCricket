@@ -4,12 +4,13 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import pl.polsl.student.maciwal866.ucricket.ast.ASTNode;
 import pl.polsl.student.maciwal866.ucricket.ast.Expression;
+import pl.polsl.student.maciwal866.ucricket.ast.Statement;
 import pl.polsl.student.maciwal866.ucricket.ast.ValueType;
 import pl.polsl.student.maciwal866.ucricket.ast.extension.Scoped;
 
 @Getter
 @AllArgsConstructor
-public class ExpressionStatement implements Expression {
+public class ExpressionStatement implements Statement {
     private Expression expression;
 
     @Override

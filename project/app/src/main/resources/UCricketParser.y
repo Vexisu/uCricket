@@ -61,8 +61,8 @@ import lombok.Getter;
 
 %%
 program:
-        program IMPORT IDENTIFIER ';'
-    |   program scope { program.addScope($2); }
+        IMPORT IDENTIFIER ';' program
+    |   scope program { program.addScope($1); }
     |   
 ;
 
@@ -71,8 +71,8 @@ scope:
 ;
 
 scopeContent:
-        scopeContent function { $$ = new Scope.ScopeContent<Function>($2, $1); }
-    |   scopeContent variableStatement { $$ = new Scope.ScopeContent<VariableStatement>($2, $1); }
+        function scopeContent { $$ = new Scope.ScopeContent<Function>($1, $2); }
+    |   variableStatement scopeContent { $$ = new Scope.ScopeContent<VariableStatement>($1, $2); }
     |   { $$ = null; }
 ;
 
@@ -92,7 +92,7 @@ returnedType:
 ;
 
 statements:
-        statements statement { $$ = new StatementChain($2, $1); }
+        statement statements { $$ = new StatementChain($1, $2); }
     |   { $$ = null; }
 ;
 
@@ -154,7 +154,7 @@ functionCall:
 ;
 
 arguments: 
-        arguments ',' expression { $$ = new ArgumentsExpression($3, $1); }
+        expression ',' arguments { $$ = new ArgumentsExpression($1, $3); }
     |   expression { $$ = new ArgumentsExpression($1, null); }
 ;
 %%
