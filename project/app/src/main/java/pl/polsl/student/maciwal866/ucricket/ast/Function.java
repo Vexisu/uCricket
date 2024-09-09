@@ -16,6 +16,7 @@ public class Function implements Resolvable, Scoped {
     private String name;
     private LinkedHashMap<String, ValueType> arguments;
     private ArrayList<Statement> statements;
+    private int programMemoryAddress;
 
     private Scoped parent;
     private ArrayList<VariableStatement> localVariables = new ArrayList<>();

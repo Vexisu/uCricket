@@ -50,7 +50,7 @@ public class BinaryExpression implements Expression {
         var resolverResultRight = rightExpression.resolve(parent);
         if (resolverResultLeft instanceof ValueType leftValueType
                 && resolverResultRight instanceof ValueType rightValueType) {
-            if (!operator.isCompatibleWith(rightValueType) && !operator.isCompatibleWith(rightValueType)) {
+            if (!operator.isCompatibleWith(leftValueType) && !operator.isCompatibleWith(rightValueType)) {
                 throw new MismatchedOperatorException(this);
             }
             return rightValueType;
