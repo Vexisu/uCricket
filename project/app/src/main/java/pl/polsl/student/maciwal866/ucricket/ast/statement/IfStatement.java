@@ -3,7 +3,6 @@ package pl.polsl.student.maciwal866.ucricket.ast.statement;
 import java.util.ArrayList;
 import java.util.stream.Stream;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import pl.polsl.student.maciwal866.ucricket.ast.ASTNode;
 import pl.polsl.student.maciwal866.ucricket.ast.Expression;
@@ -18,7 +17,7 @@ import pl.polsl.student.maciwal866.ucricket.ast.extension.Scoped;
 public class IfStatement implements Statement, Scoped {
     private Expression condition;
     private StatementChain statements;
-    
+
     private Scoped parent;
     private ArrayList<VariableStatement> localVariables = new ArrayList<>();
 
