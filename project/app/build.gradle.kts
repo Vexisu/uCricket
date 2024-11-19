@@ -7,7 +7,7 @@ dependencies {
 
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 
-    implementation("com.google.guava:guava:32.3.1-jre")
+    implementation("com.google.guava:guava:33.3.1-jre")
 
     compileOnly("org.projectlombok:lombok:1.18.34")
     annotationProcessor("org.projectlombok:lombok:1.18.34")
