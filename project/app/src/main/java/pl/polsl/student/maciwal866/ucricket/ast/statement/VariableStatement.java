@@ -1,8 +1,10 @@
 package pl.polsl.student.maciwal866.ucricket.ast.statement;
 
+import org.bytedeco.llvm.LLVM.LLVMBuilderRef;
+import org.bytedeco.llvm.LLVM.LLVMModuleRef;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import pl.polsl.student.maciwal866.ucricket.ast.ASTNode;
 import pl.polsl.student.maciwal866.ucricket.ast.Expression;
 import pl.polsl.student.maciwal866.ucricket.ast.Statement;
 import pl.polsl.student.maciwal866.ucricket.ast.ValueType;
@@ -18,12 +20,6 @@ public class VariableStatement implements Statement {
     private Expression value;
 
     @Override
-    public ASTNode solve() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'solve'");
-    }
-
-    @Override
     public Object resolve(Scoped parent) {
         if (parent.hasVariable(name)) {
             throw new VariableAlreadyExistsException(this);
@@ -33,6 +29,12 @@ public class VariableStatement implements Statement {
         }
         parent.addVariable(this);
         return null;
+    }
+
+    @Override
+    public void solve(LLVMBuilderRef builder, LLVMModuleRef module) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'solve'");
     }
 
 }

@@ -2,9 +2,12 @@ package pl.polsl.student.maciwal866.ucricket.ast.expression;
 
 import java.util.stream.Stream;
 
+import org.bytedeco.llvm.LLVM.LLVMBuilderRef;
+import org.bytedeco.llvm.LLVM.LLVMModuleRef;
+import org.bytedeco.llvm.LLVM.LLVMValueRef;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import pl.polsl.student.maciwal866.ucricket.ast.ASTNode;
 import pl.polsl.student.maciwal866.ucricket.ast.Expression;
 import pl.polsl.student.maciwal866.ucricket.ast.ValueType;
 import pl.polsl.student.maciwal866.ucricket.ast.exception.MismatchedOperatorException;
@@ -38,11 +41,6 @@ public class BinaryExpression implements Expression {
         }
     }
 
-    @Override
-    public ASTNode solve() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'solve'");
-    }
 
     @Override
     public Object resolve(Scoped parent) {
@@ -56,5 +54,12 @@ public class BinaryExpression implements Expression {
             return rightValueType;
         }
         throw new MismatchedOperatorException(this);
+    }
+
+
+    @Override
+    public LLVMValueRef solve(LLVMBuilderRef builder, LLVMModuleRef module) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'solve'");
     }
 }

@@ -3,9 +3,11 @@ package pl.polsl.student.maciwal866.ucricket.ast.statement;
 import java.util.ArrayList;
 import java.util.stream.Stream;
 
+import org.bytedeco.llvm.LLVM.LLVMBuilderRef;
+import org.bytedeco.llvm.LLVM.LLVMModuleRef;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import pl.polsl.student.maciwal866.ucricket.ast.ASTNode;
 import pl.polsl.student.maciwal866.ucricket.ast.Expression;
 import pl.polsl.student.maciwal866.ucricket.ast.Function;
 import pl.polsl.student.maciwal866.ucricket.ast.Statement;
@@ -26,12 +28,6 @@ public class WhileStatement implements Statement, Scoped {
     public WhileStatement(Expression condition, StatementChain statements) {
         this.condition = condition;
         this.statements = statements;
-    }
-
-    @Override
-    public ASTNode solve() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'solve'");
     }
 
     @Override
@@ -87,5 +83,11 @@ public class WhileStatement implements Statement, Scoped {
     @Override
     public void addFunction(Function function) {
         parent.addFunction(function);
+    }
+
+    @Override
+    public void solve(LLVMBuilderRef builder, LLVMModuleRef module) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'solve'");
     }
 }

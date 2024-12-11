@@ -3,9 +3,12 @@ package pl.polsl.student.maciwal866.ucricket;
 import java.io.FileReader;
 import java.io.IOException;
 
+import org.bytedeco.llvm.global.LLVM;
+
 public class Main {
     public static void main(String[] args) throws IOException {
-        if (args.length != 1) {
+        LLVM.LLVMInitializeAVRTargetMC();
+        if (args.length != 2) {
             System.out.println("Required parameter: main source file.");
             System.exit(1);
         }
