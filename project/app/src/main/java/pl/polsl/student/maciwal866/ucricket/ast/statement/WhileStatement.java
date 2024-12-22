@@ -3,8 +3,7 @@ package pl.polsl.student.maciwal866.ucricket.ast.statement;
 import java.util.ArrayList;
 import java.util.stream.Stream;
 
-import org.bytedeco.llvm.LLVM.LLVMBuilderRef;
-import org.bytedeco.llvm.LLVM.LLVMModuleRef;
+import org.bytedeco.llvm.LLVM.*;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -86,7 +85,7 @@ public class WhileStatement implements Statement, Scoped {
     }
 
     @Override
-    public void solve(LLVMBuilderRef builder, LLVMModuleRef module) {
+    public void solve(LLVMBuilderRef builder, LLVMModuleRef module, LLVMContextRef context) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'solve'");
     }

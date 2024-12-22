@@ -7,8 +7,12 @@ import org.bytedeco.llvm.global.LLVM;
 
 public class Main {
     public static void main(String[] args) throws IOException {
+        LLVM.LLVMInitializeAVRTarget();
+        LLVM.LLVMInitializeAVRTargetInfo();
         LLVM.LLVMInitializeAVRTargetMC();
-        if (args.length != 2) {
+        LLVM.LLVMInitializeAVRAsmParser();
+        LLVM.LLVMInitializeAVRAsmPrinter();
+        if (args.length != 1) {
             System.out.println("Required parameter: main source file.");
             System.exit(1);
         }
@@ -18,7 +22,8 @@ public class Main {
             parser.parse();
             var program = parser.getProgram();
             program.resolve();
-            System.out.println(":)");
+            program.solve();
+
         } catch (IOException e) {
             System.err.printf("Can't read file: %s\n", args[0]);
         }

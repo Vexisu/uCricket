@@ -1,7 +1,6 @@
 package pl.polsl.student.maciwal866.ucricket.ast.statement;
 
-import org.bytedeco.llvm.LLVM.LLVMBuilderRef;
-import org.bytedeco.llvm.LLVM.LLVMModuleRef;
+import org.bytedeco.llvm.LLVM.*;
 
 import lombok.Getter;
 import pl.polsl.student.maciwal866.ucricket.ast.Expression;
@@ -36,8 +35,7 @@ public class AssignmentStatement implements Statement {
     }
 
     @Override
-    public void solve(LLVMBuilderRef builder, LLVMModuleRef module) {
-        // TODO Auto-generated method stub
+    public void solve(LLVMBuilderRef builder, LLVMModuleRef module, LLVMContextRef context) {
         throw new UnsupportedOperationException("Unimplemented method 'solve'");
     }
 

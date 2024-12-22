@@ -1,8 +1,7 @@
 package pl.polsl.student.maciwal866.ucricket.ast.expression;
 
-import org.bytedeco.llvm.LLVM.LLVMBuilderRef;
-import org.bytedeco.llvm.LLVM.LLVMModuleRef;
-import org.bytedeco.llvm.LLVM.LLVMValueRef;
+import static org.bytedeco.llvm.global.LLVM.*;
+import org.bytedeco.llvm.LLVM.*;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -22,9 +21,16 @@ public class ValueExpression implements Expression {
     }
 
     @Override
-    public LLVMValueRef solve(LLVMBuilderRef builder, LLVMModuleRef module) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'solve'");
+    public LLVMValueRef solve(LLVMBuilderRef builder, LLVMModuleRef module, LLVMContextRef context) {
+        if (value instanceof String literalValue) { 
+            return switch (type) {
+                case INTEGER -> LLVMConstInt(type.getLlvmType(context), Long.parseLong(literalValue), 0);
+                case FLOAT -> LLVMConstReal(type.getLlvmType(context), Double.parseDouble(literalValue));
+                case BOOLEAN ->
+                    LLVMConstInt(type.getLlvmType(context), literalValue.equalsIgnoreCase("true") ? 1 : 0, 0);
+                default -> null;
+            };
+        }
+        return null;
     }
-
 }

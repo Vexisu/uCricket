@@ -1,22 +1,25 @@
 package pl.polsl.student.maciwal866.ucricket.ast;
 
+import static org.bytedeco.llvm.global.LLVM.*;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+
+import org.bytedeco.javacpp.BytePointer;
+import org.bytedeco.javacpp.PointerPointer;
+import org.bytedeco.llvm.LLVM.*;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import pl.polsl.student.maciwal866.ucricket.ast.exception.FunctionAlreadyExistsException;
-import pl.polsl.student.maciwal866.ucricket.ast.extension.Resolvable;
 import pl.polsl.student.maciwal866.ucricket.ast.extension.Scoped;
 import pl.polsl.student.maciwal866.ucricket.ast.statement.VariableStatement;
 
 @Getter
-public class Function implements Resolvable, Scoped {
+public class Function implements Statement, Scoped {
     private ValueType type;
     private String name;
     private LinkedHashMap<String, ValueType> arguments;
     private ArrayList<Statement> statements;
-    private int programMemoryAddress;
 
     private Scoped parent;
     private ArrayList<VariableStatement> localVariables = new ArrayList<>();
@@ -112,5 +115,29 @@ public class Function implements Resolvable, Scoped {
     @Override
     public void addFunction(Function function) {
         parent.addFunction(function);
+    }
+
+    @Override
+    public void solve(LLVMBuilderRef builder, LLVMModuleRef module, LLVMContextRef context) {
+        var argumentTypes = arguments.values().toArray(ValueType[]::new);
+        var llvmArgumentTypes = new PointerPointer<LLVMTypeRef>(argumentTypes.length);
+        for (int i = 0; i < argumentTypes.length; i++) {
+            llvmArgumentTypes.put(i, argumentTypes[i].getLlvmType(context));
+        }
+        var llvmFunctionType = LLVMFunctionType(type.getLlvmType(context), llvmArgumentTypes, argumentTypes.length, 0);
+        var llvmFunction = LLVMAddFunction(module, name, llvmFunctionType);
+        var llvmFunctionEntry = LLVMAppendBasicBlockInContext(context, llvmFunction, "entry");
+        LLVMPositionBuilderAtEnd(builder, llvmFunctionEntry);
+        for (var statement : statements) {
+            statement.solve(builder, module, context);
+        }
+        if (type.equals(ValueType.NONE)) {
+            LLVMBuildRetVoid(builder);
+        } else {
+            throw new UnsupportedOperationException("Unimplemented method 'solve'");
+        }
+        var moduleMessage = new PointerPointer<BytePointer>(1);
+        LLVMVerifyModule(module, 0, moduleMessage);
+        LLVMDisposeMessage(moduleMessage.get(BytePointer.class));
     }
 }

@@ -1,7 +1,6 @@
 package pl.polsl.student.maciwal866.ucricket.ast.statement;
 
-import org.bytedeco.llvm.LLVM.LLVMBuilderRef;
-import org.bytedeco.llvm.LLVM.LLVMModuleRef;
+import org.bytedeco.llvm.LLVM.*;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -20,7 +19,7 @@ public class ReturnStatement implements Statement {
     }
 
     @Override
-    public void solve(LLVMBuilderRef builder, LLVMModuleRef module) {
+    public void solve(LLVMBuilderRef builder, LLVMModuleRef module, LLVMContextRef context) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'solve'");
     }

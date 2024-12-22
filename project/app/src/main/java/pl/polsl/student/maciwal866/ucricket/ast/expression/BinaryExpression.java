@@ -2,9 +2,7 @@ package pl.polsl.student.maciwal866.ucricket.ast.expression;
 
 import java.util.stream.Stream;
 
-import org.bytedeco.llvm.LLVM.LLVMBuilderRef;
-import org.bytedeco.llvm.LLVM.LLVMModuleRef;
-import org.bytedeco.llvm.LLVM.LLVMValueRef;
+import org.bytedeco.llvm.LLVM.*;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -58,7 +56,7 @@ public class BinaryExpression implements Expression {
 
 
     @Override
-    public LLVMValueRef solve(LLVMBuilderRef builder, LLVMModuleRef module) {
+    public LLVMValueRef solve(LLVMBuilderRef builder, LLVMModuleRef module, LLVMContextRef context) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'solve'");
     }

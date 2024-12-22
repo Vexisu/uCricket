@@ -1,7 +1,6 @@
 package pl.polsl.student.maciwal866.ucricket.ast.statement;
 
-import org.bytedeco.llvm.LLVM.LLVMBuilderRef;
-import org.bytedeco.llvm.LLVM.LLVMModuleRef;
+import org.bytedeco.llvm.LLVM.*;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -16,8 +15,8 @@ public class ExpressionStatement implements Statement {
     private Expression expression;
 
     @Override
-    public void solve(LLVMBuilderRef builder, LLVMModuleRef module) {
-        expression.solve(builder, module);
+    public void solve(LLVMBuilderRef builder, LLVMModuleRef module, LLVMContextRef context) {
+        expression.solve(builder, module, context);
     }
 
     @Override

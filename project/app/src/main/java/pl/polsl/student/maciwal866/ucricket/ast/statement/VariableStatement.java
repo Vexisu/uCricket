@@ -1,9 +1,8 @@
 package pl.polsl.student.maciwal866.ucricket.ast.statement;
 
-import org.bytedeco.llvm.LLVM.LLVMBuilderRef;
-import org.bytedeco.llvm.LLVM.LLVMModuleRef;
+import static org.bytedeco.llvm.global.LLVM.*;
+import org.bytedeco.llvm.LLVM.*;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import pl.polsl.student.maciwal866.ucricket.ast.Expression;
 import pl.polsl.student.maciwal866.ucricket.ast.Statement;
@@ -13,11 +12,17 @@ import pl.polsl.student.maciwal866.ucricket.ast.exception.VariableAlreadyExistsE
 import pl.polsl.student.maciwal866.ucricket.ast.extension.Scoped;
 
 @Getter
-@AllArgsConstructor
 public class VariableStatement implements Statement {
     private ValueType type;
     private String name;
     private Expression value;
+    private LLVMValueRef llvmVariable;
+
+    public VariableStatement(ValueType type, String name, Expression value) {
+        this.type = type;
+        this.name = name;
+        this.value = value;
+    }
 
     @Override
     public Object resolve(Scoped parent) {
@@ -32,9 +37,10 @@ public class VariableStatement implements Statement {
     }
 
     @Override
-    public void solve(LLVMBuilderRef builder, LLVMModuleRef module) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'solve'");
+    public void solve(LLVMBuilderRef builder, LLVMModuleRef module, LLVMContextRef context) {
+        llvmVariable = LLVMBuildAlloca(builder, type.getLlvmType(context), name);
+        var llvmValue = value.solve(builder, module, context);
+        LLVMBuildStore(builder, llvmValue, llvmVariable);
     }
 
 }

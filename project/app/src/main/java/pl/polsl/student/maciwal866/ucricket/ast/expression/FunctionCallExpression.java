@@ -1,8 +1,6 @@
 package pl.polsl.student.maciwal866.ucricket.ast.expression;
 
-import org.bytedeco.llvm.LLVM.LLVMBuilderRef;
-import org.bytedeco.llvm.LLVM.LLVMModuleRef;
-import org.bytedeco.llvm.LLVM.LLVMValueRef;
+import org.bytedeco.llvm.LLVM.*;
 
 import lombok.Getter;
 import pl.polsl.student.maciwal866.ucricket.ast.Expression;
@@ -36,7 +34,7 @@ public class FunctionCallExpression implements Expression {
     }
 
     @Override
-    public LLVMValueRef solve(LLVMBuilderRef builder, LLVMModuleRef module) {
+    public LLVMValueRef solve(LLVMBuilderRef builder, LLVMModuleRef module, LLVMContextRef context) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'solve'");
     }
