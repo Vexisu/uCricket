@@ -41,4 +41,13 @@ public enum ValueType {
         }
         return null;
     }
+
+    public boolean anyEquals(ValueType... types) {
+        for (ValueType type : types) {
+            if (this.equals(type)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }
