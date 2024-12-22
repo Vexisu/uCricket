@@ -88,7 +88,7 @@ argumentChain:
 
 returnedType:
         '<' IDENTIFIER '>' { $$ = ValueType.parse($<String>2); }
-    |   { $$ = null; }
+    |   { $$ = ValueType.NONE; }
 ;
 
 statements:

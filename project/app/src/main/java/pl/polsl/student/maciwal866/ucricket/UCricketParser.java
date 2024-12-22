@@ -610,7 +610,7 @@ public class UCricketParser
   case 14: /* returnedType: %empty  */
   if (yyn == 14)
     /* "./src/main/resources/UCricketParser.y":91  */
-        { yyval = null; };
+        { yyval = ValueType.NONE; };
   break;
 
 

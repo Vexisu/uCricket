@@ -35,6 +35,7 @@ FLOAT = \d*\.\d+d
 "/" {return '/';}
 "=" {return '=';}
 "%" {return '%';}
+"!" {return '!';}
 "(" {return '(';}
 ")" {return ')';}
 "<" {return '<';}
