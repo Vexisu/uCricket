@@ -1,4 +1,10 @@
-plugins { application }
+plugins { 
+    application
+    id("com.gradleup.shadow") version "9.0.0-beta4"
+    id("org.bytedeco.gradle-javacpp-platform") version "1.5.10"
+}
+
+extra["javacppPlatform"] = "linux-x86_64"
 
 repositories { mavenCentral() }
 
@@ -8,7 +14,7 @@ dependencies {
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 
     implementation("com.google.guava:guava:33.3.1-jre")
-    implementation("org.bytedeco:llvm-platform:19.1.3-1.5.11")   
+    implementation("org.bytedeco:llvm-platform:19.1.3-1.5.11")
 
     compileOnly("org.projectlombok:lombok:1.18.34")
     annotationProcessor("org.projectlombok:lombok:1.18.34")
