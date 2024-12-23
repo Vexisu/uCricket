@@ -5,6 +5,8 @@ import pl.polsl.student.maciwal866.ucricket.ast.ValueType;
 import pl.polsl.student.maciwal866.ucricket.ast.statement.VariableStatement;
 
 public interface Scoped {
+    Scoped getParent();
+
     VariableStatement getVariable(String name);
 
     boolean hasVariable(String name);

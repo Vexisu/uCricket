@@ -96,4 +96,9 @@ public class Scope implements Resolvable, Scoped {
     public void addFunction(Function function) {
         functions.add(function);
     }
+
+    @Override
+    public Scoped getParent() {
+        return null;
+    }
 }

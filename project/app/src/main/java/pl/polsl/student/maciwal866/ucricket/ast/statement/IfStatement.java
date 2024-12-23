@@ -1,5 +1,7 @@
 package pl.polsl.student.maciwal866.ucricket.ast.statement;
 
+import static org.bytedeco.llvm.global.LLVM.*;
+
 import java.util.ArrayList;
 import java.util.stream.Stream;
 
@@ -84,7 +86,18 @@ public class IfStatement implements Statement, Scoped {
 
     @Override
     public void solve(LLVMBuilderRef builder, LLVMModuleRef module, LLVMContextRef context) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'solve'");
+        var llvmCondition = condition.solve(builder, module, context);
+        var llvmCurrentBlock = LLVMGetInsertBlock(builder);
+        var llvmFunction = LLVMGetBasicBlockParent(llvmCurrentBlock);
+        var llvmIfBlock = LLVMAppendBasicBlockInContext(context, llvmFunction, "if");
+        var llvmContinuationBlock = LLVMAppendBasicBlockInContext(context, llvmFunction, "continue");
+        LLVMBuildCondBr(builder, llvmCondition, llvmIfBlock, llvmContinuationBlock);
+        LLVMPositionBuilderAtEnd(builder, llvmIfBlock);
+        var collectedStatements = statements.collect();
+        for (var statement : collectedStatements) {
+            statement.solve(builder, module, context);
+        }
+        LLVMBuildBr(builder, llvmContinuationBlock);
+        LLVMPositionBuilderAtEnd(builder, llvmContinuationBlock);
     }
 }

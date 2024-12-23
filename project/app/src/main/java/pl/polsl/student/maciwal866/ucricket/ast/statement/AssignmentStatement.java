@@ -1,5 +1,7 @@
 package pl.polsl.student.maciwal866.ucricket.ast.statement;
 
+import static org.bytedeco.llvm.global.LLVM.*;
+
 import org.bytedeco.llvm.LLVM.*;
 
 import lombok.Getter;
@@ -36,7 +38,8 @@ public class AssignmentStatement implements Statement {
 
     @Override
     public void solve(LLVMBuilderRef builder, LLVMModuleRef module, LLVMContextRef context) {
-        throw new UnsupportedOperationException("Unimplemented method 'solve'");
+        var llvmExpression = expression.solve(builder, module, context);
+        LLVMBuildStore(builder, llvmExpression, linkedVariable.getLlvmVariable());
     }
 
 }
