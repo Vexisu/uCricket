@@ -32,6 +32,16 @@ public class ArgumentsExpression implements Expression {
         }
         return argumentTypes.toArray(ValueType[]::new);
     }
+    
+    public Expression[] collect() {
+        var argumentsArray = new ArrayList<Expression>();
+        var argument = this;
+        while (argument != null) {
+            argumentsArray.add(argument.getExpression());
+            argument = argument.getNext();
+        }
+        return argumentsArray.toArray(Expression[]::new);
+    }
 
     @Override
     public LLVMValueRef solve(LLVMBuilderRef builder, LLVMModuleRef module, LLVMContextRef context) {

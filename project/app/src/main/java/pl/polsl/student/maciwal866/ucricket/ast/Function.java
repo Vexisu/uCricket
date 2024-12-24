@@ -10,6 +10,7 @@ import org.bytedeco.llvm.LLVM.*;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Setter;
 import pl.polsl.student.maciwal866.ucricket.ast.exception.FunctionAlreadyExistsException;
 import pl.polsl.student.maciwal866.ucricket.ast.extension.Scoped;
 import pl.polsl.student.maciwal866.ucricket.ast.statement.VariableStatement;
@@ -20,10 +21,14 @@ public class Function implements Statement, Scoped {
     private String name;
     private LinkedHashMap<String, ValueType> arguments;
     private ArrayList<Statement> statements;
-
     private Scoped parent;
     private ArrayList<VariableStatement> localVariables = new ArrayList<>();
+    private LLVMTypeRef llvmFunctionType;
+    private LLVMValueRef llvmFunction;
 
+    @Setter
+    private boolean called;
+    
     public Function(ValueType type, String name, ArgumentChain argumentChain, StatementChain statementChain) {
         this.type = type;
         this.name = name;
@@ -124,8 +129,13 @@ public class Function implements Statement, Scoped {
         for (int i = 0; i < argumentTypes.length; i++) {
             llvmArgumentTypes.put(i, argumentTypes[i].getLlvmType(context));
         }
-        var llvmFunctionType = LLVMFunctionType(type.getLlvmType(context), llvmArgumentTypes, argumentTypes.length, 0);
-        var llvmFunction = LLVMAddFunction(module, name, llvmFunctionType);
+        llvmFunctionType = LLVMFunctionType(type.getLlvmType(context), llvmArgumentTypes, argumentTypes.length, 0);
+        llvmFunction = LLVMAddFunction(module, name, llvmFunctionType);
+        var argumentNames = arguments.keySet().toArray(String[]::new);
+        for (int i = 0; i < argumentNames.length; i++) {
+            var argument = LLVMGetParam(llvmFunction, i);
+            LLVMSetValueName(argument, argumentNames[i]);
+        }
         var llvmFunctionEntry = LLVMAppendBasicBlockInContext(context, llvmFunction, "entry");
         LLVMPositionBuilderAtEnd(builder, llvmFunctionEntry);
         for (var statement : statements) {
@@ -133,11 +143,6 @@ public class Function implements Statement, Scoped {
         }
         if (type.equals(ValueType.NONE)) {
             LLVMBuildRetVoid(builder);
-        } else {
-            throw new UnsupportedOperationException("Unimplemented method 'solve'");
         }
-        var moduleMessage = new PointerPointer<BytePointer>(1);
-        LLVMVerifyModule(module, 0, moduleMessage);
-        LLVMDisposeMessage(moduleMessage.get(BytePointer.class));
     }
 }

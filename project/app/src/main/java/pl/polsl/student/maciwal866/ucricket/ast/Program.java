@@ -2,6 +2,9 @@ package pl.polsl.student.maciwal866.ucricket.ast;
 
 import java.util.ArrayList;
 
+import org.bytedeco.javacpp.BytePointer;
+import org.bytedeco.javacpp.PointerPointer;
+
 import static org.bytedeco.llvm.global.LLVM.*;
 
 import lombok.Getter;
@@ -40,6 +43,9 @@ public class Program {
             if (mainFunction != null) {
                 mainFunction.solve(builder, module, context);
             }
+            var moduleMessage = new PointerPointer<BytePointer>(1);
+            LLVMVerifyModule(module, 0, moduleMessage);
+            LLVMDisposeMessage(moduleMessage.get(BytePointer.class));
             LLVMDumpModule(module);
             LLVMDisposeBuilder(builder);
             LLVMDisposeModule(module);
