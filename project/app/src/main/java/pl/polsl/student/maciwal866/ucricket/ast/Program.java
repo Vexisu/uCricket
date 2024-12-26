@@ -41,7 +41,11 @@ public class Program {
             var builder = LLVMCreateBuilderInContext(context);
             var mainFunction = mainScope.getFunction("main", new ValueType[0]);
             if (mainFunction != null) {
+                for (var scope : scopes) {
+                    scope.solve(builder, module, context);
+                }
                 mainFunction.solve(builder, module, context);
+                LLVMSetValueName(mainFunction.getLlvmFunction(), "main");
             }
             var moduleMessage = new PointerPointer<BytePointer>(1);
             LLVMVerifyModule(module, 0, moduleMessage);

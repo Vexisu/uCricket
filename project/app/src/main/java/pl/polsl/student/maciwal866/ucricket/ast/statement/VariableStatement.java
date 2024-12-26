@@ -4,6 +4,7 @@ import static org.bytedeco.llvm.global.LLVM.*;
 import org.bytedeco.llvm.LLVM.*;
 
 import lombok.Getter;
+import lombok.Setter;
 import pl.polsl.student.maciwal866.ucricket.ast.Expression;
 import pl.polsl.student.maciwal866.ucricket.ast.Statement;
 import pl.polsl.student.maciwal866.ucricket.ast.ValueType;
@@ -17,6 +18,11 @@ public class VariableStatement implements Statement {
     private String name;
     private Expression value;
     private LLVMValueRef llvmVariable;
+    private Scoped parent;
+    @Setter
+    private boolean accessed;
+    @Setter
+    private boolean global;
 
     public VariableStatement(ValueType type, String name, Expression value) {
         this.type = type;
@@ -26,6 +32,7 @@ public class VariableStatement implements Statement {
 
     @Override
     public Object resolve(Scoped parent) {
+        this.parent = parent;
         if (parent.hasVariable(name)) {
             throw new VariableAlreadyExistsException(this);
         }
@@ -38,9 +45,16 @@ public class VariableStatement implements Statement {
 
     @Override
     public void solve(LLVMBuilderRef builder, LLVMModuleRef module, LLVMContextRef context) {
-        llvmVariable = LLVMBuildAlloca(builder, type.getLlvmType(context), name);
-        var llvmValue = value.solve(builder, module, context);
-        LLVMBuildStore(builder, llvmValue, llvmVariable);
+        if (accessed) {
+            if (global) {
+                llvmVariable = LLVMAddGlobal(module, type.getLlvmType(context), parent.getPath() + ':' + name);
+                LLVMSetInitializer(llvmVariable, value.solve(builder, module, context));
+            } else {
+                llvmVariable = LLVMBuildAlloca(builder, type.getLlvmType(context), parent.getPath() + ':' + name);
+                var llvmValue = value.solve(builder, module, context);
+                LLVMBuildStore(builder, llvmValue, llvmVariable);
+            }
+        }
     }
 
 }

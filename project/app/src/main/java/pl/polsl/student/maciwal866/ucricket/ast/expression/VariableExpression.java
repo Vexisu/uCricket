@@ -26,8 +26,9 @@ public class VariableExpression implements Expression {
         if (!parent.hasVariable(name)) {
             throw new VariableNotFoundException(name);
         }
-        this.linkedVariable = parent.getVariable(name);
-        return this.linkedVariable.getType();
+        linkedVariable = parent.getVariable(name);
+        linkedVariable.setAccessed(true);
+        return linkedVariable.getType();
     }
 
     @Override

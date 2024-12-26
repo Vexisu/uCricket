@@ -61,7 +61,7 @@ public class FunctionCallExpression implements Expression {
         for (int i = 0; i < argumentExpressions.length; i++) {
             llvmArguments.put(argumentExpressions[i].solve(builder, module, context));
         }
-        return LLVMBuildCall2(builder, linkedFunction.getLlvmFunctionType(), LLVMGetNamedFunction(module, functionName),
+        return LLVMBuildCall2(builder, linkedFunction.getLlvmFunctionType(), linkedFunction.getLlvmFunction(),
                 llvmArguments, argumentExpressions.length, linkedFunction.getType().equals(ValueType.NONE) ? "" : functionName + "_ret");
     }
 

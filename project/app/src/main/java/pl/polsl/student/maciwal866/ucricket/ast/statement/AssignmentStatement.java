@@ -29,6 +29,7 @@ public class AssignmentStatement implements Statement {
         if (linkedVariable == null) {
             throw new VariableNotFoundException(variableName);
         }
+        linkedVariable.setAccessed(true);
         if (expression.resolve(parent) instanceof ValueType expressionValueType
                 && !expressionValueType.equals(this.linkedVariable.getType())) {
             throw new MismatchedTypeException(expressionValueType, this);

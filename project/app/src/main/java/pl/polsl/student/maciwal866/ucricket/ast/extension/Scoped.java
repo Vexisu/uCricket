@@ -7,6 +7,8 @@ import pl.polsl.student.maciwal866.ucricket.ast.statement.VariableStatement;
 public interface Scoped {
     Scoped getParent();
 
+    String getPath();
+
     VariableStatement getVariable(String name);
 
     boolean hasVariable(String name);

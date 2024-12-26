@@ -78,14 +78,14 @@ public class Function implements Statement, Scoped {
         parent.addFunction(this);
         arguments.forEach(
                 (argumentName, argumentType) -> addVariable(new VariableStatement(argumentType, argumentName, null)));
-        statements.forEach(statement -> statement.resolve(parent));
+        statements.forEach(statement -> statement.resolve(this));
         return null;
     }
 
     @Override
     public VariableStatement getVariable(String name) {
         for (var variable : localVariables) {
-            if (variable.getName().equalsIgnoreCase(name)) {
+            if (variable.getName().equals(name)) {
                 return variable;
             }
         }
@@ -95,7 +95,7 @@ public class Function implements Statement, Scoped {
     @Override
     public boolean hasVariable(String name) {
         for (var variable : localVariables) {
-            if (variable.getName().equalsIgnoreCase(name)) {
+            if (variable.getName().equals(name)) {
                 return true;
             }
         }
@@ -130,7 +130,7 @@ public class Function implements Statement, Scoped {
             llvmArgumentTypes.put(i, argumentTypes[i].getLlvmType(context));
         }
         llvmFunctionType = LLVMFunctionType(type.getLlvmType(context), llvmArgumentTypes, argumentTypes.length, 0);
-        llvmFunction = LLVMAddFunction(module, name, llvmFunctionType);
+        llvmFunction = LLVMAddFunction(module, getPath(), llvmFunctionType);
         var argumentNames = arguments.keySet().toArray(String[]::new);
         for (int i = 0; i < argumentNames.length; i++) {
             var argument = LLVMGetParam(llvmFunction, i);
@@ -144,5 +144,10 @@ public class Function implements Statement, Scoped {
         if (type.equals(ValueType.NONE)) {
             LLVMBuildRetVoid(builder);
         }
+    }
+
+    @Override
+    public String getPath() {
+        return parent.getPath() + ':' + name;
     }
 }

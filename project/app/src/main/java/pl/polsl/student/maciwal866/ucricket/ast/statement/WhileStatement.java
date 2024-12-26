@@ -32,14 +32,14 @@ public class WhileStatement implements Statement, Scoped {
     @Override
     public Object resolve(Scoped parent) {
         this.parent = parent;
-        var resolverConditionResult = condition.resolve(parent);
+        var resolverConditionResult = condition.resolve(this);
         if (resolverConditionResult instanceof ValueType conditionValueType) {
             if (Stream.of(ValueType.LOGIC_TYPES).anyMatch(logicType -> logicType.equals(conditionValueType))) {
                 throw new MismatchedTypeException(conditionValueType, this);
             }
         }
         if (statements != null) {
-            statements.resolve(parent);
+            statements.resolve(this);
         }
         return null;
     }
@@ -47,7 +47,7 @@ public class WhileStatement implements Statement, Scoped {
     @Override
     public VariableStatement getVariable(String name) {
         for (var variable : localVariables) {
-            if (variable.getName().equalsIgnoreCase(name)) {
+            if (variable.getName().equals(name)) {
                 return variable;
             }
         }
@@ -57,7 +57,7 @@ public class WhileStatement implements Statement, Scoped {
     @Override
     public boolean hasVariable(String name) {
         for (var variable : localVariables) {
-            if (variable.getName().equalsIgnoreCase(name)) {
+            if (variable.getName().equals(name)) {
                 return true;
             }
         }
@@ -88,5 +88,10 @@ public class WhileStatement implements Statement, Scoped {
     public void solve(LLVMBuilderRef builder, LLVMModuleRef module, LLVMContextRef context) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'solve'");
+    }
+
+    @Override
+    public String getPath() {
+        return parent.getPath() + ":while";
     }
 }
