@@ -23,6 +23,8 @@ public class VariableStatement implements Statement {
     private boolean accessed;
     @Setter
     private boolean global;
+    @Setter
+    private boolean resolved;
 
     public VariableStatement(ValueType type, String name, Expression value) {
         this.type = type;
@@ -33,12 +35,13 @@ public class VariableStatement implements Statement {
     @Override
     public Object resolve(Scoped parent) {
         this.parent = parent;
-        if (parent.hasVariable(name)) {
+        if (parent.hasResolvedVariable(name)) {
             throw new VariableAlreadyExistsException(this);
         }
         if (value.resolve(parent) instanceof ValueType valueType && !valueType.equals(type)) {
             throw new MismatchedTypeException(valueType, this);
         }
+        resolved = true;
         parent.addVariable(this);
         return null;
     }

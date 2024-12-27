@@ -1,14 +1,6 @@
 package pl.polsl.student.maciwal866.ucricket.ast.expression;
 
-import static org.bytedeco.llvm.global.LLVM.LLVMBuildCall2;
-import static org.bytedeco.llvm.global.LLVM.LLVMBuildCallBr;
-import static org.bytedeco.llvm.global.LLVM.LLVMCreateBuilderInContext;
-import static org.bytedeco.llvm.global.LLVM.LLVMDisposeBuilder;
-import static org.bytedeco.llvm.global.LLVM.LLVMFunctionType;
-import static org.bytedeco.llvm.global.LLVM.LLVMGetInsertBlock;
-import static org.bytedeco.llvm.global.LLVM.LLVMGetNamedFunction;
-
-import java.util.ArrayList;
+import static org.bytedeco.llvm.global.LLVM.*;
 
 import org.bytedeco.javacpp.PointerPointer;
 import org.bytedeco.llvm.LLVM.*;
@@ -62,7 +54,8 @@ public class FunctionCallExpression implements Expression {
             llvmArguments.put(argumentExpressions[i].solve(builder, module, context));
         }
         return LLVMBuildCall2(builder, linkedFunction.getLlvmFunctionType(), linkedFunction.getLlvmFunction(),
-                llvmArguments, argumentExpressions.length, linkedFunction.getType().equals(ValueType.NONE) ? "" : functionName + "_ret");
+                llvmArguments, argumentExpressions.length,
+                linkedFunction.getType().equals(ValueType.NONE) ? "" : functionName + "_ret");
     }
 
 }

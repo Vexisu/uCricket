@@ -13,11 +13,13 @@ public interface Scoped {
 
     boolean hasVariable(String name);
 
+    boolean hasResolvedVariable(String name);
+
     void addVariable(VariableStatement statement);
 
     Function getFunction(String name, ValueType[] argumentTypes);
 
     boolean hasFunction(String name, ValueType[] argumentTypes);
 
-    void addFunction(Function function);
+    boolean hasResolvedFunction(String name, ValueType[] argumentTypes);
 }

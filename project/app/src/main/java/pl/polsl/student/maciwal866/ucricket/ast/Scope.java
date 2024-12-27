@@ -15,13 +15,20 @@ import pl.polsl.student.maciwal866.ucricket.ast.statement.VariableStatement;
 @Getter
 public class Scope implements Scoped, Statement{
     private String name;
-    private ScopeContent<?> content;
     private ArrayList<VariableStatement> globalVariables = new ArrayList<>();
     private ArrayList<Function> functions = new ArrayList<>();
 
     public Scope(String name, ScopeContent<?> content) {
         this.name = name;
-        this.content = content;
+        var currentContent = content;
+        while (currentContent != null) {
+            if (currentContent.getElement() instanceof Function function) {
+                functions.add(function);
+            } else if (currentContent.getElement() instanceof VariableStatement variable) {
+                globalVariables.add(variable);
+            }
+            currentContent = currentContent.getNext();
+        }
     }
 
     @Getter
@@ -33,14 +40,11 @@ public class Scope implements Scoped, Statement{
 
     @Override
     public Object resolve(Scoped parent) {
-        var currentContent = content;
-        while (currentContent != null) {
-            if (currentContent.getElement() instanceof Function function) {
-                function.resolve(this);
-            } else if (currentContent.getElement() instanceof VariableStatement variable) {
-                variable.resolve(this);
-            }
-            currentContent = currentContent.getNext();
+        for (var variable : globalVariables) {
+            variable.resolve(this);
+        }
+        for (var function : functions) {
+            function.resolve(this);
         }
         return null;
     }
@@ -94,6 +98,22 @@ public class Scope implements Scoped, Statement{
     }
 
     @Override
+    public boolean hasResolvedVariable(String name) {
+        var variables = globalVariables;
+        if (name.contains(":")) {
+            var nameWithScope = name.split(":");
+            variables = UCricketParser.getProgram().getScopeByName(nameWithScope[0]).getGlobalVariables();
+            name = nameWithScope[1];
+        }
+        for (var variable : variables) {
+            if (variable.getName().equals(name) && variable.isResolved()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
     public boolean hasFunction(String name, ValueType[] argumentTypes) {
         var functions = this.functions;
         if (name.contains(":")) {
@@ -110,14 +130,24 @@ public class Scope implements Scoped, Statement{
     }
 
     @Override
-    public void addVariable(VariableStatement statement) {
-        statement.setGlobal(true);
-        globalVariables.add(statement);
+    public boolean hasResolvedFunction(String name, ValueType[] argumentTypes) {
+        var functions = this.functions;
+        if (name.contains(":")) {
+            var nameWithScope = name.split(":");
+            functions = UCricketParser.getProgram().getScopeByName(nameWithScope[0]).getFunctions();
+            name = nameWithScope[1];
+        }
+        for (var function : functions) {
+            if (function.isEquivalent(name, argumentTypes) && function.isResolved()) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
-    public void addFunction(Function function) {
-        functions.add(function);
+    public void addVariable(VariableStatement statement) {
+        statement.setGlobal(true);
     }
 
     @Override

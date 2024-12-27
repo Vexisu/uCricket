@@ -65,6 +65,16 @@ public class WhileStatement implements Statement, Scoped {
     }
 
     @Override
+    public boolean hasResolvedVariable(String name) {
+        for (var variable : localVariables) {
+            if (variable.getName().equals(name) && variable.isResolved()) {
+                return true;
+            }
+        }
+        return parent.hasResolvedVariable(name);
+    }
+
+    @Override
     public void addVariable(VariableStatement statement) {
         localVariables.add(statement);
     }
@@ -80,8 +90,8 @@ public class WhileStatement implements Statement, Scoped {
     }
 
     @Override
-    public void addFunction(Function function) {
-        parent.addFunction(function);
+    public boolean hasResolvedFunction(String name, ValueType[] argumentTypes) {
+        return parent.hasResolvedFunction(name, argumentTypes);
     }
 
     @Override

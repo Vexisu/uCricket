@@ -4,7 +4,6 @@ import static org.bytedeco.llvm.global.LLVM.*;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
-import org.bytedeco.javacpp.BytePointer;
 import org.bytedeco.javacpp.PointerPointer;
 import org.bytedeco.llvm.LLVM.*;
 
@@ -28,6 +27,9 @@ public class Function implements Statement, Scoped {
 
     @Setter
     private boolean called;
+
+    @Setter
+    private boolean resolved;
     
     public Function(ValueType type, String name, ArgumentChain argumentChain, StatementChain statementChain) {
         this.type = type;
@@ -72,10 +74,10 @@ public class Function implements Statement, Scoped {
     public Object resolve(Scoped parent) {
         this.parent = parent;
         ValueType[] argumentTypes = getArguments().values().toArray(ValueType[]::new);
-        if (parent.hasFunction(name, argumentTypes)) {
+        if (parent.hasResolvedFunction(name, argumentTypes)) {
             throw new FunctionAlreadyExistsException(name, argumentTypes);
         }
-        parent.addFunction(this);
+        this.resolved = true;
         arguments.forEach(
                 (argumentName, argumentType) -> addVariable(new VariableStatement(argumentType, argumentName, null)));
         statements.forEach(statement -> statement.resolve(this));
@@ -103,6 +105,16 @@ public class Function implements Statement, Scoped {
     }
 
     @Override
+    public boolean hasResolvedVariable(String name) {
+        for (var variable : localVariables) {
+            if (variable.getName().equals(name) && variable.isResolved()) {
+                return true;
+            }
+        }
+        return parent.hasResolvedVariable(name);
+    }
+
+    @Override
     public void addVariable(VariableStatement statement) {
         localVariables.add(statement);
     }
@@ -118,8 +130,8 @@ public class Function implements Statement, Scoped {
     }
 
     @Override
-    public void addFunction(Function function) {
-        parent.addFunction(function);
+    public boolean hasResolvedFunction(String name, ValueType[] argumentTypes) {
+        return parent.hasResolvedFunction(name, argumentTypes);
     }
 
     @Override
