@@ -1,25 +1,36 @@
 package pl.polsl.student.maciwal866.ucricket.ast;
 
+import static org.bytedeco.llvm.global.LLVM.*;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
+import org.bytedeco.javacpp.PointerPointer;
+import org.bytedeco.llvm.LLVM.*;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Setter;
 import pl.polsl.student.maciwal866.ucricket.ast.exception.FunctionAlreadyExistsException;
-import pl.polsl.student.maciwal866.ucricket.ast.extension.Resolvable;
 import pl.polsl.student.maciwal866.ucricket.ast.extension.Scoped;
 import pl.polsl.student.maciwal866.ucricket.ast.statement.VariableStatement;
 
 @Getter
-public class Function implements Resolvable, Scoped {
+public class Function implements Statement, Scoped {
     private ValueType type;
     private String name;
     private LinkedHashMap<String, ValueType> arguments;
     private ArrayList<Statement> statements;
-
     private Scoped parent;
     private ArrayList<VariableStatement> localVariables = new ArrayList<>();
+    private LLVMTypeRef llvmFunctionType;
+    private LLVMValueRef llvmFunction;
 
+    @Setter
+    private boolean called;
+
+    @Setter
+    private boolean resolved;
+    
     public Function(ValueType type, String name, ArgumentChain argumentChain, StatementChain statementChain) {
         this.type = type;
         this.name = name;
@@ -63,20 +74,20 @@ public class Function implements Resolvable, Scoped {
     public Object resolve(Scoped parent) {
         this.parent = parent;
         ValueType[] argumentTypes = getArguments().values().toArray(ValueType[]::new);
-        if (parent.hasFunction(name, argumentTypes)) {
+        if (parent.hasResolvedFunction(name, argumentTypes)) {
             throw new FunctionAlreadyExistsException(name, argumentTypes);
         }
-        parent.addFunction(this);
+        this.resolved = true;
         arguments.forEach(
                 (argumentName, argumentType) -> addVariable(new VariableStatement(argumentType, argumentName, null)));
-        statements.forEach(statement -> statement.resolve(parent));
+        statements.forEach(statement -> statement.resolve(this));
         return null;
     }
 
     @Override
     public VariableStatement getVariable(String name) {
         for (var variable : localVariables) {
-            if (variable.getName().equalsIgnoreCase(name)) {
+            if (variable.getName().equals(name)) {
                 return variable;
             }
         }
@@ -86,11 +97,21 @@ public class Function implements Resolvable, Scoped {
     @Override
     public boolean hasVariable(String name) {
         for (var variable : localVariables) {
-            if (variable.getName().equalsIgnoreCase(name)) {
+            if (variable.getName().equals(name)) {
                 return true;
             }
         }
         return parent.hasVariable(name);
+    }
+
+    @Override
+    public boolean hasResolvedVariable(String name) {
+        for (var variable : localVariables) {
+            if (variable.getName().equals(name) && variable.isResolved()) {
+                return true;
+            }
+        }
+        return parent.hasResolvedVariable(name);
     }
 
     @Override
@@ -109,7 +130,36 @@ public class Function implements Resolvable, Scoped {
     }
 
     @Override
-    public void addFunction(Function function) {
-        parent.addFunction(function);
+    public boolean hasResolvedFunction(String name, ValueType[] argumentTypes) {
+        return parent.hasResolvedFunction(name, argumentTypes);
+    }
+
+    @Override
+    public void solve(LLVMBuilderRef builder, LLVMModuleRef module, LLVMContextRef context) {
+        var argumentTypes = arguments.values().toArray(ValueType[]::new);
+        var llvmArgumentTypes = new PointerPointer<LLVMTypeRef>(argumentTypes.length);
+        for (int i = 0; i < argumentTypes.length; i++) {
+            llvmArgumentTypes.put(i, argumentTypes[i].getLlvmType(context));
+        }
+        llvmFunctionType = LLVMFunctionType(type.getLlvmType(context), llvmArgumentTypes, argumentTypes.length, 0);
+        llvmFunction = LLVMAddFunction(module, getPath(), llvmFunctionType);
+        var argumentNames = arguments.keySet().toArray(String[]::new);
+        for (int i = 0; i < argumentNames.length; i++) {
+            var argument = LLVMGetParam(llvmFunction, i);
+            LLVMSetValueName(argument, argumentNames[i]);
+        }
+        var llvmFunctionEntry = LLVMAppendBasicBlockInContext(context, llvmFunction, "entry");
+        LLVMPositionBuilderAtEnd(builder, llvmFunctionEntry);
+        for (var statement : statements) {
+            statement.solve(builder, module, context);
+        }
+        if (type.equals(ValueType.NONE)) {
+            LLVMBuildRetVoid(builder);
+        }
+    }
+
+    @Override
+    public String getPath() {
+        return parent.getPath() + ':' + name;
     }
 }

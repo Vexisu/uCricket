@@ -1,8 +1,10 @@
 package pl.polsl.student.maciwal866.ucricket.ast.statement;
 
-import lombok.AllArgsConstructor;
+import static org.bytedeco.llvm.global.LLVM.*;
+import org.bytedeco.llvm.LLVM.*;
+
 import lombok.Getter;
-import pl.polsl.student.maciwal866.ucricket.ast.ASTNode;
+import lombok.Setter;
 import pl.polsl.student.maciwal866.ucricket.ast.Expression;
 import pl.polsl.student.maciwal866.ucricket.ast.Statement;
 import pl.polsl.student.maciwal866.ucricket.ast.ValueType;
@@ -11,28 +13,51 @@ import pl.polsl.student.maciwal866.ucricket.ast.exception.VariableAlreadyExistsE
 import pl.polsl.student.maciwal866.ucricket.ast.extension.Scoped;
 
 @Getter
-@AllArgsConstructor
 public class VariableStatement implements Statement {
     private ValueType type;
     private String name;
     private Expression value;
+    private LLVMValueRef llvmVariable;
+    private Scoped parent;
+    @Setter
+    private boolean accessed;
+    @Setter
+    private boolean global;
+    @Setter
+    private boolean resolved;
 
-    @Override
-    public ASTNode solve() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'solve'");
+    public VariableStatement(ValueType type, String name, Expression value) {
+        this.type = type;
+        this.name = name;
+        this.value = value;
     }
 
     @Override
     public Object resolve(Scoped parent) {
-        if (parent.hasVariable(name)) {
+        this.parent = parent;
+        if (parent.hasResolvedVariable(name)) {
             throw new VariableAlreadyExistsException(this);
         }
         if (value.resolve(parent) instanceof ValueType valueType && !valueType.equals(type)) {
             throw new MismatchedTypeException(valueType, this);
         }
+        resolved = true;
         parent.addVariable(this);
         return null;
+    }
+
+    @Override
+    public void solve(LLVMBuilderRef builder, LLVMModuleRef module, LLVMContextRef context) {
+        if (accessed) {
+            if (global) {
+                llvmVariable = LLVMAddGlobal(module, type.getLlvmType(context), parent.getPath() + ':' + name);
+                LLVMSetInitializer(llvmVariable, value.solve(builder, module, context));
+            } else {
+                llvmVariable = LLVMBuildAlloca(builder, type.getLlvmType(context), parent.getPath() + ':' + name);
+                var llvmValue = value.solve(builder, module, context);
+                LLVMBuildStore(builder, llvmValue, llvmVariable);
+            }
+        }
     }
 
 }

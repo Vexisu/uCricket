@@ -24,7 +24,7 @@ package pl.polsl.student.maciwal866.ucricket;
 
 COMMENT = \/\/.*
 WHITESPACE = \ +|\n+|\r+|\t+
-IDENTIFIER = [a-zA-Z][a-zA-Z0-9]*
+IDENTIFIER = [a-zA-z][a-zA-Z0-9]*(:?[a-zA-Z0-9]+)?
 INTEGER = \d+
 FLOAT = \d*\.\d+d
 
@@ -35,6 +35,7 @@ FLOAT = \d*\.\d+d
 "/" {return '/';}
 "=" {return '=';}
 "%" {return '%';}
+"!" {return '!';}
 "(" {return '(';}
 ")" {return ')';}
 "<" {return '<';}

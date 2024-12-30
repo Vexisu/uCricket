@@ -1,8 +1,10 @@
 package pl.polsl.student.maciwal866.ucricket.ast.statement;
 
-import lombok.AllArgsConstructor;
+import static org.bytedeco.llvm.global.LLVM.*;
+
+import org.bytedeco.llvm.LLVM.*;
+
 import lombok.Getter;
-import pl.polsl.student.maciwal866.ucricket.ast.ASTNode;
 import pl.polsl.student.maciwal866.ucricket.ast.Expression;
 import pl.polsl.student.maciwal866.ucricket.ast.Statement;
 import pl.polsl.student.maciwal866.ucricket.ast.ValueType;
@@ -11,28 +13,34 @@ import pl.polsl.student.maciwal866.ucricket.ast.exception.VariableNotFoundExcept
 import pl.polsl.student.maciwal866.ucricket.ast.extension.Scoped;
 
 @Getter
-@AllArgsConstructor
 public class AssignmentStatement implements Statement {
     private String variableName;
     private Expression expression;
+    private VariableStatement linkedVariable;
 
-    @Override
-    public ASTNode solve() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'solve'");
+    public AssignmentStatement(String variableName, Expression expression) {
+        this.variableName = variableName;
+        this.expression = expression;
     }
 
     @Override
     public Object resolve(Scoped parent) {
-        var variableInScope = parent.getVariable(variableName);
-        if (variableInScope == null) {
+        this.linkedVariable = parent.getVariable(variableName);
+        if (linkedVariable == null) {
             throw new VariableNotFoundException(variableName);
         }
+        linkedVariable.setAccessed(true);
         if (expression.resolve(parent) instanceof ValueType expressionValueType
-                && !expressionValueType.equals(variableInScope.getType())) {
+                && !expressionValueType.equals(this.linkedVariable.getType())) {
             throw new MismatchedTypeException(expressionValueType, this);
         }
         return null;
+    }
+
+    @Override
+    public void solve(LLVMBuilderRef builder, LLVMModuleRef module, LLVMContextRef context) {
+        var llvmExpression = expression.solve(builder, module, context);
+        LLVMBuildStore(builder, llvmExpression, linkedVariable.getLlvmVariable());
     }
 
 }

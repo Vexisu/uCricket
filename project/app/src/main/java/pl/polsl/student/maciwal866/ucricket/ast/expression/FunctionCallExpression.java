@@ -1,23 +1,26 @@
 package pl.polsl.student.maciwal866.ucricket.ast.expression;
 
-import lombok.AllArgsConstructor;
+import static org.bytedeco.llvm.global.LLVM.*;
+
+import org.bytedeco.javacpp.PointerPointer;
+import org.bytedeco.llvm.LLVM.*;
+
 import lombok.Getter;
-import pl.polsl.student.maciwal866.ucricket.ast.ASTNode;
 import pl.polsl.student.maciwal866.ucricket.ast.Expression;
+import pl.polsl.student.maciwal866.ucricket.ast.Function;
 import pl.polsl.student.maciwal866.ucricket.ast.ValueType;
 import pl.polsl.student.maciwal866.ucricket.ast.exception.FunctionNotFoundException;
 import pl.polsl.student.maciwal866.ucricket.ast.extension.Scoped;
 
 @Getter
-@AllArgsConstructor
 public class FunctionCallExpression implements Expression {
-    public String functionName;
-    public ArgumentsExpression arguments;
+    private String functionName;
+    private ArgumentsExpression arguments;
+    private Function linkedFunction;
 
-    @Override
-    public ASTNode solve() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'solve'");
+    public FunctionCallExpression(String functionName, ArgumentsExpression arguments) {
+        this.functionName = functionName;
+        this.arguments = arguments;
     }
 
     @Override
@@ -26,11 +29,33 @@ public class FunctionCallExpression implements Expression {
         if (arguments != null && arguments.resolve(parent) instanceof ValueType[] resolvedArgumentTypes) {
             argumentTypes = resolvedArgumentTypes;
         }
-        var calledFunction = parent.getFunction(functionName, argumentTypes);
-        if (calledFunction == null) {
+        linkedFunction = parent.getFunction(functionName, argumentTypes);
+        if (this.linkedFunction == null) {
             throw new FunctionNotFoundException(functionName, argumentTypes);
         }
-        return calledFunction.getType();
+        linkedFunction.setCalled(true);
+        return linkedFunction.getType();
+    }
+
+    @Override
+    public LLVMValueRef solve(LLVMBuilderRef builder, LLVMModuleRef module, LLVMContextRef context) {
+        if (linkedFunction.getLlvmFunction() == null) {
+            System.out.println("Delegating function build process to " + functionName + "().");
+            var delegatedBuilder = LLVMCreateBuilderInContext(context);
+            linkedFunction.solve(delegatedBuilder, module, context);
+            LLVMDisposeBuilder(delegatedBuilder);
+        }
+        var argumentExpressions = new Expression[0];
+        if (arguments != null) {
+            argumentExpressions = arguments.collect();
+        }
+        var llvmArguments = new PointerPointer<LLVMTypeRef>(argumentExpressions.length);
+        for (int i = 0; i < argumentExpressions.length; i++) {
+            llvmArguments.put(argumentExpressions[i].solve(builder, module, context));
+        }
+        return LLVMBuildCall2(builder, linkedFunction.getLlvmFunctionType(), linkedFunction.getLlvmFunction(),
+                llvmArguments, argumentExpressions.length,
+                linkedFunction.getType().equals(ValueType.NONE) ? "" : functionName + "_ret");
     }
 
 }

@@ -2,6 +2,11 @@ package pl.polsl.student.maciwal866.ucricket.ast;
 
 import java.util.ArrayList;
 
+import org.bytedeco.javacpp.BytePointer;
+import org.bytedeco.javacpp.PointerPointer;
+
+import static org.bytedeco.llvm.global.LLVM.*;
+
 import lombok.Getter;
 
 @Getter
@@ -26,5 +31,29 @@ public class Program {
             scope.resolve(null);
         }
         return null;
+    }
+
+    public void solve() {
+        var context = LLVMContextCreate();
+        var mainScope = getScopeByName("Main");
+        if (mainScope != null) {
+            var module = LLVMModuleCreateWithNameInContext("Main", context);
+            var builder = LLVMCreateBuilderInContext(context);
+            var mainFunction = mainScope.getFunction("main", new ValueType[0]);
+            if (mainFunction != null) {
+                for (var scope : scopes) {
+                    scope.solve(builder, module, context);
+                }
+                mainFunction.solve(builder, module, context);
+                LLVMSetValueName(mainFunction.getLlvmFunction(), "main");
+            }
+            var moduleMessage = new PointerPointer<BytePointer>(1);
+            LLVMVerifyModule(module, 0, moduleMessage);
+            LLVMDisposeMessage(moduleMessage.get(BytePointer.class));
+            LLVMDumpModule(module);
+            LLVMDisposeBuilder(builder);
+            LLVMDisposeModule(module);
+        }
+        LLVMContextDispose(context);
     }
 }

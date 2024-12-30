@@ -2,9 +2,10 @@ package pl.polsl.student.maciwal866.ucricket.ast.expression;
 
 import java.util.ArrayList;
 
+import org.bytedeco.llvm.LLVM.*;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import pl.polsl.student.maciwal866.ucricket.ast.ASTNode;
 import pl.polsl.student.maciwal866.ucricket.ast.Expression;
 import pl.polsl.student.maciwal866.ucricket.ast.ValueType;
 import pl.polsl.student.maciwal866.ucricket.ast.exception.MismatchedOperatorException;
@@ -15,12 +16,6 @@ import pl.polsl.student.maciwal866.ucricket.ast.extension.Scoped;
 public class ArgumentsExpression implements Expression {
     private Expression expression;
     private ArgumentsExpression next;
-
-    @Override
-    public ASTNode solve() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'solve'");
-    }
 
     @Override
     public Object resolve(Scoped parent) {
@@ -36,6 +31,22 @@ public class ArgumentsExpression implements Expression {
             currentArgument = currentArgument.getNext();
         }
         return argumentTypes.toArray(ValueType[]::new);
+    }
+    
+    public Expression[] collect() {
+        var argumentsArray = new ArrayList<Expression>();
+        var argument = this;
+        while (argument != null) {
+            argumentsArray.add(argument.getExpression());
+            argument = argument.getNext();
+        }
+        return argumentsArray.toArray(Expression[]::new);
+    }
+
+    @Override
+    public LLVMValueRef solve(LLVMBuilderRef builder, LLVMModuleRef module, LLVMContextRef context) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'solve'");
     }
 
 }

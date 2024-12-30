@@ -1,19 +1,26 @@
-plugins { application }
+plugins { 
+    application
+    id("com.gradleup.shadow") version "9.0.0-beta4"
+    id("org.bytedeco.gradle-javacpp-platform") version "1.5.10"
+}
+
+extra["javacppPlatform"] = "linux-x86_64"
 
 repositories { mavenCentral() }
 
 dependencies {
-    testImplementation("org.junit.jupiter:junit-jupiter:5.9.3")
+    testImplementation("org.junit.jupiter:junit-jupiter:5.11.3")
 
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 
-    implementation("com.google.guava:guava:32.1.1-jre")
+    implementation("com.google.guava:guava:33.3.1-jre")
+    implementation("org.bytedeco:llvm-platform:19.1.3-1.5.11")
 
-    compileOnly("org.projectlombok:lombok:1.18.30")
-    annotationProcessor("org.projectlombok:lombok:1.18.30")
+    compileOnly("org.projectlombok:lombok:1.18.34")
+    annotationProcessor("org.projectlombok:lombok:1.18.34")
 
-    testCompileOnly("org.projectlombok:lombok:1.18.30")
-    testAnnotationProcessor("org.projectlombok:lombok:1.18.30")
+    testCompileOnly("org.projectlombok:lombok:1.18.34")
+    testAnnotationProcessor("org.projectlombok:lombok:1.18.34")
 }
 
 java { toolchain { languageVersion.set(JavaLanguageVersion.of(17)) } }

@@ -3,9 +3,10 @@ package pl.polsl.student.maciwal866.ucricket.ast.statement;
 import java.util.ArrayList;
 import java.util.stream.Stream;
 
+import org.bytedeco.llvm.LLVM.*;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import pl.polsl.student.maciwal866.ucricket.ast.ASTNode;
 import pl.polsl.student.maciwal866.ucricket.ast.Expression;
 import pl.polsl.student.maciwal866.ucricket.ast.Function;
 import pl.polsl.student.maciwal866.ucricket.ast.Statement;
@@ -29,22 +30,16 @@ public class WhileStatement implements Statement, Scoped {
     }
 
     @Override
-    public ASTNode solve() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'solve'");
-    }
-
-    @Override
     public Object resolve(Scoped parent) {
         this.parent = parent;
-        var resolverConditionResult = condition.resolve(parent);
+        var resolverConditionResult = condition.resolve(this);
         if (resolverConditionResult instanceof ValueType conditionValueType) {
             if (Stream.of(ValueType.LOGIC_TYPES).anyMatch(logicType -> logicType.equals(conditionValueType))) {
                 throw new MismatchedTypeException(conditionValueType, this);
             }
         }
         if (statements != null) {
-            statements.resolve(parent);
+            statements.resolve(this);
         }
         return null;
     }
@@ -52,7 +47,7 @@ public class WhileStatement implements Statement, Scoped {
     @Override
     public VariableStatement getVariable(String name) {
         for (var variable : localVariables) {
-            if (variable.getName().equalsIgnoreCase(name)) {
+            if (variable.getName().equals(name)) {
                 return variable;
             }
         }
@@ -62,11 +57,21 @@ public class WhileStatement implements Statement, Scoped {
     @Override
     public boolean hasVariable(String name) {
         for (var variable : localVariables) {
-            if (variable.getName().equalsIgnoreCase(name)) {
+            if (variable.getName().equals(name)) {
                 return true;
             }
         }
         return parent.hasVariable(name);
+    }
+
+    @Override
+    public boolean hasResolvedVariable(String name) {
+        for (var variable : localVariables) {
+            if (variable.getName().equals(name) && variable.isResolved()) {
+                return true;
+            }
+        }
+        return parent.hasResolvedVariable(name);
     }
 
     @Override
@@ -85,7 +90,18 @@ public class WhileStatement implements Statement, Scoped {
     }
 
     @Override
-    public void addFunction(Function function) {
-        parent.addFunction(function);
+    public boolean hasResolvedFunction(String name, ValueType[] argumentTypes) {
+        return parent.hasResolvedFunction(name, argumentTypes);
+    }
+
+    @Override
+    public void solve(LLVMBuilderRef builder, LLVMModuleRef module, LLVMContextRef context) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'solve'");
+    }
+
+    @Override
+    public String getPath() {
+        return parent.getPath() + ":while";
     }
 }

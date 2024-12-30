@@ -45,7 +45,7 @@ import lombok.Getter;
 %nterm <Function.ArgumentChain> argumentChain
 
 %start program
-%left "==" "!=" "<=" ">=" "<" ">" 
+%left EQUAL_EQUAL BANG_EQUAL LESS_EQUAL GREATER_EQUAL '<' '>' 
 %left '+' '-'
 %left '*' '/'
 %right ARITHM_NEGATION LOGICAL_NEGATION
@@ -88,7 +88,7 @@ argumentChain:
 
 returnedType:
         '<' IDENTIFIER '>' { $$ = ValueType.parse($<String>2); }
-    |   { $$ = null; }
+    |   { $$ = ValueType.NONE; }
 ;
 
 statements:

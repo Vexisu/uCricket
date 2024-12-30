@@ -5,9 +5,15 @@ import pl.polsl.student.maciwal866.ucricket.ast.ValueType;
 import pl.polsl.student.maciwal866.ucricket.ast.statement.VariableStatement;
 
 public interface Scoped {
+    Scoped getParent();
+
+    String getPath();
+
     VariableStatement getVariable(String name);
 
     boolean hasVariable(String name);
+
+    boolean hasResolvedVariable(String name);
 
     void addVariable(VariableStatement statement);
 
@@ -15,5 +21,5 @@ public interface Scoped {
 
     boolean hasFunction(String name, ValueType[] argumentTypes);
 
-    void addFunction(Function function);
+    boolean hasResolvedFunction(String name, ValueType[] argumentTypes);
 }
