@@ -132,6 +132,9 @@ binary:
     |   expression '-' expression { $$ = new BinaryExpression($1, BinaryExpression.Operator.SUBTRACT, $3); }
     |   expression '*' expression { $$ = new BinaryExpression($1, BinaryExpression.Operator.MULTIPLY, $3); }
     |   expression '/' expression { $$ = new BinaryExpression($1, BinaryExpression.Operator.DIVIDE, $3); }
+    |   expression '&' expression { $$ = new BinaryExpression($1, BinaryExpression.Operator.AND, $3); }
+    |   expression '|' expression { $$ = new BinaryExpression($1, BinaryExpression.Operator.OR, $3); }
+    |   expression '^' expression { $$ = new BinaryExpression($1, BinaryExpression.Operator.XOR, $3); }
 ;
 
 unary:

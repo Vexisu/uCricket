@@ -37,7 +37,10 @@ public class BinaryExpression implements Expression {
         ADD(ValueType.NUMERIC_TYPES),
         SUBTRACT(ValueType.NUMERIC_TYPES),
         MULTIPLY(ValueType.NUMERIC_TYPES),
-        DIVIDE(ValueType.NUMERIC_TYPES);
+        DIVIDE(ValueType.NUMERIC_TYPES),
+        AND(ValueType.ALL_TYPES),
+        OR(ValueType.ALL_TYPES),
+        XOR(ValueType.ALL_TYPES);
 
         private final ValueType[] compatibleWith;
 
