@@ -28,12 +28,13 @@ public class VariableExpression implements Expression {
         }
         linkedVariable = parent.getVariable(name);
         linkedVariable.setAccessed(true);
-        return linkedVariable.getType();
+        return linkedVariable.getValueType();
     }
 
     @Override
     public LLVMValueRef solve(LLVMBuilderRef builder, LLVMModuleRef module, LLVMContextRef context) {
-        return LLVMBuildLoad2(builder, linkedVariable.getType().getLlvmType(context), linkedVariable.getLlvmVariable(),
+        return LLVMBuildLoad2(builder, linkedVariable.getValueType().getLlvmType(context),
+                linkedVariable.getLlvmVariable(),
                 name);
     }
 

@@ -49,6 +49,7 @@ import pl.polsl.student.maciwal866.ucricket.ast.Function;
 import pl.polsl.student.maciwal866.ucricket.ast.Expression;
 import pl.polsl.student.maciwal866.ucricket.ast.Statement;
 import pl.polsl.student.maciwal866.ucricket.ast.ValueType;
+import pl.polsl.student.maciwal866.ucricket.ast.AssignmentType;
 import pl.polsl.student.maciwal866.ucricket.ast.StatementChain;
 import pl.polsl.student.maciwal866.ucricket.ast.statement.AssignmentStatement;
 import pl.polsl.student.maciwal866.ucricket.ast.statement.ExpressionStatement;
@@ -65,7 +66,7 @@ import pl.polsl.student.maciwal866.ucricket.ast.expression.FunctionCallExpressio
 
 import lombok.Getter;
 
-/* "./src/main/java/pl/polsl/student/maciwal866/ucricket/UCricketParser.java":69  */
+/* "./src/main/java/pl/polsl/student/maciwal866/ucricket/UCricketParser.java":70  */
 
 /**
  * A Bison parser, automatically generated from <tt>./src/main/resources/UCricketParser.y</tt>.
@@ -123,42 +124,43 @@ public class UCricketParser
     S_BANG_EQUAL(16),              /* BANG_EQUAL  */
     S_LESS_EQUAL(17),              /* LESS_EQUAL  */
     S_GREATER_EQUAL(18),           /* GREATER_EQUAL  */
-    S_19_(19),                     /* '<'  */
-    S_20_(20),                     /* '>'  */
-    S_21_(21),                     /* '+'  */
-    S_22_(22),                     /* '-'  */
-    S_23_(23),                     /* '*'  */
-    S_24_(24),                     /* '/'  */
-    S_ARITHM_NEGATION(25),         /* ARITHM_NEGATION  */
-    S_LOGICAL_NEGATION(26),        /* LOGICAL_NEGATION  */
-    S_27_(27),                     /* ';'  */
-    S_28_(28),                     /* '{'  */
-    S_29_(29),                     /* '}'  */
-    S_30_(30),                     /* '('  */
-    S_31_(31),                     /* ')'  */
-    S_32_(32),                     /* ','  */
-    S_33_(33),                     /* '='  */
-    S_34_(34),                     /* '&'  */
-    S_35_(35),                     /* '|'  */
-    S_36_(36),                     /* '^'  */
-    S_37_(37),                     /* '!'  */
-    S_YYACCEPT(38),                /* $accept  */
-    S_program(39),                 /* program  */
-    S_scope(40),                   /* scope  */
-    S_scopeContent(41),            /* scopeContent  */
-    S_function(42),                /* function  */
-    S_argumentChain(43),           /* argumentChain  */
-    S_returnedType(44),            /* returnedType  */
-    S_statements(45),              /* statements  */
-    S_statement(46),               /* statement  */
-    S_variableStatement(47),       /* variableStatement  */
-    S_condition(48),               /* condition  */
-    S_expression(49),              /* expression  */
-    S_binary(50),                  /* binary  */
-    S_unary(51),                   /* unary  */
-    S_primary(52),                 /* primary  */
-    S_functionCall(53),            /* functionCall  */
-    S_arguments(54);               /* arguments  */
+    S_ASSIGN_ADDRESS(19),          /* ASSIGN_ADDRESS  */
+    S_20_(20),                     /* '<'  */
+    S_21_(21),                     /* '>'  */
+    S_22_(22),                     /* '+'  */
+    S_23_(23),                     /* '-'  */
+    S_24_(24),                     /* '*'  */
+    S_25_(25),                     /* '/'  */
+    S_26_(26),                     /* '&'  */
+    S_27_(27),                     /* '|'  */
+    S_28_(28),                     /* '^'  */
+    S_ARITHM_NEGATION(29),         /* ARITHM_NEGATION  */
+    S_LOGICAL_NEGATION(30),        /* LOGICAL_NEGATION  */
+    S_31_(31),                     /* ';'  */
+    S_32_(32),                     /* '{'  */
+    S_33_(33),                     /* '}'  */
+    S_34_(34),                     /* '('  */
+    S_35_(35),                     /* ')'  */
+    S_36_(36),                     /* ','  */
+    S_37_(37),                     /* '='  */
+    S_38_(38),                     /* '!'  */
+    S_YYACCEPT(39),                /* $accept  */
+    S_program(40),                 /* program  */
+    S_scope(41),                   /* scope  */
+    S_scopeContent(42),            /* scopeContent  */
+    S_function(43),                /* function  */
+    S_argumentChain(44),           /* argumentChain  */
+    S_returnedType(45),            /* returnedType  */
+    S_statements(46),              /* statements  */
+    S_statement(47),               /* statement  */
+    S_variableStatement(48),       /* variableStatement  */
+    S_condition(49),               /* condition  */
+    S_expression(50),              /* expression  */
+    S_binary(51),                  /* binary  */
+    S_unary(52),                   /* unary  */
+    S_primary(53),                 /* primary  */
+    S_functionCall(54),            /* functionCall  */
+    S_arguments(55);               /* arguments  */
 
 
     private final int yycode_;
@@ -187,18 +189,18 @@ public class UCricketParser
       SymbolKind.S_BANG_EQUAL,
       SymbolKind.S_LESS_EQUAL,
       SymbolKind.S_GREATER_EQUAL,
-      SymbolKind.S_19_,
+      SymbolKind.S_ASSIGN_ADDRESS,
       SymbolKind.S_20_,
       SymbolKind.S_21_,
       SymbolKind.S_22_,
       SymbolKind.S_23_,
       SymbolKind.S_24_,
-      SymbolKind.S_ARITHM_NEGATION,
-      SymbolKind.S_LOGICAL_NEGATION,
+      SymbolKind.S_25_,
+      SymbolKind.S_26_,
       SymbolKind.S_27_,
       SymbolKind.S_28_,
-      SymbolKind.S_29_,
-      SymbolKind.S_30_,
+      SymbolKind.S_ARITHM_NEGATION,
+      SymbolKind.S_LOGICAL_NEGATION,
       SymbolKind.S_31_,
       SymbolKind.S_32_,
       SymbolKind.S_33_,
@@ -206,6 +208,7 @@ public class UCricketParser
       SymbolKind.S_35_,
       SymbolKind.S_36_,
       SymbolKind.S_37_,
+      SymbolKind.S_38_,
       SymbolKind.S_YYACCEPT,
       SymbolKind.S_program,
       SymbolKind.S_scope,
@@ -275,10 +278,10 @@ public class UCricketParser
   "\"end of file\"", "error", "\"invalid token\"", "IDENTIFIER",
   "INTEGER", "FLOAT", "IMPORT", "SCOPE", "IF", "WHILE", "FUNC", "VAR",
   "RETURN", "TRUE", "FALSE", "EQUAL_EQUAL", "BANG_EQUAL", "LESS_EQUAL",
-  "GREATER_EQUAL", "'<'", "'>'", "'+'", "'-'", "'*'", "'/'",
-  "ARITHM_NEGATION", "LOGICAL_NEGATION", "';'", "'{'", "'}'", "'('", "')'",
-  "','", "'='", "'&'", "'|'", "'^'", "'!'", "$accept", "program", "scope",
-  "scopeContent", "function", "argumentChain", "returnedType",
+  "GREATER_EQUAL", "ASSIGN_ADDRESS", "'<'", "'>'", "'+'", "'-'", "'*'",
+  "'/'", "'&'", "'|'", "'^'", "ARITHM_NEGATION", "LOGICAL_NEGATION", "';'",
+  "'{'", "'}'", "'('", "')'", "','", "'='", "'!'", "$accept", "program",
+  "scope", "scopeContent", "function", "argumentChain", "returnedType",
   "statements", "statement", "variableStatement", "condition",
   "expression", "binary", "unary", "primary", "functionCall", "arguments", null
     };
@@ -336,10 +339,12 @@ public class UCricketParser
     static final int LESS_EQUAL = 272;
     /** Token GREATER_EQUAL, to be returned by the scanner.  */
     static final int GREATER_EQUAL = 273;
+    /** Token ASSIGN_ADDRESS, to be returned by the scanner.  */
+    static final int ASSIGN_ADDRESS = 274;
     /** Token ARITHM_NEGATION, to be returned by the scanner.  */
-    static final int ARITHM_NEGATION = 274;
+    static final int ARITHM_NEGATION = 275;
     /** Token LOGICAL_NEGATION, to be returned by the scanner.  */
-    static final int LOGICAL_NEGATION = 275;
+    static final int LOGICAL_NEGATION = 276;
 
     /** Deprecated, use YYEOF instead.  */
     public static final int EOF = YYEOF;
@@ -387,11 +392,11 @@ public class UCricketParser
   public UCricketParser(Lexer yylexer)
   {
 /* "%code init" blocks.  */
-/* "./src/main/resources/UCricketParser.y":58  */
+/* "./src/main/resources/UCricketParser.y":60  */
 
     program = new Program();
 
-/* "./src/main/java/pl/polsl/student/maciwal866/ucricket/UCricketParser.java":395  */
+/* "./src/main/java/pl/polsl/student/maciwal866/ucricket/UCricketParser.java":400  */
 
     this.yylexer = yylexer;
 
@@ -545,328 +550,342 @@ public class UCricketParser
       {
           case 3: /* program: scope program  */
   if (yyn == 3)
-    /* "./src/main/resources/UCricketParser.y":65  */
+    /* "./src/main/resources/UCricketParser.y":67  */
                       { program.addScope(((Scope)(yystack.valueAt (1)))); };
   break;
 
 
   case 5: /* scope: SCOPE IDENTIFIER '{' scopeContent '}'  */
   if (yyn == 5)
-    /* "./src/main/resources/UCricketParser.y":70  */
+    /* "./src/main/resources/UCricketParser.y":72  */
                                               { yyval = new Scope(((String)(yystack.valueAt (3))), ((Scope.ScopeContent)(yystack.valueAt (1)))); };
   break;
 
 
   case 6: /* scopeContent: function scopeContent  */
   if (yyn == 6)
-    /* "./src/main/resources/UCricketParser.y":74  */
+    /* "./src/main/resources/UCricketParser.y":76  */
                               { yyval = new Scope.ScopeContent<Function>(((Function)(yystack.valueAt (1))), ((Scope.ScopeContent)(yystack.valueAt (0)))); };
   break;
 
 
   case 7: /* scopeContent: variableStatement scopeContent  */
   if (yyn == 7)
-    /* "./src/main/resources/UCricketParser.y":75  */
+    /* "./src/main/resources/UCricketParser.y":77  */
                                        { yyval = new Scope.ScopeContent<VariableStatement>(((VariableStatement)(yystack.valueAt (1))), ((Scope.ScopeContent)(yystack.valueAt (0)))); };
   break;
 
 
   case 8: /* scopeContent: %empty  */
   if (yyn == 8)
-    /* "./src/main/resources/UCricketParser.y":76  */
+    /* "./src/main/resources/UCricketParser.y":78  */
         { yyval = null; };
   break;
 
 
   case 9: /* function: FUNC returnedType IDENTIFIER '(' argumentChain ')' '{' statements '}'  */
   if (yyn == 9)
-    /* "./src/main/resources/UCricketParser.y":80  */
+    /* "./src/main/resources/UCricketParser.y":82  */
                                                                               { yyval = new Function(((ValueType)(yystack.valueAt (7))), ((String)(yystack.valueAt (6))), ((Function.ArgumentChain)(yystack.valueAt (4))), ((StatementChain)(yystack.valueAt (1)))); };
   break;
 
 
   case 10: /* function: FUNC returnedType IDENTIFIER '(' ')' '{' statements '}'  */
   if (yyn == 10)
-    /* "./src/main/resources/UCricketParser.y":81  */
+    /* "./src/main/resources/UCricketParser.y":83  */
                                                                 { yyval = new Function(((ValueType)(yystack.valueAt (6))), ((String)(yystack.valueAt (5))), null, ((StatementChain)(yystack.valueAt (1)))); };
   break;
 
 
   case 11: /* argumentChain: argumentChain ',' IDENTIFIER IDENTIFIER  */
   if (yyn == 11)
-    /* "./src/main/resources/UCricketParser.y":85  */
+    /* "./src/main/resources/UCricketParser.y":87  */
                                                 { yyval = new Function.ArgumentChain(ValueType.parse(((String)(yystack.valueAt (1)))), ((String)(yystack.valueAt (0))), ((Function.ArgumentChain)(yystack.valueAt (3)))); };
   break;
 
 
   case 12: /* argumentChain: IDENTIFIER IDENTIFIER  */
   if (yyn == 12)
-    /* "./src/main/resources/UCricketParser.y":86  */
+    /* "./src/main/resources/UCricketParser.y":88  */
                               { yyval = new Function.ArgumentChain(ValueType.parse(((String)(yystack.valueAt (1)))), ((String)(yystack.valueAt (0))), null); };
   break;
 
 
   case 13: /* returnedType: '<' IDENTIFIER '>'  */
   if (yyn == 13)
-    /* "./src/main/resources/UCricketParser.y":90  */
+    /* "./src/main/resources/UCricketParser.y":92  */
                            { yyval = ValueType.parse(((String)(yystack.valueAt (1)))); };
   break;
 
 
   case 14: /* returnedType: %empty  */
   if (yyn == 14)
-    /* "./src/main/resources/UCricketParser.y":91  */
+    /* "./src/main/resources/UCricketParser.y":93  */
         { yyval = ValueType.NONE; };
   break;
 
 
   case 15: /* statements: statement statements  */
   if (yyn == 15)
-    /* "./src/main/resources/UCricketParser.y":95  */
+    /* "./src/main/resources/UCricketParser.y":97  */
                              { yyval = new StatementChain(((Statement)(yystack.valueAt (1))), ((StatementChain)(yystack.valueAt (0)))); };
   break;
 
 
   case 16: /* statements: %empty  */
   if (yyn == 16)
-    /* "./src/main/resources/UCricketParser.y":96  */
+    /* "./src/main/resources/UCricketParser.y":98  */
         { yyval = null; };
   break;
 
 
   case 17: /* statement: expression ';'  */
   if (yyn == 17)
-    /* "./src/main/resources/UCricketParser.y":100  */
+    /* "./src/main/resources/UCricketParser.y":102  */
                        {yyval = new ExpressionStatement(((Expression)(yystack.valueAt (1)))); };
   break;
 
 
   case 18: /* statement: IF '(' condition ')' '{' statements '}'  */
   if (yyn == 18)
-    /* "./src/main/resources/UCricketParser.y":101  */
+    /* "./src/main/resources/UCricketParser.y":103  */
                                                 { yyval = new IfStatement(((Expression)(yystack.valueAt (4))), ((StatementChain)(yystack.valueAt (1)))); };
   break;
 
 
   case 19: /* statement: WHILE '(' condition ')' '{' statements '}'  */
   if (yyn == 19)
-    /* "./src/main/resources/UCricketParser.y":102  */
+    /* "./src/main/resources/UCricketParser.y":104  */
                                                    { yyval = new WhileStatement(((Expression)(yystack.valueAt (4))), ((StatementChain)(yystack.valueAt (1)))); };
   break;
 
 
   case 20: /* statement: variableStatement  */
   if (yyn == 20)
-    /* "./src/main/resources/UCricketParser.y":103  */
+    /* "./src/main/resources/UCricketParser.y":105  */
                           { yyval = ((VariableStatement)(yystack.valueAt (0))); };
   break;
 
 
   case 21: /* statement: IDENTIFIER '=' expression ';'  */
   if (yyn == 21)
-    /* "./src/main/resources/UCricketParser.y":104  */
-                                      { yyval = new AssignmentStatement(((String)(yystack.valueAt (3))), ((Expression)(yystack.valueAt (1)))); };
+    /* "./src/main/resources/UCricketParser.y":106  */
+                                      { yyval = new AssignmentStatement(AssignmentType.VALUE, ((String)(yystack.valueAt (3))), ((Expression)(yystack.valueAt (1)))); };
   break;
 
 
-  case 22: /* statement: RETURN expression ';'  */
+  case 22: /* statement: IDENTIFIER ASSIGN_ADDRESS expression ';'  */
   if (yyn == 22)
-    /* "./src/main/resources/UCricketParser.y":105  */
+    /* "./src/main/resources/UCricketParser.y":107  */
+                                                 { yyval = new AssignmentStatement(AssignmentType.ADDRESS, ((String)(yystack.valueAt (3))), ((Expression)(yystack.valueAt (1)))); };
+  break;
+
+
+  case 23: /* statement: RETURN expression ';'  */
+  if (yyn == 23)
+    /* "./src/main/resources/UCricketParser.y":108  */
                               { yyval = new ReturnStatement(((Expression)(yystack.valueAt (1)))); };
   break;
 
 
-  case 23: /* variableStatement: VAR returnedType IDENTIFIER ';'  */
-  if (yyn == 23)
-    /* "./src/main/resources/UCricketParser.y":109  */
-                                        { yyval = new VariableStatement(((ValueType)(yystack.valueAt (2))), ((String)(yystack.valueAt (1))), null); };
-  break;
-
-
-  case 24: /* variableStatement: VAR returnedType IDENTIFIER '=' expression ';'  */
+  case 24: /* variableStatement: VAR returnedType IDENTIFIER ';'  */
   if (yyn == 24)
-    /* "./src/main/resources/UCricketParser.y":110  */
-                                                       { yyval = new VariableStatement(((ValueType)(yystack.valueAt (4))), ((String)(yystack.valueAt (3))), ((Expression)(yystack.valueAt (1)))); };
+    /* "./src/main/resources/UCricketParser.y":112  */
+                                        { yyval = new VariableStatement(((ValueType)(yystack.valueAt (2))), ((String)(yystack.valueAt (1))), AssignmentType.NONE, null); };
   break;
 
 
-  case 30: /* binary: expression EQUAL_EQUAL expression  */
-  if (yyn == 30)
-    /* "./src/main/resources/UCricketParser.y":125  */
+  case 25: /* variableStatement: VAR returnedType IDENTIFIER '=' expression ';'  */
+  if (yyn == 25)
+    /* "./src/main/resources/UCricketParser.y":113  */
+                                                       { yyval = new VariableStatement(((ValueType)(yystack.valueAt (4))), ((String)(yystack.valueAt (3))), AssignmentType.VALUE, ((Expression)(yystack.valueAt (1)))); };
+  break;
+
+
+  case 26: /* variableStatement: VAR returnedType IDENTIFIER ASSIGN_ADDRESS expression ';'  */
+  if (yyn == 26)
+    /* "./src/main/resources/UCricketParser.y":114  */
+                                                                  { yyval = new VariableStatement(((ValueType)(yystack.valueAt (4))), ((String)(yystack.valueAt (3))), AssignmentType.ADDRESS, ((Expression)(yystack.valueAt (1)))); };
+  break;
+
+
+  case 32: /* binary: expression EQUAL_EQUAL expression  */
+  if (yyn == 32)
+    /* "./src/main/resources/UCricketParser.y":129  */
                                           { yyval = new BinaryExpression(((Expression)(yystack.valueAt (2))), BinaryExpression.Operator.EQUAL, ((Expression)(yystack.valueAt (0)))); };
   break;
 
 
-  case 31: /* binary: expression BANG_EQUAL expression  */
-  if (yyn == 31)
-    /* "./src/main/resources/UCricketParser.y":126  */
+  case 33: /* binary: expression BANG_EQUAL expression  */
+  if (yyn == 33)
+    /* "./src/main/resources/UCricketParser.y":130  */
                                          { yyval = new BinaryExpression(((Expression)(yystack.valueAt (2))), BinaryExpression.Operator.NOT_EQUAL, ((Expression)(yystack.valueAt (0)))); };
   break;
 
 
-  case 32: /* binary: expression '<' expression  */
-  if (yyn == 32)
-    /* "./src/main/resources/UCricketParser.y":127  */
+  case 34: /* binary: expression '<' expression  */
+  if (yyn == 34)
+    /* "./src/main/resources/UCricketParser.y":131  */
                                   { yyval = new BinaryExpression(((Expression)(yystack.valueAt (2))), BinaryExpression.Operator.LESS, ((Expression)(yystack.valueAt (0)))); };
   break;
 
 
-  case 33: /* binary: expression '>' expression  */
-  if (yyn == 33)
-    /* "./src/main/resources/UCricketParser.y":128  */
+  case 35: /* binary: expression '>' expression  */
+  if (yyn == 35)
+    /* "./src/main/resources/UCricketParser.y":132  */
                                   { yyval = new BinaryExpression(((Expression)(yystack.valueAt (2))), BinaryExpression.Operator.GREATER, ((Expression)(yystack.valueAt (0)))); };
   break;
 
 
-  case 34: /* binary: expression LESS_EQUAL expression  */
-  if (yyn == 34)
-    /* "./src/main/resources/UCricketParser.y":129  */
+  case 36: /* binary: expression LESS_EQUAL expression  */
+  if (yyn == 36)
+    /* "./src/main/resources/UCricketParser.y":133  */
                                          { yyval = new BinaryExpression(((Expression)(yystack.valueAt (2))), BinaryExpression.Operator.LESS_EQUAL, ((Expression)(yystack.valueAt (0)))); };
   break;
 
 
-  case 35: /* binary: expression GREATER_EQUAL expression  */
-  if (yyn == 35)
-    /* "./src/main/resources/UCricketParser.y":130  */
+  case 37: /* binary: expression GREATER_EQUAL expression  */
+  if (yyn == 37)
+    /* "./src/main/resources/UCricketParser.y":134  */
                                             { yyval = new BinaryExpression(((Expression)(yystack.valueAt (2))), BinaryExpression.Operator.GREATER_EQUAL, ((Expression)(yystack.valueAt (0)))); };
   break;
 
 
-  case 36: /* binary: expression '+' expression  */
-  if (yyn == 36)
-    /* "./src/main/resources/UCricketParser.y":131  */
+  case 38: /* binary: expression '+' expression  */
+  if (yyn == 38)
+    /* "./src/main/resources/UCricketParser.y":135  */
                                   { yyval = new BinaryExpression(((Expression)(yystack.valueAt (2))), BinaryExpression.Operator.ADD, ((Expression)(yystack.valueAt (0)))); };
   break;
 
 
-  case 37: /* binary: expression '-' expression  */
-  if (yyn == 37)
-    /* "./src/main/resources/UCricketParser.y":132  */
+  case 39: /* binary: expression '-' expression  */
+  if (yyn == 39)
+    /* "./src/main/resources/UCricketParser.y":136  */
                                   { yyval = new BinaryExpression(((Expression)(yystack.valueAt (2))), BinaryExpression.Operator.SUBTRACT, ((Expression)(yystack.valueAt (0)))); };
   break;
 
 
-  case 38: /* binary: expression '*' expression  */
-  if (yyn == 38)
-    /* "./src/main/resources/UCricketParser.y":133  */
+  case 40: /* binary: expression '*' expression  */
+  if (yyn == 40)
+    /* "./src/main/resources/UCricketParser.y":137  */
                                   { yyval = new BinaryExpression(((Expression)(yystack.valueAt (2))), BinaryExpression.Operator.MULTIPLY, ((Expression)(yystack.valueAt (0)))); };
   break;
 
 
-  case 39: /* binary: expression '/' expression  */
-  if (yyn == 39)
-    /* "./src/main/resources/UCricketParser.y":134  */
+  case 41: /* binary: expression '/' expression  */
+  if (yyn == 41)
+    /* "./src/main/resources/UCricketParser.y":138  */
                                   { yyval = new BinaryExpression(((Expression)(yystack.valueAt (2))), BinaryExpression.Operator.DIVIDE, ((Expression)(yystack.valueAt (0)))); };
   break;
 
 
-  case 40: /* binary: expression '&' expression  */
-  if (yyn == 40)
-    /* "./src/main/resources/UCricketParser.y":135  */
+  case 42: /* binary: expression '&' expression  */
+  if (yyn == 42)
+    /* "./src/main/resources/UCricketParser.y":139  */
                                   { yyval = new BinaryExpression(((Expression)(yystack.valueAt (2))), BinaryExpression.Operator.AND, ((Expression)(yystack.valueAt (0)))); };
   break;
 
 
-  case 41: /* binary: expression '|' expression  */
-  if (yyn == 41)
-    /* "./src/main/resources/UCricketParser.y":136  */
+  case 43: /* binary: expression '|' expression  */
+  if (yyn == 43)
+    /* "./src/main/resources/UCricketParser.y":140  */
                                   { yyval = new BinaryExpression(((Expression)(yystack.valueAt (2))), BinaryExpression.Operator.OR, ((Expression)(yystack.valueAt (0)))); };
   break;
 
 
-  case 42: /* binary: expression '^' expression  */
-  if (yyn == 42)
-    /* "./src/main/resources/UCricketParser.y":137  */
+  case 44: /* binary: expression '^' expression  */
+  if (yyn == 44)
+    /* "./src/main/resources/UCricketParser.y":141  */
                                   { yyval = new BinaryExpression(((Expression)(yystack.valueAt (2))), BinaryExpression.Operator.XOR, ((Expression)(yystack.valueAt (0)))); };
   break;
 
 
-  case 43: /* unary: '(' expression ')'  */
-  if (yyn == 43)
-    /* "./src/main/resources/UCricketParser.y":141  */
+  case 45: /* unary: '(' expression ')'  */
+  if (yyn == 45)
+    /* "./src/main/resources/UCricketParser.y":145  */
                            { yyval = new UnaryExpression(((Expression)(yystack.valueAt (1))), UnaryExpression.Type.PARENTHESIS); };
   break;
 
 
-  case 44: /* unary: '!' expression  */
-  if (yyn == 44)
-    /* "./src/main/resources/UCricketParser.y":142  */
+  case 46: /* unary: '!' expression  */
+  if (yyn == 46)
+    /* "./src/main/resources/UCricketParser.y":146  */
                                               { yyval = new UnaryExpression(((Expression)(yystack.valueAt (0))), UnaryExpression.Type.LOGICAL_NEGATION); };
   break;
 
 
-  case 45: /* unary: '-' expression  */
-  if (yyn == 45)
-    /* "./src/main/resources/UCricketParser.y":143  */
+  case 47: /* unary: '-' expression  */
+  if (yyn == 47)
+    /* "./src/main/resources/UCricketParser.y":147  */
                                              { yyval = new UnaryExpression(((Expression)(yystack.valueAt (0))), UnaryExpression.Type.ARITHMETICAL_NEGATION); };
   break;
 
 
-  case 46: /* primary: INTEGER  */
-  if (yyn == 46)
-    /* "./src/main/resources/UCricketParser.y":147  */
+  case 48: /* primary: INTEGER  */
+  if (yyn == 48)
+    /* "./src/main/resources/UCricketParser.y":151  */
                 { yyval = new ValueExpression(((String)(yystack.valueAt (0))), ValueType.INTEGER); };
   break;
 
 
-  case 47: /* primary: FLOAT  */
-  if (yyn == 47)
-    /* "./src/main/resources/UCricketParser.y":148  */
+  case 49: /* primary: FLOAT  */
+  if (yyn == 49)
+    /* "./src/main/resources/UCricketParser.y":152  */
               { yyval = new ValueExpression(((String)(yystack.valueAt (0))), ValueType.FLOAT); };
   break;
 
 
-  case 48: /* primary: TRUE  */
-  if (yyn == 48)
-    /* "./src/main/resources/UCricketParser.y":149  */
+  case 50: /* primary: TRUE  */
+  if (yyn == 50)
+    /* "./src/main/resources/UCricketParser.y":153  */
              { yyval = new ValueExpression(((String)(yystack.valueAt (0))), ValueType.BOOLEAN); };
   break;
 
 
-  case 49: /* primary: FALSE  */
-  if (yyn == 49)
-    /* "./src/main/resources/UCricketParser.y":150  */
+  case 51: /* primary: FALSE  */
+  if (yyn == 51)
+    /* "./src/main/resources/UCricketParser.y":154  */
               { yyval = new ValueExpression(((String)(yystack.valueAt (0))), ValueType.BOOLEAN); };
   break;
 
 
-  case 50: /* primary: IDENTIFIER  */
-  if (yyn == 50)
-    /* "./src/main/resources/UCricketParser.y":151  */
+  case 52: /* primary: IDENTIFIER  */
+  if (yyn == 52)
+    /* "./src/main/resources/UCricketParser.y":155  */
                    { yyval = new VariableExpression(((String)(yystack.valueAt (0)))); };
   break;
 
 
-  case 51: /* functionCall: IDENTIFIER '(' arguments ')'  */
-  if (yyn == 51)
-    /* "./src/main/resources/UCricketParser.y":155  */
+  case 53: /* functionCall: IDENTIFIER '(' arguments ')'  */
+  if (yyn == 53)
+    /* "./src/main/resources/UCricketParser.y":159  */
                                      { yyval = new FunctionCallExpression(((String)(yystack.valueAt (3))), ((ArgumentsExpression)(yystack.valueAt (1)))); };
   break;
 
 
-  case 52: /* functionCall: IDENTIFIER '(' ')'  */
-  if (yyn == 52)
-    /* "./src/main/resources/UCricketParser.y":156  */
+  case 54: /* functionCall: IDENTIFIER '(' ')'  */
+  if (yyn == 54)
+    /* "./src/main/resources/UCricketParser.y":160  */
                            { yyval = new FunctionCallExpression(((String)(yystack.valueAt (2))), null); };
   break;
 
 
-  case 53: /* arguments: expression ',' arguments  */
-  if (yyn == 53)
-    /* "./src/main/resources/UCricketParser.y":160  */
+  case 55: /* arguments: expression ',' arguments  */
+  if (yyn == 55)
+    /* "./src/main/resources/UCricketParser.y":164  */
                                  { yyval = new ArgumentsExpression(((Expression)(yystack.valueAt (2))), ((ArgumentsExpression)(yystack.valueAt (0)))); };
   break;
 
 
-  case 54: /* arguments: expression  */
-  if (yyn == 54)
-    /* "./src/main/resources/UCricketParser.y":161  */
+  case 56: /* arguments: expression  */
+  if (yyn == 56)
+    /* "./src/main/resources/UCricketParser.y":165  */
                    { yyval = new ArgumentsExpression(((Expression)(yystack.valueAt (0))), null); };
   break;
 
 
 
-/* "./src/main/java/pl/polsl/student/maciwal866/ucricket/UCricketParser.java":870  */
+/* "./src/main/java/pl/polsl/student/maciwal866/ucricket/UCricketParser.java":889  */
 
         default: break;
       }
@@ -1278,7 +1297,7 @@ public class UCricketParser
     return yyvalue == yytable_ninf_;
   }
 
-  private static final short yypact_ninf_ = -73;
+  private static final short yypact_ninf_ = -76;
   private static final byte yytable_ninf_ = -1;
 
 /* YYPACT[STATE-NUM] -- Index in YYTABLE of the portion describing
@@ -1288,19 +1307,19 @@ public class UCricketParser
   {
     return new short[]
     {
-      57,     3,    17,    23,    57,    16,    25,   -73,   -73,    57,
-      39,   -73,    55,    55,    29,    39,    39,    59,    76,    81,
-     -73,   -73,   -73,    65,    58,   -11,   -73,     4,   -73,    78,
-      86,    62,    40,    64,   -73,   -73,   -73,   -73,    78,    78,
-      78,   101,   -73,   -73,   -73,   -73,   -73,    43,    67,    98,
-      56,     5,   123,     5,    78,    78,    78,    78,    78,    78,
-      78,    78,    78,    78,   -73,    78,    78,    78,   -25,    72,
-      73,    78,    77,    43,   -73,   145,    43,   102,   -73,   167,
-      82,   -73,    75,    75,    75,    75,    75,    75,   -21,   -21,
-       5,     5,   233,   233,   233,    78,    78,    78,   189,   -73,
-     -73,   -73,    83,   -73,    78,   -73,   211,    95,   233,    96,
-     -73,   -73,   -73,   -73,    79,   103,    43,    43,    85,   100,
-     -73,   -73
+      11,    13,    19,    27,    11,   -21,    21,   -76,   -76,    11,
+      15,   -76,    25,    25,    24,    15,    15,    55,    58,    66,
+     -76,   -76,   -76,    54,    44,   -16,   -76,     6,    79,   -76,
+      79,    76,    49,     7,    53,   -76,   -76,   -76,   -76,    79,
+      79,    79,   136,   -76,   -76,   -76,   -76,   153,   -76,    51,
+      56,    87,    63,   -76,   120,   -76,    79,    79,    79,    79,
+      79,    79,    79,    79,    79,    79,    79,    79,    79,   -76,
+     -76,   -14,    57,    60,    79,    62,    51,   -76,   170,    51,
+      93,   -76,   103,    64,   -76,    81,    81,    81,    81,    81,
+      81,   243,   243,   -20,   -20,   -76,   -76,   -76,    79,    79,
+      79,    79,   187,   -76,   -76,   -76,    67,   -76,    79,   -76,
+     204,   221,    75,   238,    77,   -76,   -76,   -76,   -76,   -76,
+      82,    83,    51,    51,    78,    89,   -76,   -76
     };
   }
 
@@ -1314,17 +1333,17 @@ public class UCricketParser
     {
        4,     0,     0,     0,     4,     0,     0,     1,     3,     4,
        8,     2,    14,    14,     0,     8,     8,     0,     0,     0,
-       5,     6,     7,     0,     0,     0,    13,     0,    23,     0,
-       0,     0,     0,    50,    46,    47,    48,    49,     0,     0,
-       0,     0,    26,    27,    28,    29,    12,    16,     0,     0,
-       0,    45,     0,    44,     0,     0,     0,     0,     0,     0,
-       0,     0,     0,     0,    24,     0,     0,     0,    50,     0,
-       0,     0,     0,    16,    20,     0,    16,     0,    52,    54,
-       0,    43,    30,    31,    34,    35,    32,    33,    36,    37,
-      38,    39,    40,    41,    42,     0,     0,     0,     0,    10,
-      15,    17,     0,    11,     0,    51,     0,     0,    25,     0,
-      22,     9,    53,    21,     0,     0,    16,    16,     0,     0,
-      18,    19
+       5,     6,     7,     0,     0,     0,    13,     0,     0,    24,
+       0,     0,     0,     0,    52,    48,    49,    50,    51,     0,
+       0,     0,     0,    28,    29,    30,    31,     0,    12,    16,
+       0,     0,     0,    47,     0,    46,     0,     0,     0,     0,
+       0,     0,     0,     0,     0,     0,     0,     0,     0,    26,
+      25,    52,     0,     0,     0,     0,    16,    20,     0,    16,
+       0,    54,    56,     0,    45,    32,    33,    36,    37,    34,
+      35,    38,    39,    40,    41,    42,    43,    44,     0,     0,
+       0,     0,     0,    10,    15,    17,     0,    11,     0,    53,
+       0,     0,     0,    27,     0,    23,     9,    55,    22,    21,
+       0,     0,    16,    16,     0,     0,    18,    19
     };
   }
 
@@ -1334,8 +1353,8 @@ public class UCricketParser
   {
     return new byte[]
     {
-     -73,    15,   -73,    61,   -73,   -73,    91,   -72,   -73,     2,
-      33,   -29,   -73,   -73,   -73,   -73,    28
+     -76,    10,   -76,    36,   -76,   -76,   119,   -75,   -76,    34,
+      32,   -28,   -76,   -76,   -76,   -76,     8
     };
   }
 
@@ -1345,8 +1364,8 @@ public class UCricketParser
   {
     return new byte[]
     {
-       0,     3,     4,    14,    15,    32,    18,    72,    73,    74,
-     107,    75,    42,    43,    44,    45,    80
+       0,     3,     4,    14,    15,    33,    18,    75,    76,    77,
+     112,    78,    43,    44,    45,    46,    83
     };
   }
 
@@ -1358,33 +1377,34 @@ public class UCricketParser
   {
     return new byte[]
     {
-      41,   100,    62,    63,   102,    50,     5,    30,    95,    51,
-      52,    53,    16,    65,    66,    67,    28,    16,    16,     8,
-       6,    79,    29,     7,    11,    82,    83,    84,    85,    86,
-      87,    88,    89,    90,    91,    31,    92,    93,    94,    65,
-      66,    67,    98,     9,   118,   119,    68,    34,    35,    12,
-      13,    69,    70,    10,    13,    71,    36,    37,    20,    33,
-      34,    35,    23,     1,     2,    38,   106,   108,   108,    36,
-      37,    48,    49,    39,    17,    79,    21,    22,    38,    24,
-      40,    33,    34,    35,    25,    26,    39,    78,    27,    46,
-      47,    36,    37,    40,    50,    76,    60,    61,    62,    63,
-      38,    77,    96,    97,    19,   103,    99,   116,    39,    65,
-      66,    67,   111,   105,   120,    40,    54,    55,    56,    57,
-      58,    59,    60,    61,    62,    63,   114,   115,    64,   121,
-     109,   117,   112,     0,     0,    65,    66,    67,    54,    55,
-      56,    57,    58,    59,    60,    61,    62,    63,     0,     0,
-       0,     0,     0,     0,    81,     0,     0,    65,    66,    67,
-      54,    55,    56,    57,    58,    59,    60,    61,    62,    63,
-       0,     0,   101,     0,     0,     0,     0,     0,     0,    65,
-      66,    67,    54,    55,    56,    57,    58,    59,    60,    61,
-      62,    63,     0,     0,     0,     0,     0,     0,     0,   104,
-       0,    65,    66,    67,    54,    55,    56,    57,    58,    59,
-      60,    61,    62,    63,     0,     0,   110,     0,     0,     0,
-       0,     0,     0,    65,    66,    67,    54,    55,    56,    57,
-      58,    59,    60,    61,    62,    63,     0,     0,   113,     0,
-       0,     0,     0,     0,     0,    65,    66,    67,    54,    55,
-      56,    57,    58,    59,    60,    61,    62,    63,     0,     0,
-       0,     0,     0,     0,     0,     0,     0,    65,    66,    67
+      42,   104,    47,    28,   106,    98,    66,    67,    68,    31,
+       9,    53,    54,    55,     8,    29,     5,     1,     2,    11,
+      52,    30,     6,    99,    82,    12,    13,     7,    85,    86,
+      87,    88,    89,    90,    91,    92,    93,    94,    95,    96,
+      97,    32,    50,    51,    16,    17,   102,   124,   125,    16,
+      16,    21,    22,    10,    71,    35,    36,    20,    23,    72,
+      73,    24,    13,    74,    37,    38,    34,    35,    36,    25,
+     110,   111,   113,   113,    39,    26,    37,    38,    27,    48,
+      82,    49,    34,    35,    36,    40,    39,    52,    79,    41,
+      80,   100,    37,    38,   101,   103,   107,    40,    81,   109,
+     116,    41,    39,    62,    63,    64,    65,    66,    67,    68,
+     120,   126,   121,    40,   122,   123,   117,    41,    56,    57,
+      58,    59,   127,    60,    61,    62,    63,    64,    65,    66,
+      67,    68,    19,   114,     0,    56,    57,    58,    59,   108,
+      60,    61,    62,    63,    64,    65,    66,    67,    68,     0,
+       0,    56,    57,    58,    59,    84,    60,    61,    62,    63,
+      64,    65,    66,    67,    68,     0,     0,    69,    56,    57,
+      58,    59,     0,    60,    61,    62,    63,    64,    65,    66,
+      67,    68,     0,     0,    70,    56,    57,    58,    59,     0,
+      60,    61,    62,    63,    64,    65,    66,    67,    68,     0,
+       0,   105,    56,    57,    58,    59,     0,    60,    61,    62,
+      63,    64,    65,    66,    67,    68,     0,     0,   115,    56,
+      57,    58,    59,     0,    60,    61,    62,    63,    64,    65,
+      66,    67,    68,     0,     0,   118,    56,    57,    58,    59,
+       0,    60,    61,    62,    63,    64,    65,    66,    67,    68,
+       0,     0,   119,    56,    57,    58,    59,     0,    60,    61,
+      62,    63,    64,    65,    66,    67,    68,    64,    65,    66,
+      67,    68
     };
   }
 
@@ -1393,33 +1413,34 @@ private static final byte[] yycheck_ = yycheck_init();
   {
     return new byte[]
     {
-      29,    73,    23,    24,    76,    30,     3,     3,    33,    38,
-      39,    40,    10,    34,    35,    36,    27,    15,    16,     4,
-       3,    50,    33,     0,     9,    54,    55,    56,    57,    58,
-      59,    60,    61,    62,    63,    31,    65,    66,    67,    34,
-      35,    36,    71,    27,   116,   117,     3,     4,     5,    10,
-      11,     8,     9,    28,    11,    12,    13,    14,    29,     3,
-       4,     5,     3,     6,     7,    22,    95,    96,    97,    13,
-      14,    31,    32,    30,    19,   104,    15,    16,    22,     3,
-      37,     3,     4,     5,     3,    20,    30,    31,    30,     3,
-      28,    13,    14,    37,    30,    28,    21,    22,    23,    24,
-      22,     3,    30,    30,    13,     3,    29,    28,    30,    34,
-      35,    36,    29,    31,    29,    37,    15,    16,    17,    18,
-      19,    20,    21,    22,    23,    24,    31,    31,    27,    29,
-      97,    28,   104,    -1,    -1,    34,    35,    36,    15,    16,
-      17,    18,    19,    20,    21,    22,    23,    24,    -1,    -1,
-      -1,    -1,    -1,    -1,    31,    -1,    -1,    34,    35,    36,
-      15,    16,    17,    18,    19,    20,    21,    22,    23,    24,
-      -1,    -1,    27,    -1,    -1,    -1,    -1,    -1,    -1,    34,
-      35,    36,    15,    16,    17,    18,    19,    20,    21,    22,
-      23,    24,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    32,
-      -1,    34,    35,    36,    15,    16,    17,    18,    19,    20,
-      21,    22,    23,    24,    -1,    -1,    27,    -1,    -1,    -1,
-      -1,    -1,    -1,    34,    35,    36,    15,    16,    17,    18,
-      19,    20,    21,    22,    23,    24,    -1,    -1,    27,    -1,
-      -1,    -1,    -1,    -1,    -1,    34,    35,    36,    15,    16,
-      17,    18,    19,    20,    21,    22,    23,    24,    -1,    -1,
-      -1,    -1,    -1,    -1,    -1,    -1,    -1,    34,    35,    36
+      28,    76,    30,    19,    79,    19,    26,    27,    28,     3,
+      31,    39,    40,    41,     4,    31,     3,     6,     7,     9,
+      34,    37,     3,    37,    52,    10,    11,     0,    56,    57,
+      58,    59,    60,    61,    62,    63,    64,    65,    66,    67,
+      68,    35,    35,    36,    10,    20,    74,   122,   123,    15,
+      16,    15,    16,    32,     3,     4,     5,    33,     3,     8,
+       9,     3,    11,    12,    13,    14,     3,     4,     5,     3,
+      98,    99,   100,   101,    23,    21,    13,    14,    34,     3,
+     108,    32,     3,     4,     5,    34,    23,    34,    32,    38,
+       3,    34,    13,    14,    34,    33,     3,    34,    35,    35,
+      33,    38,    23,    22,    23,    24,    25,    26,    27,    28,
+      35,    33,    35,    34,    32,    32,   108,    38,    15,    16,
+      17,    18,    33,    20,    21,    22,    23,    24,    25,    26,
+      27,    28,    13,   101,    -1,    15,    16,    17,    18,    36,
+      20,    21,    22,    23,    24,    25,    26,    27,    28,    -1,
+      -1,    15,    16,    17,    18,    35,    20,    21,    22,    23,
+      24,    25,    26,    27,    28,    -1,    -1,    31,    15,    16,
+      17,    18,    -1,    20,    21,    22,    23,    24,    25,    26,
+      27,    28,    -1,    -1,    31,    15,    16,    17,    18,    -1,
+      20,    21,    22,    23,    24,    25,    26,    27,    28,    -1,
+      -1,    31,    15,    16,    17,    18,    -1,    20,    21,    22,
+      23,    24,    25,    26,    27,    28,    -1,    -1,    31,    15,
+      16,    17,    18,    -1,    20,    21,    22,    23,    24,    25,
+      26,    27,    28,    -1,    -1,    31,    15,    16,    17,    18,
+      -1,    20,    21,    22,    23,    24,    25,    26,    27,    28,
+      -1,    -1,    31,    15,    16,    17,    18,    -1,    20,    21,
+      22,    23,    24,    25,    26,    27,    28,    24,    25,    26,
+      27,    28
     };
   }
 
@@ -1430,19 +1451,19 @@ private static final byte[] yycheck_ = yycheck_init();
   {
     return new byte[]
     {
-       0,     6,     7,    39,    40,     3,     3,     0,    39,    27,
-      28,    39,    10,    11,    41,    42,    47,    19,    44,    44,
-      29,    41,    41,     3,     3,     3,    20,    30,    27,    33,
-       3,    31,    43,     3,     4,     5,    13,    14,    22,    30,
-      37,    49,    50,    51,    52,    53,     3,    28,    31,    32,
-      30,    49,    49,    49,    15,    16,    17,    18,    19,    20,
-      21,    22,    23,    24,    27,    34,    35,    36,     3,     8,
-       9,    12,    45,    46,    47,    49,    28,     3,    31,    49,
-      54,    31,    49,    49,    49,    49,    49,    49,    49,    49,
-      49,    49,    49,    49,    49,    33,    30,    30,    49,    29,
-      45,    27,    45,     3,    32,    31,    49,    48,    49,    48,
-      27,    29,    54,    27,    31,    31,    28,    28,    45,    45,
-      29,    29
+       0,     6,     7,    40,    41,     3,     3,     0,    40,    31,
+      32,    40,    10,    11,    42,    43,    48,    20,    45,    45,
+      33,    42,    42,     3,     3,     3,    21,    34,    19,    31,
+      37,     3,    35,    44,     3,     4,     5,    13,    14,    23,
+      34,    38,    50,    51,    52,    53,    54,    50,     3,    32,
+      35,    36,    34,    50,    50,    50,    15,    16,    17,    18,
+      20,    21,    22,    23,    24,    25,    26,    27,    28,    31,
+      31,     3,     8,     9,    12,    46,    47,    48,    50,    32,
+       3,    35,    50,    55,    35,    50,    50,    50,    50,    50,
+      50,    50,    50,    50,    50,    50,    50,    50,    19,    37,
+      34,    34,    50,    33,    46,    31,    46,     3,    36,    35,
+      50,    50,    49,    50,    49,    31,    33,    55,    31,    31,
+      35,    35,    32,    32,    46,    46,    33,    33
     };
   }
 
@@ -1452,12 +1473,12 @@ private static final byte[] yycheck_ = yycheck_init();
   {
     return new byte[]
     {
-       0,    38,    39,    39,    39,    40,    41,    41,    41,    42,
-      42,    43,    43,    44,    44,    45,    45,    46,    46,    46,
-      46,    46,    46,    47,    47,    48,    49,    49,    49,    49,
-      50,    50,    50,    50,    50,    50,    50,    50,    50,    50,
-      50,    50,    50,    51,    51,    51,    52,    52,    52,    52,
-      52,    53,    53,    54,    54
+       0,    39,    40,    40,    40,    41,    42,    42,    42,    43,
+      43,    44,    44,    45,    45,    46,    46,    47,    47,    47,
+      47,    47,    47,    47,    48,    48,    48,    49,    50,    50,
+      50,    50,    51,    51,    51,    51,    51,    51,    51,    51,
+      51,    51,    51,    51,    51,    52,    52,    52,    53,    53,
+      53,    53,    53,    54,    54,    55,    55
     };
   }
 
@@ -1469,10 +1490,10 @@ private static final byte[] yycheck_ = yycheck_init();
     {
        0,     2,     4,     2,     0,     5,     2,     2,     0,     9,
        8,     4,     2,     3,     0,     2,     0,     2,     7,     7,
-       1,     4,     3,     4,     6,     1,     1,     1,     1,     1,
-       3,     3,     3,     3,     3,     3,     3,     3,     3,     3,
-       3,     3,     3,     3,     2,     2,     1,     1,     1,     1,
-       1,     4,     3,     3,     1
+       1,     4,     4,     3,     4,     6,     6,     1,     1,     1,
+       1,     1,     3,     3,     3,     3,     3,     3,     3,     3,
+       3,     3,     3,     3,     3,     3,     2,     2,     1,     1,
+       1,     1,     1,     4,     3,     3,     1
     };
   }
 
@@ -1484,7 +1505,7 @@ private static final byte[] yycheck_ = yycheck_init();
   private static final SymbolKind yytranslate_(int t)
   {
     // Last valid token kind.
-    int code_max = 275;
+    int code_max = 276;
     if (t <= 0)
       return SymbolKind.S_YYEOF;
     else if (t <= code_max)
@@ -1500,16 +1521,16 @@ private static final byte[] yycheck_ = yycheck_init();
        0,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,     2,     2,    37,     2,     2,     2,     2,    34,     2,
-      30,    31,    23,    21,    32,    22,     2,    24,     2,     2,
-       2,     2,     2,     2,     2,     2,     2,     2,     2,    27,
-      19,    33,    20,     2,     2,     2,     2,     2,     2,     2,
+       2,     2,     2,    38,     2,     2,     2,     2,    26,     2,
+      34,    35,    24,    22,    36,    23,     2,    25,     2,     2,
+       2,     2,     2,     2,     2,     2,     2,     2,     2,    31,
+      20,    37,    21,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,     2,     2,     2,    36,     2,     2,     2,     2,     2,
+       2,     2,     2,     2,    28,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,     2,     2,    28,    35,    29,     2,     2,     2,     2,
+       2,     2,     2,    32,    27,    33,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
@@ -1524,23 +1545,23 @@ private static final byte[] yycheck_ = yycheck_init();
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     1,     2,     3,     4,
        5,     6,     7,     8,     9,    10,    11,    12,    13,    14,
-      15,    16,    17,    18,    25,    26
+      15,    16,    17,    18,    19,    29,    30
     };
   }
 
 
-  private static final int YYLAST_ = 269;
+  private static final int YYLAST_ = 271;
   private static final int YYEMPTY_ = -2;
   private static final int YYFINAL_ = 7;
-  private static final int YYNTOKENS_ = 38;
+  private static final int YYNTOKENS_ = 39;
 
 /* Unqualified %code blocks.  */
-/* "./src/main/resources/UCricketParser.y":53  */
+/* "./src/main/resources/UCricketParser.y":55  */
 
     @Getter
     private static Program program;
 
-/* "./src/main/java/pl/polsl/student/maciwal866/ucricket/UCricketParser.java":1544  */
+/* "./src/main/java/pl/polsl/student/maciwal866/ucricket/UCricketParser.java":1565  */
 
 }
-/* "./src/main/resources/UCricketParser.y":163  */
+/* "./src/main/resources/UCricketParser.y":167  */

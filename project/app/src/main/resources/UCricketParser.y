@@ -7,6 +7,7 @@ import pl.polsl.student.maciwal866.ucricket.ast.Function;
 import pl.polsl.student.maciwal866.ucricket.ast.Expression;
 import pl.polsl.student.maciwal866.ucricket.ast.Statement;
 import pl.polsl.student.maciwal866.ucricket.ast.ValueType;
+import pl.polsl.student.maciwal866.ucricket.ast.AssignmentType;
 import pl.polsl.student.maciwal866.ucricket.ast.StatementChain;
 import pl.polsl.student.maciwal866.ucricket.ast.statement.AssignmentStatement;
 import pl.polsl.student.maciwal866.ucricket.ast.statement.ExpressionStatement;
@@ -31,7 +32,7 @@ import lombok.Getter;
 %define parse.error verbose
 %verbose
 
-%token IDENTIFIER INTEGER FLOAT IMPORT SCOPE IF WHILE FUNC VAR RETURN TRUE FALSE EQUAL_EQUAL BANG_EQUAL LESS_EQUAL GREATER_EQUAL
+%token IDENTIFIER INTEGER FLOAT IMPORT SCOPE IF WHILE FUNC VAR RETURN TRUE FALSE EQUAL_EQUAL BANG_EQUAL LESS_EQUAL GREATER_EQUAL ASSIGN_ADDRESS
 
 %nterm <ValueType> returnedType
 %nterm <StatementChain> statements
@@ -48,6 +49,7 @@ import lombok.Getter;
 %left EQUAL_EQUAL BANG_EQUAL LESS_EQUAL GREATER_EQUAL '<' '>' 
 %left '+' '-'
 %left '*' '/'
+%left '&' '|' '^'
 %right ARITHM_NEGATION LOGICAL_NEGATION
 
 %code {
@@ -101,13 +103,15 @@ statement:
     |   IF '(' condition ')' '{' statements '}' { $$ = new IfStatement($3, $6); }
     |   WHILE '(' condition ')' '{' statements '}' { $$ = new WhileStatement($3, $6); }
     |   variableStatement { $$ = $1; }
-    |   IDENTIFIER '=' expression ';' { $$ = new AssignmentStatement($<String>1, $3); }
+    |   IDENTIFIER '=' expression ';' { $$ = new AssignmentStatement(AssignmentType.VALUE, $<String>1, $3); }
+    |   IDENTIFIER ASSIGN_ADDRESS expression ';' { $$ = new AssignmentStatement(AssignmentType.ADDRESS, $<String>1, $3); }
     |   RETURN expression ';' { $$ = new ReturnStatement($2); }
 ;
 
 variableStatement:
-        VAR returnedType IDENTIFIER ';' { $$ = new VariableStatement($2, $<String>3, null); }
-    |   VAR returnedType IDENTIFIER '=' expression ';' { $$ = new VariableStatement($2, $<String>3, $5); }
+        VAR returnedType IDENTIFIER ';' { $$ = new VariableStatement($2, $<String>3, AssignmentType.NONE, null); }
+    |   VAR returnedType IDENTIFIER '=' expression ';' { $$ = new VariableStatement($2, $<String>3, AssignmentType.VALUE, $5); }
+    |   VAR returnedType IDENTIFIER ASSIGN_ADDRESS expression ';' { $$ = new VariableStatement($2, $<String>3, AssignmentType.ADDRESS, $5); }
 ;
 
 condition:

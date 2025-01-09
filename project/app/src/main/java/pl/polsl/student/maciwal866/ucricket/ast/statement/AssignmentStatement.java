@@ -1,10 +1,13 @@
 package pl.polsl.student.maciwal866.ucricket.ast.statement;
 
-import static org.bytedeco.llvm.global.LLVM.*;
+import static org.bytedeco.llvm.global.LLVM.LLVMBuildStore;
 
-import org.bytedeco.llvm.LLVM.*;
+import org.bytedeco.llvm.LLVM.LLVMBuilderRef;
+import org.bytedeco.llvm.LLVM.LLVMContextRef;
+import org.bytedeco.llvm.LLVM.LLVMModuleRef;
 
 import lombok.Getter;
+import pl.polsl.student.maciwal866.ucricket.ast.AssignmentType;
 import pl.polsl.student.maciwal866.ucricket.ast.Expression;
 import pl.polsl.student.maciwal866.ucricket.ast.Statement;
 import pl.polsl.student.maciwal866.ucricket.ast.ValueType;
@@ -14,11 +17,13 @@ import pl.polsl.student.maciwal866.ucricket.ast.extension.Scoped;
 
 @Getter
 public class AssignmentStatement implements Statement {
+    private AssignmentType assignmentType;
     private String variableName;
     private Expression expression;
     private VariableStatement linkedVariable;
 
-    public AssignmentStatement(String variableName, Expression expression) {
+    public AssignmentStatement(AssignmentType assignmentType, String variableName, Expression expression) {
+        this.assignmentType = assignmentType;
         this.variableName = variableName;
         this.expression = expression;
     }
@@ -31,7 +36,7 @@ public class AssignmentStatement implements Statement {
         }
         linkedVariable.setAccessed(true);
         if (expression.resolve(parent) instanceof ValueType expressionValueType
-                && !expressionValueType.equals(this.linkedVariable.getType())) {
+                && !expressionValueType.equals(this.linkedVariable.getValueType())) {
             throw new MismatchedTypeException(expressionValueType, this);
         }
         return null;

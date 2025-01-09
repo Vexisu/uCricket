@@ -60,6 +60,8 @@ FLOAT = \d*\.\d+d
 "<=" {return UCricketParser.Lexer.LESS_EQUAL;} 
 ">=" {return UCricketParser.Lexer.GREATER_EQUAL;}
 
+"<-" {return UCricketParser.Lexer.ASSIGN_ADDRESS;}
+
 import {return UCricketParser.Lexer.IMPORT;}
 scope {return UCricketParser.Lexer.SCOPE;}
 func {return UCricketParser.Lexer.FUNC;}
