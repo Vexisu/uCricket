@@ -1,11 +1,22 @@
 package pl.polsl.student.maciwal866.ucricket.ast;
 
-import static org.bytedeco.llvm.global.LLVM.*;
+import static org.bytedeco.llvm.global.LLVM.LLVMAddFunction;
+import static org.bytedeco.llvm.global.LLVM.LLVMAppendBasicBlockInContext;
+import static org.bytedeco.llvm.global.LLVM.LLVMBuildRetVoid;
+import static org.bytedeco.llvm.global.LLVM.LLVMFunctionType;
+import static org.bytedeco.llvm.global.LLVM.LLVMGetParam;
+import static org.bytedeco.llvm.global.LLVM.LLVMPositionBuilderAtEnd;
+import static org.bytedeco.llvm.global.LLVM.LLVMSetValueName;
+
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
 import org.bytedeco.javacpp.PointerPointer;
-import org.bytedeco.llvm.LLVM.*;
+import org.bytedeco.llvm.LLVM.LLVMBuilderRef;
+import org.bytedeco.llvm.LLVM.LLVMContextRef;
+import org.bytedeco.llvm.LLVM.LLVMModuleRef;
+import org.bytedeco.llvm.LLVM.LLVMTypeRef;
+import org.bytedeco.llvm.LLVM.LLVMValueRef;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -30,7 +41,7 @@ public class Function implements Statement, Scoped {
 
     @Setter
     private boolean resolved;
-    
+
     public Function(ValueType type, String name, ArgumentChain argumentChain, StatementChain statementChain) {
         this.type = type;
         this.name = name;
@@ -79,7 +90,8 @@ public class Function implements Statement, Scoped {
         }
         this.resolved = true;
         arguments.forEach(
-                (argumentName, argumentType) -> addVariable(new VariableStatement(argumentType, argumentName, null)));
+                (argumentName, argumentType) -> addVariable(
+                        new VariableStatement(argumentType, argumentName, AssignmentType.VALUE, null)));
         statements.forEach(statement -> statement.resolve(this));
         return null;
     }
