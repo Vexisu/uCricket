@@ -1,5 +1,10 @@
 package pl.polsl.student.maciwal866.ucricket.ast.statement;
 
+import static org.bytedeco.llvm.global.LLVM.LLVMAddGlobal;
+import static org.bytedeco.llvm.global.LLVM.LLVMBuildAlloca;
+import static org.bytedeco.llvm.global.LLVM.LLVMBuildStore;
+import static org.bytedeco.llvm.global.LLVM.LLVMSetInitializer;
+
 import org.bytedeco.llvm.LLVM.LLVMBuilderRef;
 import org.bytedeco.llvm.LLVM.LLVMContextRef;
 import org.bytedeco.llvm.LLVM.LLVMModuleRef;
@@ -13,7 +18,7 @@ import pl.polsl.student.maciwal866.ucricket.ast.exception.VariableAlreadyExistsE
 import pl.polsl.student.maciwal866.ucricket.ast.extension.Scoped;
 
 @Getter
-public class PointerStatement extends VariableStatement{
+public class PointerStatement extends VariableStatement {
     private AssignmentType assignmentType;
 
     public PointerStatement(ValueType valueType, String name, AssignmentType assignmentType, Expression value) {
@@ -42,8 +47,36 @@ public class PointerStatement extends VariableStatement{
 
     @Override
     public void solve(LLVMBuilderRef builder, LLVMModuleRef module, LLVMContextRef context) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'solve'");
+        if (accessed) {
+            switch (assignmentType) {
+                case ADDRESS:
+                    if (global) {
+                        llvmVariable = LLVMAddGlobal(module, ValueType.INTEGER.getLlvmType(context),
+                                parent.getPath() + ':' + name);
+                        LLVMSetInitializer(llvmVariable, value.solve(builder, module, context));
+                    } else {
+                        llvmVariable = LLVMBuildAlloca(builder, ValueType.INTEGER.getLlvmType(context),
+                                parent.getPath() + ':' + name);
+                        var llvmValue = value.solve(builder, module, context);
+                        LLVMBuildStore(builder, llvmValue, llvmVariable);
+                    }
+                    break;
+                case VALUE:
+                    if (global) {
+                        
+                    } else {
+                        var llvmAllocatedVariable = LLVMBuildAlloca(builder, valueType.getLlvmType(context),
+                                parent.getPath() + ':' + name);
+                        var llvmValue = value.solve(builder, module, context);
+                        LLVMBuildStore(builder, llvmValue, llvmVariable);
+                        llvmVariable = LLVMBuildAlloca(builder, ValueType.POINTER.getLlvmType(context),
+                                parent.getPath() + ':' + name + "_addr");
+                        LLVMBuildStore(builder, llvmAllocatedVariable, llvmVariable);
+                    }
+                default:
+                    break;
+            }
+        }
     }
 
 }

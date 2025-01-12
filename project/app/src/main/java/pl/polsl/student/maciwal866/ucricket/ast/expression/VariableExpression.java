@@ -7,8 +7,10 @@ import org.bytedeco.llvm.LLVM.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import pl.polsl.student.maciwal866.ucricket.ast.Expression;
+import pl.polsl.student.maciwal866.ucricket.ast.ValueType;
 import pl.polsl.student.maciwal866.ucricket.ast.exception.VariableNotFoundException;
 import pl.polsl.student.maciwal866.ucricket.ast.extension.Scoped;
+import pl.polsl.student.maciwal866.ucricket.ast.statement.PointerStatement;
 import pl.polsl.student.maciwal866.ucricket.ast.statement.VariableStatement;
 
 @Getter
@@ -33,6 +35,12 @@ public class VariableExpression implements Expression {
 
     @Override
     public LLVMValueRef solve(LLVMBuilderRef builder, LLVMModuleRef module, LLVMContextRef context) {
+        if (linkedVariable instanceof PointerStatement linkedPointer) {
+            var address = LLVMBuildLoad2(builder, ValueType.POINTER.getLlvmType(context),
+                    linkedPointer.getLlvmVariable(), name + "_addr");
+            return LLVMBuildLoad2(builder, linkedVariable.getValueType().getLlvmType(context),
+                    address, name);
+        }
         return LLVMBuildLoad2(builder, linkedVariable.getValueType().getLlvmType(context),
                 linkedVariable.getLlvmVariable(),
                 name);
