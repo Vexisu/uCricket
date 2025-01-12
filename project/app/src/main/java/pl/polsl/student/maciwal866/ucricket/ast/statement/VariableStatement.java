@@ -14,17 +14,17 @@ import pl.polsl.student.maciwal866.ucricket.ast.extension.Scoped;
 
 @Getter
 public class VariableStatement implements Statement {
-    private ValueType valueType;
-    private String name;
-    private Expression value;
-    private LLVMValueRef llvmVariable;
-    private Scoped parent;
+    ValueType valueType;
+    String name;
+    Expression value;
+    LLVMValueRef llvmVariable;
+    Scoped parent;
     @Setter
-    private boolean accessed;
+    boolean accessed;
     @Setter
-    private boolean global;
+    boolean global;
     @Setter
-    private boolean resolved;
+    boolean resolved;
 
     public VariableStatement(ValueType valueType, String name, Expression value) {
         this.valueType = valueType;
@@ -37,9 +37,6 @@ public class VariableStatement implements Statement {
         this.parent = parent;
         if (parent.hasResolvedVariable(name)) {
             throw new VariableAlreadyExistsException(this);
-        }
-        if (value.resolve(parent) instanceof ValueType valueType && !valueType.equals(valueType)) {
-            throw new MismatchedTypeException(valueType, this);
         }
         resolved = true;
         parent.addVariable(this);
