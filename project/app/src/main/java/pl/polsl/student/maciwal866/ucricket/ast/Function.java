@@ -91,7 +91,7 @@ public class Function implements Statement, Scoped {
         this.resolved = true;
         arguments.forEach(
                 (argumentName, argumentType) -> addVariable(
-                        new VariableStatement(argumentType, argumentName, AssignmentType.VALUE, null)));
+                        new VariableStatement(argumentType, argumentName, null)));
         statements.forEach(statement -> statement.resolve(this));
         return null;
     }

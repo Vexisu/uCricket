@@ -5,7 +5,6 @@ import org.bytedeco.llvm.LLVM.*;
 
 import lombok.Getter;
 import lombok.Setter;
-import pl.polsl.student.maciwal866.ucricket.ast.AssignmentType;
 import pl.polsl.student.maciwal866.ucricket.ast.Expression;
 import pl.polsl.student.maciwal866.ucricket.ast.Statement;
 import pl.polsl.student.maciwal866.ucricket.ast.ValueType;
@@ -17,7 +16,6 @@ import pl.polsl.student.maciwal866.ucricket.ast.extension.Scoped;
 public class VariableStatement implements Statement {
     private ValueType valueType;
     private String name;
-    private AssignmentType assignmentType;
     private Expression value;
     private LLVMValueRef llvmVariable;
     private Scoped parent;
@@ -28,10 +26,9 @@ public class VariableStatement implements Statement {
     @Setter
     private boolean resolved;
 
-    public VariableStatement(ValueType valueType, String name, AssignmentType assignmentType, Expression value) {
+    public VariableStatement(ValueType valueType, String name, Expression value) {
         this.valueType = valueType;
         this.name = name;
-        this.assignmentType = assignmentType;
         this.value = value;
     }
 

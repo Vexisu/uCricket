@@ -68,6 +68,7 @@ func {return UCricketParser.Lexer.FUNC;}
 if {return UCricketParser.Lexer.IF;}
 while {return UCricketParser.Lexer.WHILE;}
 var {return UCricketParser.Lexer.VAR;}
+ptr {return UCricketParser.Lexer.PTR;}
 return {return UCricketParser.Lexer.RETURN;}
 true {return UCricketParser.Lexer.TRUE;}
 false {return UCricketParser.Lexer.FALSE;}

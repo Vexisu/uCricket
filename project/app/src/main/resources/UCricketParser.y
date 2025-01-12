@@ -14,6 +14,7 @@ import pl.polsl.student.maciwal866.ucricket.ast.statement.ExpressionStatement;
 import pl.polsl.student.maciwal866.ucricket.ast.statement.IfStatement;
 import pl.polsl.student.maciwal866.ucricket.ast.statement.ReturnStatement;
 import pl.polsl.student.maciwal866.ucricket.ast.statement.VariableStatement;
+import pl.polsl.student.maciwal866.ucricket.ast.statement.PointerStatement;
 import pl.polsl.student.maciwal866.ucricket.ast.statement.WhileStatement;
 import pl.polsl.student.maciwal866.ucricket.ast.expression.BinaryExpression;
 import pl.polsl.student.maciwal866.ucricket.ast.expression.UnaryExpression;
@@ -32,12 +33,13 @@ import lombok.Getter;
 %define parse.error verbose
 %verbose
 
-%token IDENTIFIER INTEGER FLOAT IMPORT SCOPE IF WHILE FUNC VAR RETURN TRUE FALSE EQUAL_EQUAL BANG_EQUAL LESS_EQUAL GREATER_EQUAL ASSIGN_ADDRESS
+%token IDENTIFIER INTEGER FLOAT IMPORT SCOPE IF WHILE FUNC VAR PTR RETURN TRUE FALSE EQUAL_EQUAL BANG_EQUAL LESS_EQUAL GREATER_EQUAL ASSIGN_ADDRESS
 
 %nterm <ValueType> returnedType
 %nterm <StatementChain> statements
 %nterm <Statement> statement
 %nterm <VariableStatement> variableStatement
+%nterm <PointerStatement> pointerStatement
 %nterm <Expression> expression binary unary primary functionCall condition
 %nterm <ArgumentsExpression> arguments
 %nterm <Scope> scope
@@ -103,15 +105,21 @@ statement:
     |   IF '(' condition ')' '{' statements '}' { $$ = new IfStatement($3, $6); }
     |   WHILE '(' condition ')' '{' statements '}' { $$ = new WhileStatement($3, $6); }
     |   variableStatement { $$ = $1; }
+    |   pointerStatement { $$ = $1; }
     |   IDENTIFIER '=' expression ';' { $$ = new AssignmentStatement(AssignmentType.VALUE, $<String>1, $3); }
     |   IDENTIFIER ASSIGN_ADDRESS expression ';' { $$ = new AssignmentStatement(AssignmentType.ADDRESS, $<String>1, $3); }
     |   RETURN expression ';' { $$ = new ReturnStatement($2); }
 ;
 
 variableStatement:
-        VAR returnedType IDENTIFIER ';' { $$ = new VariableStatement($2, $<String>3, AssignmentType.NONE, null); }
-    |   VAR returnedType IDENTIFIER '=' expression ';' { $$ = new VariableStatement($2, $<String>3, AssignmentType.VALUE, $5); }
-    |   VAR returnedType IDENTIFIER ASSIGN_ADDRESS expression ';' { $$ = new VariableStatement($2, $<String>3, AssignmentType.ADDRESS, $5); }
+        VAR returnedType IDENTIFIER ';' { $$ = new VariableStatement($2, $<String>3, null); }
+    |   VAR returnedType IDENTIFIER '=' expression ';' { $$ = new VariableStatement($2, $<String>3, $5); }
+;
+
+pointerStatement:
+        PTR returnedType IDENTIFIER ';' { $$ = new PointerStatement($2, $<String>3, AssignmentType.NONE, null); }
+    |   PTR returnedType IDENTIFIER '=' expression ';' { $$ = new PointerStatement($2, $<String>3, AssignmentType.VALUE, $5); }
+    |   PTR returnedType IDENTIFIER ASSIGN_ADDRESS expression ';' { $$ = new PointerStatement($2, $<String>3, AssignmentType.ADDRESS, $5); }
 ;
 
 condition:
