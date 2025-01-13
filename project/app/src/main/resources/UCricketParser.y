@@ -77,6 +77,7 @@ scope:
 scopeContent:
         function scopeContent { $$ = new Scope.ScopeContent<Function>($1, $2); }
     |   variableStatement scopeContent { $$ = new Scope.ScopeContent<VariableStatement>($1, $2); }
+    |   pointerStatement scopeContent { $$ = new Scope.ScopeContent<PointerStatement>($1, $2); }
     |   { $$ = null; }
 ;
 

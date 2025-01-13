@@ -52,24 +52,27 @@ public class PointerStatement extends VariableStatement {
                 case ADDRESS:
                     if (global) {
                         llvmVariable = LLVMAddGlobal(module, ValueType.INTEGER.getLlvmType(context),
-                                parent.getPath() + ':' + name);
+                                parent.getPath() + ':' + name + "_addr");
                         LLVMSetInitializer(llvmVariable, value.solve(builder, module, context));
                     } else {
                         llvmVariable = LLVMBuildAlloca(builder, ValueType.INTEGER.getLlvmType(context),
-                                parent.getPath() + ':' + name);
-                        var llvmValue = value.solve(builder, module, context);
-                        LLVMBuildStore(builder, llvmValue, llvmVariable);
+                                parent.getPath() + ':' + name + "_addr");
+                        LLVMBuildStore(builder, value.solve(builder, module, context), llvmVariable);
                     }
                     break;
                 case VALUE:
                     if (global) {
-                        
+                        var llvmAllocatedVariable = LLVMAddGlobal(module, valueType.getLlvmType(context),
+                                parent.getPath() + ':' + name);
+                        LLVMSetInitializer(llvmAllocatedVariable, value.solve(builder, module, context));
+                        llvmVariable = LLVMAddGlobal(module, ValueType.INTEGER.getLlvmType(context),
+                                parent.getPath() + ':' + name + "_addr");
+                        LLVMSetInitializer(llvmVariable, llvmAllocatedVariable);
                     } else {
                         var llvmAllocatedVariable = LLVMBuildAlloca(builder, valueType.getLlvmType(context),
                                 parent.getPath() + ':' + name);
-                        var llvmValue = value.solve(builder, module, context);
-                        LLVMBuildStore(builder, llvmValue, llvmVariable);
-                        llvmVariable = LLVMBuildAlloca(builder, ValueType.POINTER.getLlvmType(context),
+                        LLVMBuildStore(builder, value.solve(builder, module, context), llvmVariable);
+                        llvmVariable = LLVMBuildAlloca(builder, ValueType.INTEGER.getLlvmType(context),
                                 parent.getPath() + ':' + name + "_addr");
                         LLVMBuildStore(builder, llvmAllocatedVariable, llvmVariable);
                     }
