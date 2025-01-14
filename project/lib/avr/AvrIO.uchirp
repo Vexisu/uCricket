@@ -1,0 +1,13 @@
+scope AvrIO {
+    ptr<Integer> PINB <- 35;
+    ptr<Integer> DDRB <- 36;
+    ptr<Integer> PORTB <- 37;
+
+    ptr<Integer> PINC <- 38;
+    ptr<Integer> DDRC <- 39;
+    ptr<Integer> PORTC <- 40;
+    
+    ptr<Integer> PIND <- 41;
+    ptr<Integer> DDRD <- 42;
+    ptr<Integer> PORTD <- 43;
+}
