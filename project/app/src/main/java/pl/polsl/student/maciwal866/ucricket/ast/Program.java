@@ -54,11 +54,6 @@ public class Program {
             LLVMSetTarget(module, "avr");
             PointerPointer<BytePointer> error = new PointerPointer<>(1);
             LLVMTargetRef target = LLVMGetTargetFromName("avr");
-            if (target == null) {
-                System.err.println("AVR target not found!");
-                System.exit(1);
-            }
-
             LLVMTargetMachineRef targetMachine = LLVMCreateTargetMachine(
                     target,
                     "avr",
@@ -76,7 +71,7 @@ public class Program {
                     LLVMAssemblyFile,
                     error) != 0) {
                 System.err.println("Failed to emit file: " + error.get(BytePointer.class));
-                System.exit(1);
+                return;
             }
 
             var moduleMessage = new PointerPointer<BytePointer>(1);
