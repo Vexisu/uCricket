@@ -3,7 +3,10 @@ package pl.polsl.student.maciwal866.ucricket.ast.statement;
 import static org.bytedeco.llvm.global.LLVM.LLVMAddGlobal;
 import static org.bytedeco.llvm.global.LLVM.LLVMBuildAlloca;
 import static org.bytedeco.llvm.global.LLVM.LLVMBuildStore;
+import static org.bytedeco.llvm.global.LLVM.LLVMConstIntToPtr;
+import static org.bytedeco.llvm.global.LLVM.LLVMPointerType;
 import static org.bytedeco.llvm.global.LLVM.LLVMSetInitializer;
+import static org.bytedeco.llvm.global.LLVM.LLVMTypeOf;
 
 import org.bytedeco.llvm.LLVM.LLVMBuilderRef;
 import org.bytedeco.llvm.LLVM.LLVMContextRef;
@@ -51,31 +54,35 @@ public class PointerStatement extends VariableStatement {
             switch (assignmentType) {
                 case ADDRESS:
                     if (global) {
-                        llvmVariable = LLVMAddGlobal(module, ValueType.INTEGER.getLlvmType(context),
-                                parent.getPath() + ':' + name + "_addr");
-                        LLVMSetInitializer(llvmVariable, value.solve(builder, module, context));
+                        llvmVariable = LLVMAddGlobal(module, valueType.pointerOf(context),
+                                parent.getPath() + '_' + name + "_ptr");
+                        LLVMSetInitializer(llvmVariable,
+                                LLVMConstIntToPtr(value.solve(builder, module, context), LLVMTypeOf(llvmVariable)));
                     } else {
-                        llvmVariable = LLVMBuildAlloca(builder, ValueType.INTEGER.getLlvmType(context),
-                                parent.getPath() + ':' + name + "_addr");
-                        LLVMBuildStore(builder, value.solve(builder, module, context), llvmVariable);
+                        llvmVariable = LLVMBuildAlloca(builder, valueType.pointerOf(context),
+                                parent.getPath() + '_' + name + "_ptr");
+                        LLVMBuildStore(builder,
+                                LLVMConstIntToPtr(value.solve(builder, module, context), LLVMTypeOf(llvmVariable)),
+                                llvmVariable);
                     }
                     break;
                 case VALUE:
                     if (global) {
                         var llvmAllocatedVariable = LLVMAddGlobal(module, valueType.getLlvmType(context),
-                                parent.getPath() + ':' + name);
+                                parent.getPath() + '_' + name);
                         LLVMSetInitializer(llvmAllocatedVariable, value.solve(builder, module, context));
-                        llvmVariable = LLVMAddGlobal(module, ValueType.INTEGER.getLlvmType(context),
-                                parent.getPath() + ':' + name + "_addr");
+                        llvmVariable = LLVMAddGlobal(module, valueType.pointerOf(),
+                                parent.getPath() + '_' + name + "_ptr");
                         LLVMSetInitializer(llvmVariable, llvmAllocatedVariable);
                     } else {
                         var llvmAllocatedVariable = LLVMBuildAlloca(builder, valueType.getLlvmType(context),
-                                parent.getPath() + ':' + name);
-                        LLVMBuildStore(builder, value.solve(builder, module, context), llvmVariable);
-                        llvmVariable = LLVMBuildAlloca(builder, ValueType.INTEGER.getLlvmType(context),
-                                parent.getPath() + ':' + name + "_addr");
+                                parent.getPath() + '_' + name);
+                        LLVMBuildStore(builder, value.solve(builder, module, context), llvmAllocatedVariable);
+                        llvmVariable = LLVMBuildAlloca(builder, valueType.pointerOf(),
+                                parent.getPath() + '_' + name + "_ptr");
                         LLVMBuildStore(builder, llvmAllocatedVariable, llvmVariable);
                     }
+                    break;
                 default:
                     break;
             }

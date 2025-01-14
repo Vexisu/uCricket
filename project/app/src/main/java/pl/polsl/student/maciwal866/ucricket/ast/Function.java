@@ -172,6 +172,6 @@ public class Function implements Statement, Scoped {
 
     @Override
     public String getPath() {
-        return parent.getPath() + ':' + name;
+        return parent.getPath() + '_' + name;
     }
 }

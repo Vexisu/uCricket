@@ -88,7 +88,7 @@ public class IfStatement implements Statement, Scoped {
     public boolean hasFunction(String name, ValueType[] argumentTypes) {
         return parent.hasFunction(name, argumentTypes);
     }
-    
+
     @Override
     public boolean hasResolvedFunction(String name, ValueType[] argumentTypes) {
         return parent.hasResolvedFunction(name, argumentTypes);
@@ -113,6 +113,6 @@ public class IfStatement implements Statement, Scoped {
 
     @Override
     public String getPath() {
-        return parent.getPath() + ":if";
+        return parent.getPath() + "_if";
     }
 }

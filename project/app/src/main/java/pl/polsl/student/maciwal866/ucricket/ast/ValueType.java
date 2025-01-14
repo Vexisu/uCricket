@@ -7,7 +7,6 @@ public enum ValueType {
     INTEGER,
     FLOAT,
     BOOLEAN,
-    POINTER,
     NONE;
 
     public final static ValueType[] NUMERIC_TYPES = { INTEGER, FLOAT };
@@ -18,8 +17,7 @@ public enum ValueType {
         return switch (this) {
             case BOOLEAN -> LLVMInt1Type();
             case FLOAT -> LLVMFloatType();
-            case INTEGER -> LLVMInt16Type();
-            case POINTER -> LLVMPointerType(LLVMInt16Type(), 0);
+            case INTEGER -> LLVMInt8Type();
             case NONE -> LLVMVoidType();
             default -> LLVMVoidType();
         };
@@ -29,17 +27,13 @@ public enum ValueType {
         return switch (this) {
             case BOOLEAN -> LLVMInt1TypeInContext(context);
             case FLOAT -> LLVMFloatTypeInContext(context);
-            case INTEGER -> LLVMInt16TypeInContext(context);
-            case POINTER -> LLVMPointerType(LLVMInt16TypeInContext(context), 0);
+            case INTEGER -> LLVMInt8TypeInContext(context);
             case NONE -> LLVMVoidTypeInContext(context);
             default -> LLVMVoidTypeInContext(context);
         };
     }
 
     public static ValueType parse(String name) {
-        if (name.equalsIgnoreCase("pointer")) {
-            return null;
-        }
         for (var type : ValueType.values()) {
             if (name.equalsIgnoreCase(type.name())) {
                 return type;
@@ -55,5 +49,13 @@ public enum ValueType {
             }
         }
         return false;
+    }
+
+    public LLVMTypeRef pointerOf() {
+        return LLVMPointerType(getLlvmType(), 0);
+    }
+
+    public LLVMTypeRef pointerOf(LLVMContextRef context) {
+        return LLVMPointerType(getLlvmType(context), 0);
     }
 }

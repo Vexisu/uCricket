@@ -53,10 +53,10 @@ public class VariableStatement implements Statement {
     public void solve(LLVMBuilderRef builder, LLVMModuleRef module, LLVMContextRef context) {
         if (accessed) {
             if (global) {
-                llvmVariable = LLVMAddGlobal(module, valueType.getLlvmType(context), parent.getPath() + ':' + name);
+                llvmVariable = LLVMAddGlobal(module, valueType.getLlvmType(context), parent.getPath() + '_' + name);
                 LLVMSetInitializer(llvmVariable, value.solve(builder, module, context));
             } else {
-                llvmVariable = LLVMBuildAlloca(builder, valueType.getLlvmType(context), parent.getPath() + ':' + name);
+                llvmVariable = LLVMBuildAlloca(builder, valueType.getLlvmType(context), parent.getPath() + '_' + name);
                 var llvmValue = value.solve(builder, module, context);
                 LLVMBuildStore(builder, llvmValue, llvmVariable);
             }

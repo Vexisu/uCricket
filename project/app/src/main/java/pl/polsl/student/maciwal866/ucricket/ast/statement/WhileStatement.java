@@ -102,6 +102,6 @@ public class WhileStatement implements Statement, Scoped {
 
     @Override
     public String getPath() {
-        return parent.getPath() + ":while";
+        return parent.getPath() + "_while";
     }
 }

@@ -1,5 +1,6 @@
 package pl.polsl.student.maciwal866.ucricket.ast.statement;
 
+import static org.bytedeco.llvm.global.LLVM.LLVMBuildLoad2;
 import static org.bytedeco.llvm.global.LLVM.LLVMBuildStore;
 
 import org.bytedeco.llvm.LLVM.LLVMBuilderRef;
@@ -45,6 +46,12 @@ public class AssignmentStatement implements Statement {
     @Override
     public void solve(LLVMBuilderRef builder, LLVMModuleRef module, LLVMContextRef context) {
         var llvmExpression = expression.solve(builder, module, context);
+        if (linkedVariable instanceof PointerStatement) {
+            var llvmPointer = LLVMBuildLoad2(builder, linkedVariable.getValueType().pointerOf(context),
+                    linkedVariable.getLlvmVariable(), variableName);
+            LLVMBuildStore(builder, llvmExpression, llvmPointer);
+            return;
+        }
         LLVMBuildStore(builder, llvmExpression, linkedVariable.getLlvmVariable());
     }
 
