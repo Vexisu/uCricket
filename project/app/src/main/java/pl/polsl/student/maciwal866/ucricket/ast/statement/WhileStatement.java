@@ -1,5 +1,6 @@
 package pl.polsl.student.maciwal866.ucricket.ast.statement;
 
+import static org.bytedeco.llvm.global.LLVM.*;
 import java.util.ArrayList;
 import java.util.stream.Stream;
 
@@ -34,7 +35,7 @@ public class WhileStatement implements Statement, Scoped {
         this.parent = parent;
         var resolverConditionResult = condition.resolve(this);
         if (resolverConditionResult instanceof ValueType conditionValueType) {
-            if (Stream.of(ValueType.LOGIC_TYPES).anyMatch(logicType -> logicType.equals(conditionValueType))) {
+            if (!Stream.of(ValueType.LOGIC_TYPES).anyMatch(logicType -> logicType.equals(conditionValueType))) {
                 throw new MismatchedTypeException(conditionValueType, this);
             }
         }
@@ -96,8 +97,22 @@ public class WhileStatement implements Statement, Scoped {
 
     @Override
     public void solve(LLVMBuilderRef builder, LLVMModuleRef module, LLVMContextRef context) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'solve'");
+        var llvmCondition = condition.solve(builder, module, context);
+        var llvmCurrentBlock = LLVMGetInsertBlock(builder);
+        var llvmFunction = LLVMGetBasicBlockParent(llvmCurrentBlock);
+        var llvmConditionBlock = LLVMAppendBasicBlockInContext(context, llvmFunction, "condition");
+        var llvmWhileBlock = LLVMAppendBasicBlockInContext(context, llvmFunction, "while");
+        var llvmContinuationBlock = LLVMAppendBasicBlockInContext(context, llvmFunction, "continue");
+        LLVMBuildBr(builder, llvmConditionBlock);
+        LLVMPositionBuilderAtEnd(builder, llvmConditionBlock);
+        LLVMBuildCondBr(builder, llvmCondition, llvmWhileBlock, llvmContinuationBlock);
+        LLVMPositionBuilderAtEnd(builder, llvmWhileBlock);
+        var collectedStatements = statements.collect();
+        for (var statement : collectedStatements) {
+            statement.solve(builder, module, context);
+        }
+        LLVMBuildBr(builder, llvmConditionBlock);
+        LLVMPositionBuilderAtEnd(builder, llvmContinuationBlock);
     }
 
     @Override

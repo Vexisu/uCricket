@@ -28,24 +28,29 @@ public class BinaryExpression implements Expression {
     @Getter
     @AllArgsConstructor
     public enum Operator {
-        EQUAL(ValueType.ALL_TYPES),
-        NOT_EQUAL(ValueType.ALL_TYPES),
-        LESS(ValueType.NUMERIC_TYPES),
-        GREATER(ValueType.NUMERIC_TYPES),
-        LESS_EQUAL(ValueType.NUMERIC_TYPES),
-        GREATER_EQUAL(ValueType.NUMERIC_TYPES),
-        ADD(ValueType.NUMERIC_TYPES),
-        SUBTRACT(ValueType.NUMERIC_TYPES),
-        MULTIPLY(ValueType.NUMERIC_TYPES),
-        DIVIDE(ValueType.NUMERIC_TYPES),
-        AND(ValueType.ALL_TYPES),
-        OR(ValueType.ALL_TYPES),
-        XOR(ValueType.ALL_TYPES);
+        EQUAL(ValueType.ALL_TYPES, true),
+        NOT_EQUAL(ValueType.ALL_TYPES, true),
+        LESS(ValueType.NUMERIC_TYPES, true),
+        GREATER(ValueType.NUMERIC_TYPES, true),
+        LESS_EQUAL(ValueType.NUMERIC_TYPES, true),
+        GREATER_EQUAL(ValueType.NUMERIC_TYPES, true),
+        ADD(ValueType.NUMERIC_TYPES, false),
+        SUBTRACT(ValueType.NUMERIC_TYPES, false),
+        MULTIPLY(ValueType.NUMERIC_TYPES, false),
+        DIVIDE(ValueType.NUMERIC_TYPES, false),
+        AND(ValueType.ALL_TYPES, false),
+        OR(ValueType.ALL_TYPES, false),
+        XOR(ValueType.ALL_TYPES, false);
 
         private final ValueType[] compatibleWith;
+        private final boolean returnsBoolean;
 
         public boolean isCompatibleWith(ValueType valueType) {
             return Stream.of(compatibleWith).anyMatch(compatibleType -> valueType.equals(compatibleType));
+        }
+
+        public boolean returnsBoolean() {
+            return returnsBoolean;
         }
     }
 
@@ -58,7 +63,13 @@ public class BinaryExpression implements Expression {
             if (!operator.isCompatibleWith(leftValueType) && !operator.isCompatibleWith(rightValueType)) {
                 throw new MismatchedOperatorException(this);
             }
-            returnType = ValueType.FLOAT.anyEquals(leftValueType, rightValueType) ? ValueType.FLOAT : rightValueType;
+            if (operator.returnsBoolean()) {
+                returnType = ValueType.BOOLEAN;
+            } else if (ValueType.FLOAT.anyEquals(leftValueType, rightValueType)) {
+                returnType = ValueType.FLOAT;
+            } else {
+                returnType = rightValueType;
+            }
             return returnType;
         }
         throw new MismatchedOperatorException(this);
@@ -71,23 +82,35 @@ public class BinaryExpression implements Expression {
         var llvmRightExpression = rightExpression.solve(builder, module, context);
         return switch (operator) {
             case EQUAL -> isFloatingOperation
-                    ? LLVMBuildFCmp(builder, LLVMRealOEQ, llvmLeftExpression, llvmRightExpression, "tmp")
-                    : LLVMBuildICmp(builder, LLVMIntEQ, llvmLeftExpression, llvmRightExpression, "tmp");
+                    ? LLVMBuildFCmp(builder, LLVMRealOEQ, llvmLeftExpression, llvmRightExpression,
+                            "tmp")
+                    : LLVMBuildICmp(builder, LLVMIntEQ, llvmLeftExpression, llvmRightExpression,
+                            "tmp");
             case NOT_EQUAL -> isFloatingOperation
-                    ? LLVMBuildFCmp(builder, LLVMRealONE, llvmLeftExpression, llvmRightExpression, "tmp")
-                    : LLVMBuildICmp(builder, LLVMIntNE, llvmLeftExpression, llvmRightExpression, "tmp");
+                    ? LLVMBuildFCmp(builder, LLVMRealONE, llvmLeftExpression, llvmRightExpression,
+                            "tmp")
+                    : LLVMBuildICmp(builder, LLVMIntNE, llvmLeftExpression, llvmRightExpression,
+                            "tmp");
             case LESS -> isFloatingOperation
-                    ? LLVMBuildFCmp(builder, LLVMRealOLT, llvmLeftExpression, llvmRightExpression, "tmp")
-                    : LLVMBuildICmp(builder, LLVMIntSLT, llvmLeftExpression, llvmRightExpression, "tmp");
+                    ? LLVMBuildFCmp(builder, LLVMRealOLT, llvmLeftExpression, llvmRightExpression,
+                            "tmp")
+                    : LLVMBuildICmp(builder, LLVMIntSLT, llvmLeftExpression, llvmRightExpression,
+                            "tmp");
             case GREATER -> isFloatingOperation
-                    ? LLVMBuildFCmp(builder, LLVMRealOGT, llvmLeftExpression, llvmRightExpression, "tmp")
-                    : LLVMBuildICmp(builder, LLVMIntSGT, llvmLeftExpression, llvmRightExpression, "tmp");
+                    ? LLVMBuildFCmp(builder, LLVMRealOGT, llvmLeftExpression, llvmRightExpression,
+                            "tmp")
+                    : LLVMBuildICmp(builder, LLVMIntSGT, llvmLeftExpression, llvmRightExpression,
+                            "tmp");
             case LESS_EQUAL -> isFloatingOperation
-                    ? LLVMBuildFCmp(builder, LLVMRealOLE, llvmLeftExpression, llvmRightExpression, "tmp")
-                    : LLVMBuildICmp(builder, LLVMIntSLE, llvmLeftExpression, llvmRightExpression, "tmp");
+                    ? LLVMBuildFCmp(builder, LLVMRealOLE, llvmLeftExpression, llvmRightExpression,
+                            "tmp")
+                    : LLVMBuildICmp(builder, LLVMIntSLE, llvmLeftExpression, llvmRightExpression,
+                            "tmp");
             case GREATER_EQUAL -> isFloatingOperation
-                    ? LLVMBuildFCmp(builder, LLVMRealOGE, llvmLeftExpression, llvmRightExpression, "tmp")
-                    : LLVMBuildICmp(builder, LLVMIntSGE, llvmLeftExpression, llvmRightExpression, "tmp");
+                    ? LLVMBuildFCmp(builder, LLVMRealOGE, llvmLeftExpression, llvmRightExpression,
+                            "tmp")
+                    : LLVMBuildICmp(builder, LLVMIntSGE, llvmLeftExpression, llvmRightExpression,
+                            "tmp");
             case ADD -> isFloatingOperation
                     ? LLVMBuildFAdd(builder, llvmLeftExpression, llvmRightExpression, "tmp")
                     : LLVMBuildAdd(builder, llvmLeftExpression, llvmRightExpression, "tmp");
@@ -100,6 +123,9 @@ public class BinaryExpression implements Expression {
             case DIVIDE -> isFloatingOperation
                     ? LLVMBuildFDiv(builder, llvmLeftExpression, llvmRightExpression, "tmp")
                     : LLVMBuildSDiv(builder, llvmLeftExpression, llvmRightExpression, "tmp");
+            case AND -> LLVMBuildAnd(builder, llvmLeftExpression, llvmRightExpression, "tmp");
+            case OR -> LLVMBuildAnd(builder, llvmLeftExpression, llvmRightExpression, "tmp");
+            case XOR -> LLVMBuildXor(builder, llvmLeftExpression, llvmRightExpression, "tmp");
             default -> null;
         };
     }

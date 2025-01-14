@@ -4,6 +4,8 @@ import java.util.ArrayList;
 
 import org.bytedeco.javacpp.BytePointer;
 import org.bytedeco.javacpp.PointerPointer;
+import org.bytedeco.llvm.LLVM.LLVMTargetMachineRef;
+import org.bytedeco.llvm.LLVM.LLVMTargetRef;
 
 import static org.bytedeco.llvm.global.LLVM.*;
 
@@ -47,6 +49,36 @@ public class Program {
                 mainFunction.solve(builder, module, context);
                 LLVMSetValueName(mainFunction.getLlvmFunction(), "main");
             }
+
+            /* Test code for emiting code */
+            LLVMSetTarget(module, "avr");
+            PointerPointer<BytePointer> error = new PointerPointer<>(1);
+            LLVMTargetRef target = LLVMGetTargetFromName("avr");
+            if (target == null) {
+                System.err.println("AVR target not found!");
+                System.exit(1);
+            }
+
+            LLVMTargetMachineRef targetMachine = LLVMCreateTargetMachine(
+                    target,
+                    "avr",
+                    "atmega328p",
+                    "",
+                    LLVMCodeGenLevelDefault,
+                    LLVMRelocDefault,
+                    LLVMCodeModelDefault);
+
+            BytePointer fileName = new BytePointer("output.s");
+            if (LLVMTargetMachineEmitToFile(
+                    targetMachine,
+                    module,
+                    fileName,
+                    LLVMAssemblyFile,
+                    error) != 0) {
+                System.err.println("Failed to emit file: " + error.get(BytePointer.class));
+                System.exit(1);
+            }
+
             var moduleMessage = new PointerPointer<BytePointer>(1);
             LLVMVerifyModule(module, 0, moduleMessage);
             LLVMDisposeMessage(moduleMessage.get(BytePointer.class));

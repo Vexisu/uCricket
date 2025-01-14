@@ -34,7 +34,7 @@ public class IfStatement implements Statement, Scoped {
         this.parent = parent;
         var resolverConditionResult = condition.resolve(this);
         if (resolverConditionResult instanceof ValueType conditionValueType) {
-            if (Stream.of(ValueType.LOGIC_TYPES).anyMatch(logicType -> logicType.equals(conditionValueType))) {
+            if (!Stream.of(ValueType.LOGIC_TYPES).anyMatch(logicType -> logicType.equals(conditionValueType))) {
                 throw new MismatchedTypeException(conditionValueType, this);
             }
         }
