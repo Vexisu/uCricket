@@ -1,5 +1,24 @@
 \chapter{Specyfikacja zewnętrzna}
 \label{ch:04}
+\section{Kompilator}
+\subsection{Wymagania}
+Do uruchomienia kompilatora wymagane jest zapewnienie odpowiedniego środowiska uruchomieniowego składającego się z:
+\begin{itemize}
+\item systemu operacyjnego z rodziny GNU/Linux lub środowiska uruchomieniowego zapewniającego warunki pracy dla programów kompilowanych dla systemów GNU/Linux np. maszyna wirtualna, WSL, kontener Docker/Podman/Distrobox;
+\item maszyna wirtualna Java w wersji 17 lub wyższej;
+\item zestaw narzędzi avr-gcc wraz z linkerem i assemblerem.
+\end{itemize}
+
+\subsection{Instalacja}
+Kompilator dostarczany jest jako archiwum programu Java w formacie .jar. Oprogramowanie LLVM zostało dołączone w archiwum jako biblioteka w formie binarnej dla platformy GNU/Linux.
+
+\subsection{Użycie kompilatora}
+Uruchomienie kompilatora odbywa się poprzez przekazanie maszynie wirtualnej programu kompilatora oraz dodaniu nazwy głównego pliku źródłowego bez rozszerzenia.
+\begin{lstlisting}
+java -jar uCricket.jar [glowny_plik_zrodlowy]
+\end{lstlisting}
+
+\section{Język programowania}
 
 \begin{itemize}
 \item  wymagania sprzętowe i programowe
@@ -62,29 +81,29 @@
 
 
  
-\begin{figure}
-\centering
-\begin{tikzpicture}
-\begin{axis}[
-    y tick label style={
-        /pgf/number format/.cd,
-            fixed,   % po zakomentowaniu os rzednych jest indeksowana wykladniczo
-            fixed zerofill, % 1.0 zamiast 1
-            precision=1,
-        /tikz/.cd
-    },
-    x tick label style={
-        /pgf/number format/.cd,
-            fixed,
-            fixed zerofill,
-            precision=2,
-        /tikz/.cd
-    }
-]
-\addplot [domain=0.0:0.1] {rnd};
-\end{axis} 
-\end{tikzpicture}
-\caption{Podpis rysunku po rysunkiem.}
-\label{fig:2}
-\end{figure}
+%\begin{figure}
+%\centering
+%\begin{tikzpicture}
+%\begin{axis}[
+%    y tick label style={
+%        /pgf/number format/.cd,
+%            fixed,   % po zakomentowaniu os rzednych jest indeksowana wykladniczo
+%            fixed zerofill, % 1.0 zamiast 1
+%            precision=1,
+%        /tikz/.cd
+%    },
+%    x tick label style={
+%        /pgf/number format/.cd,
+%            fixed,
+%            fixed zerofill,
+%            precision=2,
+%        /tikz/.cd
+%    }
+%]
+%\addplot [domain=0.0:0.1] {rnd};
+%\end{axis} 
+%\end{tikzpicture}
+%\caption{Podpis rysunku po rysunkiem.}
+%\label{fig:2}
+%\end{figure}
 
