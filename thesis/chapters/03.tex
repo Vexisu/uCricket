@@ -1,7 +1,62 @@
 \chapter{Wymagania i narzędzia}
 \label{ch:wymagania-i-narzedzia}
 
-\ksremark{Dość dokładnie wymagania dla języka. Czym on się będzie różnił od już istniejących rozwiązań?}
+\section{Wymagania projektowe}
+
+Język programowania, będący tematem pracy musi spełniać szereg założeń, pozwalających na wytwarzanie oprogramowania dla systemów wbudowanych z ograniczoną ilością zasobów pamięciowych i obliczeniowych. Ponadto, język ma być zrozumiały dla początkujących programistów poprzez zastosowanie odpowieniej semantyki i słów kluczowych.
+
+\subsection{Wymagania funkcjonalne}
+\begin{itemize}
+\item kompilowalność do kodu maszynowego, specyficznego dla danej platformy,
+\item dostęp do sprzętowych zasobów niskiego poziomu np.: adresy bezpośrednie pamięci, wzkaźniki, zapis w rejestrach,
+\item ścisłe typowanie poprzez składnię języka,
+\item prosta i czytelna semantyka, zrozumiała dla osób początkujących,
+\item mechanizmy abstrakcyjne ułatwiające organizajce kodu,
+\item możliwość łączenia wielu plików kodu źródłowego z widoczną separacją pochodzenia zmiennych i funkcji
+\end{itemize}
+
+\subsection{Wymagania niefunkcjonalne}
+\begin{itemize}
+\item mechanizmy optymalizacji kodu zmniejszające złożoność pamięciową i obliczeniową programów,
+\item statyczne kontrola typów danych na poziomie kompilacji kodu,
+\item ścisła kontrola spójności składni kodu,
+\item kompletność w sensie Turinga.
+\end{itemize}
+
+\subsection{Istniejące rozwiązania}
+
+Oficjalnie dostępne narzędzia dla mikrokontrolerów AVR, zapewniane przez firmę Microchip, pozwalają na programowanie w językach C, C++ i Assembly. Język uCricket ma na celu zminimalizowanie popełnianych, przez początkujących programistów, błędów pojawiąjących się w trakcie wytwarzania oprogramowania poprzez zapewnienie stosownych mechanizmów prewencji. Jednym z takich mechanizmów jest dużo bardziej ścisła kontrola typów danych. Języki C/C++, w swoim  mechaniźmie typowania, traktują wartości numeryczne i logiczne jako jeden typ, który można stosować zamiennie, co może prowadzić do niejasnego zachowania programu. 
+Czytelność języka, w porównianiu do oficjalnych rozwiązań, starano się także rozwiązać poprzez dodanie odpowiednich słów kluczowych, definiujących elementy złożone, w formie przedrostków:
+\begin{itemize}
+\item scope - definicja odseparowanej przestrzeni nazw,
+\item func - definicja funkcji,
+\item var - definicja zmiennej,
+\item ptr - definicja wskaźnika.
+\end{itemize}
+Kod języka uCricket wymaga stosowania przestrzeni nazw, z myślą redukcji powtórzeń i konfliktów nazw, w szczególności przy dołączaniu kolejnych plików źródłowych.
+
+\ksremark{Dość dokładnie wymagania dla języka. Czym on się będzie różnił od już istniejących rozwiązań?}
+
+\section{Narzędzia}
+
+Do zaprojektowania i implementacji języka programowania uCricket wykorzystano następujące narzędzia:
+\begin{itemize}
+\item Java - język programowania cechujący się obiektowością, czytelną składnią i zaawansowaną kontrolę typów, ułatwia on pracę z wieloma typami dziedziczącymi między sobą;
+\item JFlex - narzędzie generujące kod analizatora leksykalnego w języku Java, pozwala na korzystanie z wyrażeń regularnych, specyfikacja leksykalna definiowana jest w oddzielnym pliku;
+\item GNU Bison - zaawansowane narzędzie generujące kod analizatora składniowego na podstawie specyfikacji gramatycznej. Powszechnie wykorzystywany jako narzędzie pomocniczne w implmementacji kompilatorów. Posiada wsparcie dla języka Java;
+\item LLVM - zestaw bibliotek i narzędzi pozwalających na generowanie kodu pośredniego poprzez udostępnione interfejsy programistyczne. Wspiera wiele platform, m.in: x86, ARM, PowerPC, AVR. Dostarcza także mechanizmy optymalizacji kodu wynikowego ;
+\item JavaCPP Presets LLVM - biblioteka-most udostępniająca interfejsy dla biblioteki LLVM języka C poprzez wykorzystanie JNI (Java Native Interface);
+\item avr-gcc - kompilator języka C dla mikrokontrolerów AVR. Stosowany jest jako generator kodu maszynowego dla kodu generowanego przez LLVM;
+\item avrdude - program pozwalający na programowanie mikrokontrolerów AVR;
+\item Cutter - platforma do inżynierii wstecznej pomagająca w analizie wygenerowanego kodu maszynowego. Pracuje w oparciu o Rizin Framework;
+\item AVR Simulator - symulator mikrokontrolera ATmega328P działający w przeglądarce;
+\item \textit{Arduino Pro Mini - płytka rozwojowa z mikrokontrolerem ATmega328P;}
+\item \textit{USBasp - programator mikrokontrolerów AVR.}
+\end{itemize}
+
+\textit{Czy brać pod uwagę także płytkę rozwojową i programator?}
+
+Zestaw tych narzędzi i bibliotek pozwala na projektowanie skompikowanych kompilatorów generujących niskopoziomowy, a także testowanie i weryfikacji poprawności programów napisanych w tworzonym języku programowania.
 
 \ksremark{Opis narzędzi. Dlatego te narzędzia? Dlaczego one wybrane?}
 
