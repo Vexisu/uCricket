@@ -17,27 +17,25 @@ Uruchomienie kompilatora odbywa się poprzez przekazanie maszynie wirtualnej pro
 \begin{lstlisting}
 java -jar uCricket.jar [glowny_plik_zrodlowy]
 \end{lstlisting}
-\ksremark{A co z wyjściem? Co generuje kompilator?}
 
 \section{Język programowania}
-\ksremark{2-3 linijki zagajenia}
 \subsection{Konwencja nazewniczna identyfikatorów}
-Nazywanie elementów definiowanych przez użytkownika wymaga ścisłego używania nazw zgodnych z konwencją zapisu identyfikatorów. Identyfikatory przyjmują znaki alfanumeryczne, włącznie z dużymi i małymi literami, nie mogą zaczynać się cyfrą. \ksremark{Da się je opisać wyrażeniem regularnym?}
+Nazywanie elementów definiowanych przez użytkownika wymaga ścisłego używania nazw zgodnych z konwencją zapisu identyfikatorów. Identyfikatory przyjmują znaki alfanumeryczne, włącznie z dużymi i małymi literami, nie mogą zaczynać się cyfrą.
 
 \subsection{Pliki źródłowe}
-Nazwy plików źródłowych muszą spełniać wymagania zapisu identyfikatorów. Nazwy te są wykorzystywane do identyfikacji plików źródłowych podczas dołączania źródeł między sobą i są niezależne od nazw przestrzeni (scopes). Rozszerzeniem dla plików źródłowych jest \textit{.uchirp}.
+Nazwy plików źródłowych muszą spełniać wymagania zapisu identyfikatorów. Nazwy te są wykorzystywane do identyfikacji plików źródłowych podczas dołączania źródeł między sobą i są niezależne od nazw przestrzeni (scopes). Rozszerzeniem dla plików źródłowych jest \lstinline|.uchirp|.
 
 \subsection{Praca z wieloma plikami źródłowymi}
-Pliki źródłowe mogą być łączone między sobą poprzez użycie słowa kluczowego \textit{import}:
+Pliki źródłowe mogą być łączone między sobą poprzez użycie słowa kluczowego \lstinline|import|:
 \begin{lstlisting}
 import katalog1:katalog2:NazwaPliku;
 \end{lstlisting}
-Katalogi w składni instrukcji \textit{import} oddzielane są dwukropkami i muszą spełniać wymagania zapisu identyfikatorów. Nazwę pliku źródłowego należy przekazywać do instrukcji bez rozszerzenia, jest ono dodawane w trakcie skanowania plików źródłowych. 
+Katalogi w składni instrukcji \lstinline|import| oddzielane są dwukropkami i muszą spełniać wymagania zapisu identyfikatorów. Nazwę pliku źródłowego należy przekazywać do instrukcji bez rozszerzenia, jest ono dodawane w trakcie skanowania plików źródłowych. 
 
 \subsection{Typy danych}
-Język programowania wspiera kilka głównych typów danych wykorzystywanych w innych językach programowania. Typy danych muszą być ściśle definiowane w trakcie trakcie ich używania. W innym przypadku, kompilator przerwie proces kompilacji w trakcie analizy statycznej.
+Język programowania wspiera kilka głównych typów danych wykorzystywanych w innych językach programowania. Typy danych muszą być ściśle definiowane w trakcie trakcie ich używania. W innym przypadku, kompilator przerwie proces kompilacji w trakcie analizy statycznej. Tabela \ref{tbl:typy-danych} przedstawia typy daynch wspieraje przez język programowania.
 
-\begin{table}[H]
+\begin{table}[h!]
 \begin{tabular}{@{}llll@{}}
 \toprule
 Typ danych & Słowa & Definicja wartości & Opis \\ \midrule
@@ -46,6 +44,8 @@ Byte & 1 & 1b, 127b & Typ liczby całkowitej ośmio-bitowej. \\
 Integer & 2 & 1, 32767 & Typ liczby całkowitej szesnasto-bitowej. \\
 Float & 4 & 1.0, 123.456 & \begin{tabular}[c]{@{}l@{}}Typ liczy zmienno-przecinkowej\\ trzydziestodwu-bitowej.\end{tabular} \\ \bottomrule
 \end{tabular}
+\caption{Typy danych obsługiwane przez język uCricket}
+\label{tbl:typy-danych}
 \end{table}
 \subsection{Zmienne}
 Zmienne mogą być defoniowane jako globalne oraz logalne w obszarze bloków funkcji, zmiennych i pętl. Typowanie zmiennych jest zawsze wymagane. Nie wymaga ono natomiast przypisania wartości. Definiowanie zmiennych odbywa się w następujący sposób:
@@ -83,11 +83,11 @@ port = 0; // Ustawienie wszystkich bitow na wartosc 0
 \end{lstlisting}
 
 \subsection{Operatory arytmetyczno-logiczne}
-Język programowania uCricket implmeentuje wiele operatorów arytmetyczno-logicznych. Poniższa tabela opisuje zbór operatorów obsługiwanych przez język wraz z przyjmowanymi typami danych.
+Język programowania uCricket implmeentuje wiele operatorów arytmetyczno-logicznych. Tabela \ref{tbl:operatory-arytmetyczno-logiczne} opisuje zbór operatorów obsługiwanych przez język wraz z przyjmowanymi typami danych.
 
 % Please add the following required packages to your document preamble:
 % \usepackage{booktabs}
-\begin{table}[H]
+\begin{table}[h!]
 \begin{tabular}{@{}lllll@{}}
 \toprule
 Nazwa operacji & Operator & Semantyka & Typy przyjmowane & Typ zwracany \\ \midrule
@@ -107,10 +107,43 @@ Alternatywa & | & arg1 | arg2 & \begin{tabular}[c]{@{}l@{}}Liczbowe,\\ binarne\e
 Alternatywa rozłączna & \textasciicircum{} & arg1 \textasciicircum arg2 & \begin{tabular}[c]{@{}l@{}}Liczbowe,\\ binarne\end{tabular} & \begin{tabular}[c]{@{}l@{}}Taki sam jak\\ argument lewy\end{tabular} \\
 Negacja logiczna & $\sim$ & $\sim$arg & \begin{tabular}[c]{@{}l@{}}Liczbowe,\\ binarne\end{tabular} & \begin{tabular}[c]{@{}l@{}}Taki sam jak\\ argument\end{tabular} \\ \bottomrule
 \end{tabular}
+\caption{Lista operatorów arytmetyczno-logicznych}
+\label{tbl:operatory-arytmetyczno-logiczne}
 \end{table}
 
-\subsection{Funkcje}
+\subsection{Instrukcje kontroli przepływu}
+\subsubsection{Instrukcje warunkowe}
+\subsubsection{Pętle}
 
+\subsection{Funkcje}
+W języku uCricket istnieje kilka kombinacji definicji funkcji:
+\begin{itemize}
+\item funkcja nie zwracająca wartości, bez argumentów,
+\item funkcja nie zwracająca wartości, przyjmująca argumenty,
+\item funkcja zwracająca wartość, bez argumentów,
+\item funckja zwracająca wartość, przyjmująca argumenty. 
+\end{itemize}
+
+Podstawowa definicja funkcji składa się z słowa kluczowego \lstinline|func|, identyfikatora, otwierającego i zamykającego nazwiasu okrągłego oraz nawiasów klamrowych będących ciałem funkcji.
+\begin{lstlisting}
+func foo() {
+	// Code
+}
+\end{lstlisting}
+
+Funkcje mogą przyjmować argumenty. Wartości przekazywane do funkcji są kopiowane do nowych zmiennych, definiowanych w nawiasach okrągłych.
+\begin{lstlisting}
+func foo(Byte byteBar, Integer intBar) {
+	// Code
+}
+\end{lstlisting}
+
+Poprzez dodanie po słowie kluczowym \lstinline|func| nawiasów ostrokątnych z typem danych, możliwe jest zdefiniowanie funkcji zwracającej wartość. Po dodaniu do funkcji typu danych wymagane jest zwrócenie wartości, o odpowiednim typie, na końcu funkcji. Odbywa się to poprzez użycie słowa kluczowego \lstinline|return|. Możliwe jest także zwrócenie wartości we wnętrzu funkcji, co spowoduje przerwanie jej wykonywania i przejście do punktu jej wywołania.
+\begin{lstlisting}
+func<Integer> add(Integer x, Integer y) {
+	return x + y;
+}
+\end{lstlisting}
 \subsection{Przestrzenie nazw}
 Przestrzenie nazw pozwalają na separację funkcji i zmiennych globalnych w obrębie kodu. Ich stosowanie jest wymagane. Możliwe jest umieszczenie wielu przestrzeni nazw w jednym pliku źródłowym. Definiowanie przestrzeni nazw odbywa się w następujący sposób:
 \begin{lstlisting}
