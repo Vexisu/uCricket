@@ -27,6 +27,123 @@ Nazywanie elementów definiowanych przez użytkownika wymaga ścisłego używani
 \subsection{Pliki źródłowe}
 Nazwy plików źródłowych muszą spełniać wymagania zapisu identyfikatorów. Nazwy te są wykorzystywane do identyfikacji plików źródłowych podczas dołączania źródeł między sobą i są niezależne od nazw przestrzeni (scopes). Rozszerzeniem dla plików źródłowych jest \textit{.uchirp}.
 
+\subsection{Praca z wieloma plikami źródłowymi}
+Pliki źródłowe mogą być łączone między sobą poprzez użycie słowa kluczowego \textit{import}:
+\begin{lstlisting}
+import katalog1:katalog2:NazwaPliku;
+\end{lstlisting}
+Katalogi w składni instrukcji \textit{import} oddzielane są dwukropkami i muszą spełniać wymagania zapisu identyfikatorów. Nazwę pliku źródłowego należy przekazywać do instrukcji bez rozszerzenia, jest ono dodawane w trakcie skanowania plików źródłowych. 
+
+\subsection{Typy danych}
+Język programowania wspiera kilka głównych typów danych wykorzystywanych w innych językach programowania. Typy danych muszą być ściśle definiowane w trakcie trakcie ich używania. W innym przypadku, kompilator przerwie proces kompilacji w trakcie analizy statycznej.
+
+\begin{table}[H]
+\begin{tabular}{@{}llll@{}}
+\toprule
+Typ danych & Słowa & Definicja wartości & Opis \\ \midrule
+Boolean & 1 & true/false & \begin{tabular}[c]{@{}l@{}}Przechowuje wartość logiczną.\\ Wykorzystywany w instrukcjach warunkowych\\ i pętlach.\end{tabular} \\
+Byte & 1 & 1b, 127b & Typ liczby całkowitej ośmio-bitowej. \\
+Integer & 2 & 1, 32767 & Typ liczby całkowitej szesnasto-bitowej. \\
+Float & 4 & 1.0, 123.456 & \begin{tabular}[c]{@{}l@{}}Typ liczy zmienno-przecinkowej\\ trzydziestodwu-bitowej.\end{tabular} \\ \bottomrule
+\end{tabular}
+\end{table}
+\subsection{Zmienne}
+Zmienne mogą być defoniowane jako globalne oraz logalne w obszarze bloków funkcji, zmiennych i pętl. Typowanie zmiennych jest zawsze wymagane. Nie wymaga ono natomiast przypisania wartości. Definiowanie zmiennych odbywa się w następujący sposób:
+\begin{lstlisting}
+var<Boolean> boolValue = true;
+var<Byte> byteValue = 12b;
+var<Integer> unassignedIntValue;
+\end{lstlisting}
+W trakcie przypisywania wartości do zmiennej możliwe jest użycie wyrażenia arytmetyczno-logicznego. Pozwala to także na zmianę wartości zmiennej z użyciem jej wcześniejszej wartości.
+\begin{lstlisting}
+var<Integer> i = 1;
+i = i + 1; // Inkrementacja wartosci zmiennej i
+\end{lstlisting}
+Pamięć alokowana przez zmienne jest zwalniana, gdy część wykonywana programu przesunie się poza klamry np. po wyjściu z instrukcji warunkowej. Nie możliwe jest także odwoływanie się do zmiennych lokalnych wpisanych w klamry.
+\begin{lstlisting}
+if (true){
+	var<Integer> i = 0;
+}
+i = i + 1; // Blad nieistniejacej zmiennej.
+\end{lstlisting}
+\subsection{Wskaźniki}
+Mechanizm wskaźników pozwala na bezpośredni dostęp do przestrzeni adresowej mikrokontrolera. Dzięku niemu możliwy jest także dostęp do rejestrów i portów wejścia wyjścia.
+Definiowanie wskaźników odbywa się w sposób podobny do definicji zmiennych. Domyślnie, w odróżnieniu do zmiennych, definicja wskaźnika alokuje pamięć właściwą oraz adresową. Poniższy przykład pokazuje definicję wskaźnika oraz inkrementację jego wartości.
+\begin{lstlisting}
+ptr<Integer> i = 0;
+i = i + 1;
+\end{lstlisting}
+Z perspektywy programisty, operacje na wskaźnikach wyglądają tak samo, jak operacje na zminnych.
+Wskaźniki umożliwiają także na przypisanie oraz zmianę wartości bez alokacji pamięci właściwej. Poniższy przykład przedstawia przypisanie wartości do portów wejścia-wyjścia mikrokontrolera ATmega328P.
+\begin{lstlisting}
+ptr<Byte> port <- 37; // Utworzenie wskaznika z adresem portu B
+port = 255; // Ustawienie wszystkich bitow na wartosc 1
+port <- 40; // Zmiana adresu na adres portu C
+port = 0; // Ustawienie wszystkich bitow na wartosc 0
+\end{lstlisting}
+
+\subsection{Operatory arytmetyczno-logiczne}
+Język programowania uCricket implmeentuje wiele operatorów arytmetyczno-logicznych. Poniższa tabela opisuje zbór operatorów obsługiwanych przez język wraz z przyjmowanymi typami danych.
+
+% Please add the following required packages to your document preamble:
+% \usepackage{booktabs}
+\begin{table}[H]
+\begin{tabular}{@{}lllll@{}}
+\toprule
+Nazwa operacji & Operator & Semantyka & Typy przyjmowane & Typ zwracany \\ \midrule
+Równy & == & arg1 == arg2 & \begin{tabular}[c]{@{}l@{}}Liczbowe,\\ binarne\end{tabular} & Binarny \\
+Nierówny & != & arg1 != arg2 & \begin{tabular}[c]{@{}l@{}}Liczbowe,\\ binarne\end{tabular} & Binarny \\
+Mniejszy & \textless{} & arg1 \textless arg2 & \begin{tabular}[c]{@{}l@{}}Liczbowe,\\ binarne\end{tabular} & Binarny \\
+Większy & \textgreater{} & arg1 \textgreater arg2 & \begin{tabular}[c]{@{}l@{}}Liczbowe,\\ binarne\end{tabular} & Binarny \\
+Mniejszy lub równy & \textless{}= & arg1 \textless{}= arg2 & \begin{tabular}[c]{@{}l@{}}Liczbowe,\\ binarne\end{tabular} & Binarny \\
+Większy lub równy & \textgreater{}= & arg1 \textgreater{}= arg2 & \begin{tabular}[c]{@{}l@{}}Liczbowe,\\ binarne\end{tabular} & Binarny \\
+Dodawanie & + & arg1 + arg2 & Liczbowe & \begin{tabular}[c]{@{}l@{}}Taki sam jak\\ argument lewy\end{tabular} \\
+Odejmowanie & - & arg1 - arg2 & Liczbowe & \begin{tabular}[c]{@{}l@{}}Taki sam jak\\ argument lewy\end{tabular} \\
+Mnożenie & * & arg1 * arg2 & Liczbowe & \begin{tabular}[c]{@{}l@{}}Taki sam jak\\ argument lewy\end{tabular} \\
+Dzielenie & / & arg1 / arg2 & Liczbowe & \begin{tabular}[c]{@{}l@{}}Taki sam jak\\ argument lewy\end{tabular} \\
+Negacja arytmetyczna & - & -arg & Liczbowy & \begin{tabular}[c]{@{}l@{}}Taki sam jak\\ argument\end{tabular} \\
+Koniunkcja & \& & arg1 \& arg2 & \begin{tabular}[c]{@{}l@{}}Liczbowe,\\ binarne\end{tabular} & \begin{tabular}[c]{@{}l@{}}Taki sam jak\\ argument lewy\end{tabular} \\
+Alternatywa & | & arg1 | arg2 & \begin{tabular}[c]{@{}l@{}}Liczbowe,\\ binarne\end{tabular} & \begin{tabular}[c]{@{}l@{}}Taki sam jak\\ argument lewy\end{tabular} \\
+Alternatywa rozłączna & \textasciicircum{} & arg1 \textasciicircum arg2 & \begin{tabular}[c]{@{}l@{}}Liczbowe,\\ binarne\end{tabular} & \begin{tabular}[c]{@{}l@{}}Taki sam jak\\ argument lewy\end{tabular} \\
+Negacja logiczna & $\sim$ & $\sim$arg & \begin{tabular}[c]{@{}l@{}}Liczbowe,\\ binarne\end{tabular} & \begin{tabular}[c]{@{}l@{}}Taki sam jak\\ argument\end{tabular} \\ \bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Funkcje}
+
+\subsection{Przestrzenie nazw}
+Przestrzenie nazw pozwalają na separację funkcji i zmiennych globalnych w obrębie kodu. Ich stosowanie jest wymagane. Możliwe jest umieszczenie wielu przestrzeni nazw w jednym pliku źródłowym. Definiowanie przestrzeni nazw odbywa się w następujący sposób:
+\begin{lstlisting}
+scope NazwaPrzestrzeni {
+
+}
+\end{lstlisting}
+W klamrach przestrzeni nazw możliwe jest definiowanie funkcji, zmiennych i wskaźników globalnych. Aby odwołać się do zawartości innej przestrzeni, należy poprzedzić element właściwy danej przestrzeni, nazwą przestrzeni zawierającej.
+\begin{lstlisting}
+scope Main {
+	func main() {
+		Aux:auxilary();	
+	}
+}
+
+scope Aux {
+	func auxilary(){
+		// Code
+	}
+}
+\end{lstlisting}
+
+\subsection{Komentarze}
+Dodawanie komentarzy do kodu odbywa się poprzez dodanie przed tekstem dwóch ukośników. Może on zostać dodany w dowolnym miejscu kodu. Komentarz kończy znak nowej linii.
+\begin{lstlisting}
+scope Main {
+	// Poczatek programu
+	func main() {
+		var<Integer> x = 3; // Zmienna liczbowa x
+	}
+}
+\end{lstlisting}
+
 \begin{itemize}
 \item  wymagania sprzętowe i programowe
 \item  sposób instalacji
