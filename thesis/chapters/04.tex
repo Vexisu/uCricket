@@ -17,6 +17,18 @@ Uruchomienie kompilatora odbywa się poprzez przekazanie maszynie wirtualnej pro
 \begin{lstlisting}
 java -jar uCricket.jar [glowny_plik_zrodlowy]
 \end{lstlisting}
+Kompilator zwraca w pliku \lstinline|output.s| program w języku assembly. Do zbudowania pliku binarnego, wykorzystywany jest \lstinline|avr-gcc|. Poniższe polecenie generuje plik \lstinline|output.bin| przeznaczony dla mikrokontrolera ATmega328P.
+\begin{lstlisting}
+avr-gcc -mmcu=atmega328p -o output.bin output.s
+\end{lstlisting}
+W celu wygenerowania pliku przeznaczonego do programowania przez narzędzie \lstinline|avrdude|, możliwe jest utworzenie pliku w formacie Intel HEX. Obywa się to poprzez wykorzystanie narzędzia \lstinline|avr-objcopy|. Poniższe polecenie generuje z pliku binarnego \lstinline|output.bin| plik \lstinline|output.hex|.
+\begin{lstlisting}
+avr-objcopy -j .text -j .data -O ihex output.bin output.hex
+\end{lstlisting}
+Programowanie mikrokontrolera kodem wynikowym możliwe jest dzięki wykonaniu poniższej komendy. W danym przykładzie użyty został programator USBasp wraz z mikrokontrolerem ATmega328P.
+\begin{lstlisting}
+sudo avrdude -p atmega328p -c usbasp -P usb -F -U flash:w:output.hex:i
+\end{lstlisting}
 
 \section{Język programowania}
 \subsection{Konwencja nazewniczna identyfikatorów}
@@ -112,9 +124,24 @@ Negacja logiczna & $\sim$ & $\sim$arg & \begin{tabular}[c]{@{}l@{}}Liczbowe,\\ b
 \end{table}
 
 \subsection{Instrukcje kontroli przepływu}
-\subsubsection{Instrukcje warunkowe}
-\subsubsection{Pętle}
+Aby zapewnić możliwość łatwego i czytelnego definiowania zachowań programu, języki programowania implementują różnego sposoby definiowania kontroli przepływu. Język uCricket implementuje następujące instrukcje pozwalające na taką kontrolę.
 
+\subsubsection{Instrukcje warunkowe}
+Instrukcja warunkowa pozwala na separacje bloku kodu i nadanie mu warunku, który spowoduje jego wykonanie. Definicja funkcji warunkowej odbywa się poprzez użycie słowa kluczowego \lstinline|if|, nawiasów okrągłych przyjmujących warunek i nawiasów klamrowych zawierających blok kodu. Warunek musi zwracać wartość typu boolowskiego.
+\begin{lstlisting}
+if (true) {
+	// Code
+}
+\end{lstlisting}
+
+\subsubsection{Pętle}
+Dzięki pętlom możliwe jest wielorazowe wykonywanie kodu, dopóki warunek jest spełniany. Petlę definiuje się poprzez użycie słowa kluczowego \lstinline|while|, nawiasów okrągłych i nawiasów klamrowych. Tak samo jak w przypadku instrukcji warunkowej, warunek przekazywany do pętli musi zwracać dane typu boolowskiego.
+\begin{lstlisting}
+while (true) {
+	// Code
+}
+\end{lstlisting}
+ 
 \subsection{Funkcje}
 W języku uCricket istnieje kilka kombinacji definicji funkcji:
 \begin{itemize}
@@ -177,17 +204,17 @@ scope Main {
 }
 \end{lstlisting}
 
-\begin{itemize}
-\item  wymagania sprzętowe i programowe
-\item  sposób instalacji
-\item  sposób aktywacji
+%\begin{itemize}
+%\item  wymagania sprzętowe i programowe
+%\item  sposób instalacji
+%\item  sposób aktywacji
 %\item  kategorie użytkowników
-\item  sposób obsługi
-\item  administracja systemem
-\item  kwestie bezpieczeństwa
-\item  przykład działania
+%\item  sposób obsługi
+%\item  administracja systemem
+%\item  kwestie bezpieczeństwa
+%\item  przykład działania
 %\item  scenariusze korzystania z systemu (ilustrowane zrzutami z ekranu lub generowanymi dokumentami)
-\end{itemize}
+%\end{itemize}
 
 %%%%%%%%%%%%%%%%%%%%%
 %% RYSUNEK Z PLIKU
