@@ -36,7 +36,10 @@ sudo avrdude -p atmega328p -c usbasp -P usb -F -U flash:w:output.hex:i
 \section{Język programowania}
 \ksremark{zagajenie}
 \subsection{Konwencja nazewnicza identyfikatorów}
-Nazywanie elementów definiowanych przez użytkownika wymaga ścisłego używania nazw zgodnych z konwencją zapisu identyfikatorów. Identyfikatory przyjmują znaki alfanumeryczne, włącznie z dużymi i małymi literami, nie mogą zaczynać się cyfrą. \ksremark{Czy da się to opisać wyrażeniem regularnym?}
+Nazywanie elementów definiowanych przez użytkownika wymaga ścisłego używania nazw zgodnych z konwencją zapisu identyfikatorów. Identyfikatory przyjmują znaki alfanumeryczne, włącznie z dużymi i małymi literami, nie mogą zaczynać się cyfrą. \ksremark{Czy da się to opisać wyrażeniem regularnym?} Dana konwencja nazewnicza opisywana jest przez wyrażenie regularne:
+\begin{lstlisting}
+[a-zA-Z][a-zA-Z0-9]*
+\end{lstlisting}
 
 \subsection{Pliki źródłowe}
 Nazwy plików źródłowych muszą spełniać wymagania zapisu identyfikatorów. Nazwy te są wykorzystywane do identyfikacji plików źródłowych podczas dołączania źródeł między sobą i są niezależne od nazw przestrzeni (scopes). Rozszerzeniem dla plików źródłowych jest \lstinline|.uchirp|.

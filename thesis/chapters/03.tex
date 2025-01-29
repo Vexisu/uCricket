@@ -6,29 +6,31 @@
 Język programowania, będący tematem pracy, musi spełniać szereg założeń, pozwalających na wytwarzanie oprogramowania dla systemów wbudowanych z ograniczoną ilością zasobów pamięciowych i obliczeniowych. Ponadto język ma być zrozumiały dla początkujących programistów poprzez zastosowanie odpowiedniej semantyki i słów kluczowych.
 
 \subsection{Wymagania funkcjonalne}
-W celu spełnienia założeń projektu, język programowania powinien spełniać następujące wymagania:
+Spełnienie poniższych wymagań pozwoli na zaprojektowanie języka programowania, którego wykorzystanie będzie możliwe w budowie oprogramowania dla systemów wbudowanych.
 \begin{itemize}
 \item kompilowalność do kodu maszynowego, specyficznego dla danej platformy,
 \item dostęp do sprzętowych zasobów niskiego poziomu np.: adresy bezpośrednie pamięci, wskaźniki, zapis w rejestrach,
-\item ścisłe typowanie poprzez składnię języka,
-\item prosta i czytelna semantyka, zrozumiała dla osób początkujących,
+\item mechanizmy optymalizacji kodu zmniejszające złożoność pamięciową i obliczeniową programów,
+\item ścisłe typowanie poprzez składnię języka i kontrola typów na etapie kompilacji,
 \item mechanizmy abstrakcyjne ułatwiające organizacje kodu,
-\item możliwość łączenia wielu plików kodu źródłowego z widoczną separacją pochodzenia zmiennych i funkcji.
+\item możliwość łączenia wielu plików kodu źródłowego z widoczną separacją pochodzenia zmiennych i funkcji,
+\item kompletność w sensie Turinga.
 \end{itemize}
 
 \subsection{Wymagania niefunkcjonalne}
-
-\ksremark{zdanie wprowadzenia}
+Głownymi celami, którymi motywowany jest ten projekt są:
 \begin{itemize}
-\item mechanizmy optymalizacji kodu zmniejszające złożoność pamięciową i obliczeniową programów,
-\item statyczne kontrola typów danych na poziomie kompilacji kodu,
-\item ścisła kontrola spójności składni kodu,
-\item kompletność w sensie Turinga.
+\item przyjazność języka programowania dla początkujących programistów,
+\item minimalizacja błędów popełnianych przez programistę poprzez niskie skomplikowanie składni,
+\item łatwość użycia kompilatora.
 \end{itemize}
 
 \subsection{Istniejące rozwiązania}
 \ksremark{Wbrew tytułowi w tym podrozdziale nie mamy opisu istniejących rozwiązań.}
-Oficjalnie dostępne narzędzia dla mikrokontrolerów AVR, zapewniane przez firmę Microchip, pozwalają na programowanie w językach C, C++ i Assembly. Język uCricket ma na celu zminimalizowanie popełnianych przez początkujących programistów błędów pojawiających się w trakcie wytwarzania oprogramowania poprzez zapewnienie stosownych mechanizmów prewencji. Jednym z takich mechanizmów jest dużo bardziej ścisła kontrola typów danych. Języki C/C++, w swoim  mechanizmie typowania, traktują wartości numeryczne i logiczne jako jeden typ, który można stosować zamiennie, co może prowadzić do niejasnego zachowania programu. 
+Oficjalnie dostępne narzędzia dla mikrokontrolerów AVR, zapewniane przez firmę Microchip, pozwalają na programowanie w językach C, C++ i Assembly. 
+
+\subsection{Język \textmu Cricket}
+Język uCricket ma na celu zminimalizowanie popełnianych przez początkujących programistów błędów pojawiających się w trakcie wytwarzania oprogramowania poprzez zapewnienie stosownych mechanizmów prewencji. Jednym z takich mechanizmów jest dużo bardziej ścisła kontrola typów danych. Języki C/C++, w swoim  mechanizmie typowania, traktują wartości numeryczne i logiczne jako jeden typ, który można stosować zamiennie, co może prowadzić do niejasnego zachowania programu. 
 Czytelność języka, w porównaniu do oficjalnych rozwiązań, starano się także rozwiązać poprzez dodanie odpowiednich słów kluczowych, definiujących elementy złożone, w formie przedrostków \ksremark{Tego nie rozumiem. Czy to są na pewno przedrostki?}:
 \begin{itemize}
 \item \lstinline|scope| -- definicja odseparowanej przestrzeni nazw,
@@ -36,14 +38,7 @@ Czytelność języka, w porównaniu do oficjalnych rozwiązań, starano się tak
 \item \lstinline|var| -- definicja zmiennej,
 \item \lstinline|ptr| -- definicja wskaźnika.
 \end{itemize}
-Kod języka uCricket wymaga stosowania przestrzeni nazw, z myślą redukcji powtórzeń i konfliktów nazw, w szczególności przy dołączaniu kolejnych plików źródłowych.
-
-\subsection{Język \textmu Cricket}
-
-\ksremark{Cechy języka.}
-
-\ksremark{Dość dokładnie wymagania dla języka. Czym on się będzie różnił od już istniejących rozwiązań?}
-
+Kod języka uCricket wymaga stosowania przestrzeni nazw, z myślą redukcji powtórzeń i konfliktów nazw, w szczególności przy dołączaniu kolejnych plików źródłowych. Zapewnia to większą elastyczność w nazywaniu elementów oraz ich separację poprzez dodanie warstwy abstrakcji. Użycie przestrzeni nazw nie wpływa na rozmiar kodu wynikowego.
 
 
 \section{Narzędzia}
