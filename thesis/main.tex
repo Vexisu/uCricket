@@ -169,12 +169,31 @@
 % TODO
 \input{chapters/07.tex} % Podsumowanie i wnioski
 
+%\backmatter
+%
+%%\bibliographystyle{plplain}  % bibtex
+%%\bibliography{biblio/biblio} % bibtex
+%\printbibliography           % biblatex
+%\addcontentsline{toc}{chapter}{Bibliografia}
+%
+%\begin{appendices}
+
 \backmatter
+
+
+\defbibheading{subsubbibnumbered}[\refname]{\section*{#1}}
+\chapter*{Bibliografia}
+\addcontentsline{toc}{chapter}{Bibliografia} 
 
 %\bibliographystyle{plplain}  % bibtex
 %\bibliography{biblio/biblio} % bibtex
-\printbibliography           % biblatex
-\addcontentsline{toc}{chapter}{Bibliografia}
+\printbibliography[heading=subsubbibnumbered, type=book,title={Książki}]
+\printbibliography[heading=subsubbibnumbered, type=article,title={Artykuły}]
+\printbibliography[heading=subsubbibnumbered, type=techreport,title={Dokumentacja techniczna}]
+\printbibliography[heading=subsubbibnumbered, type=online,title={Strony internetowe}]
+
+\printbibliography[heading=subsubbibnumbered, title={Całość}]
+
 
 \begin{appendices}
 
