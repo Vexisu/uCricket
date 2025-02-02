@@ -1,6 +1,107 @@
 \chapter{Specyfikacja wewnętrzna}
 \label{ch:05}
+Kompilacja kodu podzielona jest na wiele etapów. Pozwala to na uproszenie skomplikowanych procesów i podzielenie ich odpowiedzialności. W skład procesów odbywających się w trakcie kompilacji wchodzą:
+\begin{itemize}
+\item analiza leksykalna -- podział kodu programu na tokeny na podstawie zdefiniowanej gramatyki leksykalnej\ksremark{cytowanie},
+\item analiza syntaktyczna -- budowa drzewa składni abstracyjnej\ksremark{cytowanie} (ang. \english{abstract syntax tree} na podstawie gramatyki syntaktycznej, poprzez konsumpcję tokenów\ksremark{cytowanie},
+\item analiza semantyczna -- kontrola drzewa składni syntaktycznej pod kątem m.in.: spójności typów danych, dozwolonych operacji, zdefiniowanych funkcji i zmiennych,
+\item generowanie kodu pośredniego -- zamiana drzewa syntaktycznego na uniwersalny kod pośredni,
+\item optymalizacja -- proces modyfikacji kodu pośredniego zmniejszający zużycie zasobów i zwiększający szybkość wykonywania programu docelowego bez zmiany jego zachowania,
+\item generowanie kodu docelowego -- zamiana kodu pośredniego do kodu instrukcji zrozumiałych dla platformy docelowej.
+\end{itemize}
 
+\section{Wymagania do budowy kompilatora}
+
+\section{Analiza leksykalna}
+Do zaprojektowania analizatora leksykalnego wykorzystano narzędzie JFlex. Konsumuje ono specyfikację leksykalną zawartą w pliku definicji i generuje kod na jego podstawie kod analizatora leksykalnego w języku Java. Specyfikacja leksykalna znajduje się w pliku \lstinline|app/src/main/resources/UCricketLexer.y|. Wygenerowany kod analizatora leksykalnego umieszony zostaje w pliku \lstinline|app/src/main/java/pl/polsl/student/maciwal866/ucricket/UCricketLexer.java|.
+
+Plik specyfikacji leksykalnej zaczyna się od konfiguracji narzędzia JFlex. Kod źródłowy \ref{lst:lexer-pakiet}, umieszczony w pierwszej linijce definicji, określa pakiet języka Java, w jakim znajduje się kod analizatora.
+Kod umieszczony w znacznikach, składających się z dwóch procentów, zawiera główną konfigurację narzędzia JFlex (kod zródłowy \ref{lst:lexer-konfiguracja}). Konfiguracja zawiera następujące elemnty:
+\begin{itemize}
+\item operatora \lstinline|%unicode| zmieniającego domyślne kodowanie znaków na Unicode,
+\item operatora \lstinline|%standalone| pozwalającego na uruchomienie analizatora leksykalnego jako niezależny program, ułatwiając wyszukiwanie błędów,
+\item operatora \lstinline|%public| ustawiającego dostęp do generowanej klasy na publiczny,
+\item operatora \lstinline|%class UCricketLexer| zmieniającego nazwę klasy,
+\item operatora \lstinline|%implements UCricketParser.Lexer| definiującego dziedziczenie po interfejse \lstinline|Lexer| zawartego w klasie analizatora syntaktycznego,
+\item operatorów \lstinline|%line| i \lstinline|%column| włączających możliwość pobrania aktualnej lokalizacji karetki w analizowanym kodzie źródłowym,
+\item bloku kodu \lstinline|%{ ... %}| zawierającego przesłaniane metody,
+\item definicji wyrażeń regularnych wraz z ich identyfikatorami.
+\end{itemize}
+Do poprawnej pracy analizatora leksykalnego wymagane jest przesłonięcie dwóch metod. Metoda \lstinline|yyerror(String msg)| odpowiada za raportowanie błędów napotkanych w trakcie procesu analizy. Metoda \lstinline|getLVal()| jest metodą dziedziczoną z interfejsu \lstinline|Lexer| klasy analizatora syntaktycznego i jest ona wywoływana w trakcie jego pracy.
+Reguły leksykalne opisane zostały pod blokiem konfiguracyjnym. Kod źródłowy \ref{lst:lexer-reguły} przedstawia wybrane reguły definiujące tokeny jednoznakowe, tokeny wieloznakowe ,słowa kluczowe i wyrażenia regularne. Na podstawie tych reguł generowane są tokeny przechwytywane przez analizator syntaktyczny.
+Generowanie kodu analizatora leksykalnego obydwa się poprzez wywołanie komendy \lstinline|./gradlew app:buildLexer| z poziomu głównego katalogu projektu kompilatora.
+
+\begin{lstlisting}[caption={Definicja pakietu dla analizatora leksykalnego}, label={lst:lexer-pakiet}]
+package pl.polsl.student.maciwal866.ucricket;
+\end{lstlisting}
+
+\begin{lstlisting}[caption={Sekcja konfiguracyjna narzędzia JFlex}, label={lst:lexer-konfiguracja}]
+%%
+%unicode
+%standalone
+%public
+%class UCricketLexer
+%implements UCricketParser.Lexer
+%line
+%column
+
+%{
+    @Override
+    public void yyerror(String msg){
+        System.err.printf("%d:%d:%s\n%s\n", yyline + 1, yycolumn, yytext(), msg);
+        System.exit(-1);
+    }
+
+    @Override
+    public String getLVal(){
+        return yytext();
+    }
+%}
+
+COMMENT = \/\/.*
+WHITESPACE = \ +|\n+|\r+|\t+
+IDENTIFIER = [a-zA-Z][a-zA-Z0-9]*(:[a-zA-Z][a-zA-Z0-9]*)*
+INTEGER = \d+
+FLOAT = \d*\.\d+d
+
+%%
+\end{lstlisting}
+
+\begin{lstlisting}[caption={Definicje reguł analizatora leksykalnego}, label={lst:lexer-reguły}]
+/* reguly tokenow jednoznakowych */
+"+" {return '+';}
+"-" {return '-';}
+"*" {return '*';}
+
+/* reguly tokenow wieloznakowych */
+"==" {return UCricketParser.Lexer.EQUAL_EQUAL;}
+"!=" {return UCricketParser.Lexer.BANG_EQUAL;}
+"<=" {return UCricketParser.Lexer.LESS_EQUAL;} 
+
+/* reguly slow kluczowych */
+import {return UCricketParser.Lexer.IMPORT;}
+scope {return UCricketParser.Lexer.SCOPE;}
+func {return UCricketParser.Lexer.FUNC;}
+
+/* reguly wyrazen regularnych */
+{IDENTIFIER} {
+    return UCricketParser.Lexer.IDENTIFIER;
+}
+
+{INTEGER} {
+    return UCricketParser.Lexer.INTEGER;
+}
+\end{lstlisting}
+
+\section{Analiza syntaktyczna}
+
+\section{Analiza semantyczna}
+
+\section{Generowanie kodu pośredniego}
+
+\section{Optymalizacja}
+
+\section{Generowanie kodu docelowego}
 
 Jeśli „Specyfikacja wewnętrzna”:
 \begin{itemize}
