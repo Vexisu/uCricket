@@ -53,12 +53,13 @@ Wraz ze wzrostem popularności mikrokontrolerów AVR powstały także alternatyw
 \item PyMite -- minimalistyczny interpreter jezyka Python 2.5 \cytowanie,
 \item NanoVM -- wirtualna maszyna dla kodu bajtowego języka Java \cytowanie.
 \end{itemize}
+\subsection{C/C++}
 Głównie stosowanym językiem podczas wytwarzania oprogramowania dla mikrokontrolerów AVR jest język C ze względu na dostępność bibliotek oraz mały i szybki kod wynikowy. Język C++, ze względu na swoją budowę i skomplikowanie, jest wykorzystywany dużo rzadziej. Wymaga także większej ilości zasobów do pracy, w porównaniu do C. C++ pozwala na korzystanie z bibliotek napisanych dla języka C oraz stosowanie technik programowania obiektowego.
-
+\subsection{Rust}
 Rosnącą popularność w ostatnich latach zdobywa język Rust. Zawdzięcza on ją zaawansowanym technikom mitygacji problemów jakie mogą powstać w trakcie zarządzania pamięcią i obsługi wielowątkowości oraz swojej wydajności. Wprowadza on także wiele nietypowych rozwiązań w implementacji kodu w postaci lukru składniowego (ang. \english{syntactic sugar}), co może okazać się utrudnieniem dla osób początkujących. Początkowo pierwsza implementacja jezyka Rust i bibliotek dla mikrokontrolerów AVR była rozwijana jako oddzielny projekt pod nazwą AVR-Rust. Z czasem jednak baza kompilatora została włączona w głowny kompilator.
-
+\subsection{Ada}
 Ada, pomimo swojej niskiej popularności, posiada rozbudowane wsparcie dla mikrokontrolerów AVR poprzez zestaw bibliotek AVR-Ada. Wsparcie języka Ada dostarczane jest poprzez integrację z GNU GCC. Na dzień dzisiejszy, język ten nie cieszy się wysoką popularnością \cytowanie. Może to być szczególnym utrudnieniem dla początkujących programistów, dla których znalezienie aktualnych zasobów pozwalających na naukę programowania danej platformy jest bardzo trudne.
-
+\subsection{Java i Python}
 Języki Python oraz Java nie są wykorzystywane w programowaniu mikrokontrolerów AVR. Pomimo przyjazności tych języków dla początkujących programistów i istnienia ich implementacji dla danej platformy, zasoby i architektura bardzo ograniczają wykorzystanie interpreterów i maszyn wirtualnych działających w czasie rzeczywistym. Wersje dla mikrokontrolerów AVR nie dostają już także aktualizacji.
 
 %\begin{itemize}

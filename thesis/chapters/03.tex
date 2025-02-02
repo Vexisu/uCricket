@@ -1,6 +1,6 @@
 \chapter{Wymagania i narzędzia}
 \label{ch:wymagania-i-narzedzia}
-
+Zaprojektowanie języka programowania i kompilatora wymaga podjęcia odpowiednich decyzji projektowych i doboru adekwatnych narzędzi. Dotyczy to składni, sprawdzenia jej poprawności, transformacji do kodu maszynowego oraz ostatecznego tesowania w środowisku wirtualnym i docelowym.
 \section{Wymagania projektowe}
 
 Język programowania, będący tematem pracy, musi spełniać szereg założeń, pozwalających na wytwarzanie oprogramowania dla systemów wbudowanych z ograniczoną ilością zasobów pamięciowych i obliczeniowych. Ponadto język ma być zrozumiały dla początkujących programistów poprzez zastosowanie odpowiedniej semantyki i słów kluczowych.
@@ -26,12 +26,30 @@ Głownymi celami, którymi motywowany jest ten projekt są:
 \end{itemize}
 
 \subsection{Istniejące rozwiązania}
-\ksremark{Wbrew tytułowi w tym podrozdziale nie mamy opisu istniejących rozwiązań.}
-Oficjalnie dostępne narzędzia dla mikrokontrolerów AVR, zapewniane przez firmę Microchip, pozwalają na programowanie w językach C, C++ i Assembly. 
+Oficjalnie dostępne narzędzia dla mikrokontrolerów AVR, zapewniane przez firmę Microchip, pozwalają na programowanie w językach C, C++ i Assembly. Po mimo istnienia wspomnianych alternatyw, są one głównie stosowanymi narzędziami, z powodu swojej dojrzałości.
+Dzięki wykorzystaniu oficjalnej dystrybucji kompilatora GCC jako bazy, możliwe jest korzystanie z najnowszych standardów dostępnych w nim języków, wraz z identyczną składnią stosowaną w przypadku innych platform.
 
-\subsection{Język \textmu Cricket}
+Zestaw bibliotek \lstinline|avr-gcc| dostarcza najpotrzebniejszych definicji elemntów mikrokontrolerów, wraz z wyróżnieniem ich model. Przykładowo, plik nagłówkowy \lstinline|avr/io.h| zarządza makrodefinicjami dla portów wejścia/wyjścia różnych modeli mikrokontrolerów. W przypadku mikrokontrolera ATmega328P, zestaw makrodefinicji znajduje się w pliku \lstinline|avr/iom328p.h|. Zawiera on zgodne z oficjalną dokumentacją makrodefinicje adresów portów we/wy, odpowiadających im bitów, rejestrów dostępu do rozszerzeń sprzętowych takich jak: przerwań, zarządzalnych zegarów, konwerterów analogowo-cyfrowych, sprzętowych interfejsów SPI/UART/TWI i wiele innych.
+
+Przykładowym użyciem oficjalnej biblioteki jest zaprogramowanie programu włączającego korespondujący diod podpięte do rejestru C względem przełączników na rejestrze D.
+\begin{lstlisting}
+#include<avr/io.h> // plik makrodefinicji rejestrow
+
+int main(){
+	DDRC = 255; // rejestr C jako wyjscie
+	DDRD = 0; // rejestr D jako wejscie
+	while(1) {
+		// przepisanie wartosci z rejestru D do C
+		PORTC = PIND;
+	}
+}
+\end{lstlisting}
+
+Możliwe jest także korzystanie w bibliotek dostarczanych przez Arduino. Wymaga to jednak odpowiedniej konfiguracji platformy docelowej i środowiska programistycznego.
+
+\subsection{Język uCricket}
 Język uCricket ma na celu zminimalizowanie popełnianych przez początkujących programistów błędów pojawiających się w trakcie wytwarzania oprogramowania poprzez zapewnienie stosownych mechanizmów prewencji. Jednym z takich mechanizmów jest dużo bardziej ścisła kontrola typów danych. Języki C/C++, w swoim  mechanizmie typowania, traktują wartości numeryczne i logiczne jako jeden typ, który można stosować zamiennie, co może prowadzić do niejasnego zachowania programu. 
-Czytelność języka, w porównaniu do oficjalnych rozwiązań, starano się także rozwiązać poprzez dodanie odpowiednich słów kluczowych, definiujących elementy złożone, w formie przedrostków \ksremark{Tego nie rozumiem. Czy to są na pewno przedrostki?}:
+Czytelność języka, w porównaniu do oficjalnych rozwiązań, starano się także rozwiązać poprzez dodanie odpowiednich słów kluczowych, definiujących elementy złożone, w formie słów kluczowych, reprezentujących ich znaczenie:
 \begin{itemize}
 \item \lstinline|scope| -- definicja odseparowanej przestrzeni nazw,
 \item \lstinline|func| -- definicja funkcji,
@@ -40,6 +58,31 @@ Czytelność języka, w porównaniu do oficjalnych rozwiązań, starano się tak
 \end{itemize}
 Kod języka uCricket wymaga stosowania przestrzeni nazw, z myślą redukcji powtórzeń i konfliktów nazw, w szczególności przy dołączaniu kolejnych plików źródłowych. Zapewnia to większą elastyczność w nazywaniu elementów oraz ich separację poprzez dodanie warstwy abstrakcji. Użycie przestrzeni nazw nie wpływa na rozmiar kodu wynikowego.
 
+Poniżej zamieszczony zostaje przykładowy program wraz z fragmentem biblioteki \lstinline|AvrIO.uchirp| dołączonej do projektu. Program włącza diody podłączone do rejestru C, kiedy zostaną wciśnięte korespondujące przyciski na porcie D.
+\begin{lstlisting}
+// lib/avr/AvrIO.uchirp
+scope AvrIO {
+    ptr<Byte> PINC <- 38;
+    ptr<Byte> DDRC <- 39;
+    ptr<Byte> PORTC <- 40;
+    ptr<Byte> PIND <- 41;
+    ptr<Byte> DDRD <- 42;
+    ptr<Byte> PORTD <- 43;
+}
+
+// main.uchirp
+import lib:avr:AvrIO;
+
+scope Main {
+	func main() {
+		AvrIO:DDRC = 255;
+		AvrIO:DDRD = 0;
+		while(true) {
+			AvrIO:PORTC = AvrIO:PIND;	
+		}
+	}
+}
+\end{lstlisting}
 
 \section{Narzędzia}
 
