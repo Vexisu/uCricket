@@ -1,14 +1,60 @@
 \chapter{Źródła}
+\begin{lstlisting}[caption={Sekcja konfiguracyjna narzędzia JFlex}, label={lst:lexer-konfiguracja}]
+%%
+%unicode
+%standalone
+%public
+%class UCricketLexer
+%implements UCricketParser.Lexer
+%line
+%column
 
-Jeżeli w pracy konieczne jest umieszczenie długich fragmentów kodu źródłowego, należy je przenieść w to miejsce.
+%{
+    @Override
+    public void yyerror(String msg){
+        System.err.printf("%d:%d:%s\n%s\n", yyline + 1, yycolumn, yytext(), msg);
+        System.exit(-1);
+    }
 
-\begin{lstlisting}
-if (_nClusters < 1)
-	throw std::string ("unknown number of clusters");
-if (_nIterations < 1 and _epsilon < 0)
-	throw std::string ("You should set a maximal number of iteration or minimal difference -- epsilon.");
-if (_nIterations > 0 and _epsilon > 0)
-	throw std::string ("Both number of iterations and minimal epsilon set -- you should set either number of iterations or minimal epsilon.");
+    @Override
+    public String getLVal(){
+        return yytext();
+    }
+%}
+
+COMMENT = \/\/.*
+WHITESPACE = \ +|\n+|\r+|\t+
+IDENTIFIER = [a-zA-Z][a-zA-Z0-9]*(:[a-zA-Z][a-zA-Z0-9]*)*
+INTEGER = \d+
+FLOAT = \d*\.\d+d
+
+%%
+\end{lstlisting}
+
+\begin{lstlisting}[caption={Definicje reguł analizatora leksykalnego}, label={lst:lexer-reguły}]
+/* reguly tokenow jednoznakowych */
+"+" {return '+';}
+"-" {return '-';}
+"*" {return '*';}
+
+/* reguly tokenow wieloznakowych */
+"==" {return UCricketParser.Lexer.EQUAL_EQUAL;}
+"!=" {return UCricketParser.Lexer.BANG_EQUAL;}
+"<=" {return UCricketParser.Lexer.LESS_EQUAL;} 
+
+/* reguly slow kluczowych */
+import {return UCricketParser.Lexer.IMPORT;}
+scope {return UCricketParser.Lexer.SCOPE;}
+func {return UCricketParser.Lexer.FUNC;}
+
+/* reguly wyrazen regularnych */
+{IDENTIFIER} {
+    return UCricketParser.Lexer.IDENTIFIER;
+}
+
+{INTEGER} {
+    return UCricketParser.Lexer.INTEGER;
+}
 \end{lstlisting}
 
 
