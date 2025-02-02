@@ -49,9 +49,9 @@ import lombok.Getter;
 
 %start program
 %left EQUAL_EQUAL BANG_EQUAL LESS_EQUAL GREATER_EQUAL '<' '>' 
+%left '&' '|' '^'
 %left '+' '-'
 %left '*' '/'
-%left '&' '|' '^'
 %right ARITHM_NEGATION LOGICAL_NEGATION
 
 %code {
