@@ -57,6 +57,89 @@ func {return UCricketParser.Lexer.FUNC;}
 }
 \end{lstlisting}
 
+\begin{lstlisting}[caption={Definicja symboli nieterminalnych analizatora syntaktycznego}, label={lst:parser-nterms}]
+%nterm <ValueType> returnedType
+%nterm <StatementChain> statements
+%nterm <Statement> statement
+%nterm <VariableStatement> variableStatement
+%nterm <PointerStatement> pointerStatement
+%nterm <Expression> expression binary unary primary functionCall condition
+%nterm <ArgumentsExpression> arguments
+%nterm <Scope> scope
+%nterm <Function> function
+%nterm <Scope.ScopeContent> scopeContent
+%nterm <Function.ArgumentChain> argumentChain
+\end{lstlisting}
+
+\begin{lstlisting}[caption={Definicja priorytetów operacji w analizatorze syntaktycznym}, label={lst:parser-priorytety}]
+%left EQUAL_EQUAL BANG_EQUAL LESS_EQUAL GREATER_EQUAL '<' '>' 
+%left '&' '|' '^'
+%left '+' '-'
+%left '*' '/'
+%right ARITHM_NEGATION LOGICAL_NEGATION
+\end{lstlisting}
+
+\begin{lstlisting}[caption={Przykładowy fragment gramatyki definiowanej w języku uCricket}, label={lst:parser-gramatyka}]
+%%
+...
+statements:
+        statement statements { $$ = new StatementChain($1, $2); }
+    |   { $$ = null; }
+;
+
+statement: 
+        expression ';' {$$ = new ExpressionStatement($1); }
+    |   IF '(' condition ')' '{' statements '}' { $$ = new IfStatement($3, $6); }
+    |   WHILE '(' condition ')' '{' statements '}' { $$ = new WhileStatement($3, $6); }
+    |   variableStatement { $$ = $1; }
+    |   pointerStatement { $$ = $1; }
+    |   IDENTIFIER '=' expression ';' { $$ = new AssignmentStatement(AssignmentType.VALUE, $<String>1, $3); }
+    |   IDENTIFIER ASSIGN_ADDRESS expression ';' { $$ = new AssignmentStatement(AssignmentType.ADDRESS, $<String>1, $3); }
+    |   RETURN expression ';' { $$ = new ReturnStatement($2); }
+;
+
+variableStatement:
+        VAR returnedType IDENTIFIER ';' { $$ = new VariableStatement($2, $<String>3, null); }
+    |   VAR returnedType IDENTIFIER '=' expression ';' { $$ = new VariableStatement($2, $<String>3, $5); }
+;
+
+pointerStatement:
+        PTR returnedType IDENTIFIER ';' { $$ = new PointerStatement($2, $<String>3, AssignmentType.NONE, null); }
+    |   PTR returnedType IDENTIFIER '=' expression ';' { $$ = new PointerStatement($2, $<String>3, AssignmentType.VALUE, $5); }
+    |   PTR returnedType IDENTIFIER ASSIGN_ADDRESS expression ';' { $$ = new PointerStatement($2, $<String>3, AssignmentType.ADDRESS, $5); }
+;
+...
+expression:
+        binary
+    |   unary
+    |   primary
+    |   functionCall
+;
+
+binary:
+        expression EQUAL_EQUAL expression { $$ = new BinaryExpression($1, BinaryExpression.Operator.EQUAL, $3); }
+    |   expression BANG_EQUAL expression { $$ = new BinaryExpression($1, BinaryExpression.Operator.NOT_EQUAL, $3); }
+    |   expression '<' expression { $$ = new BinaryExpression($1, BinaryExpression.Operator.LESS, $3); }
+    |   expression '>' expression { $$ = new BinaryExpression($1, BinaryExpression.Operator.GREATER, $3); }
+    |   expression LESS_EQUAL expression { $$ = new BinaryExpression($1, BinaryExpression.Operator.LESS_EQUAL, $3); }
+    |   expression GREATER_EQUAL expression { $$ = new BinaryExpression($1, BinaryExpression.Operator.GREATER_EQUAL, $3); }
+    |   expression '+' expression { $$ = new BinaryExpression($1, BinaryExpression.Operator.ADD, $3); }
+    |   expression '-' expression { $$ = new BinaryExpression($1, BinaryExpression.Operator.SUBTRACT, $3); }
+    |   expression '*' expression { $$ = new BinaryExpression($1, BinaryExpression.Operator.MULTIPLY, $3); }
+    |   expression '/' expression { $$ = new BinaryExpression($1, BinaryExpression.Operator.DIVIDE, $3); }
+    |   expression '&' expression { $$ = new BinaryExpression($1, BinaryExpression.Operator.AND, $3); }
+    |   expression '|' expression { $$ = new BinaryExpression($1, BinaryExpression.Operator.OR, $3); }
+    |   expression '^' expression { $$ = new BinaryExpression($1, BinaryExpression.Operator.XOR, $3); }
+;
+
+unary:
+        '(' expression ')' { $$ = new UnaryExpression($2, UnaryExpression.Type.PARENTHESIS); }
+    |   '!' expression %prec LOGICAL_NEGATION { $$ = new UnaryExpression($2, UnaryExpression.Type.LOGICAL_NEGATION); }
+    |   '-' expression %prec ARITHM_NEGATION { $$ = new UnaryExpression($2, UnaryExpression.Type.ARITHMETICAL_NEGATION); }
+;
+...
+%%
+\end{lstlisting}
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
 % Pakiet minted wymaga odkomentowania w pliku config/settings.tex   %

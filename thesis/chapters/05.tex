@@ -35,7 +35,17 @@ Reguły leksykalne opisane zostały pod blokiem konfiguracyjnym. Kod źródłowy
 Generowanie kodu analizatora leksykalnego obydwa się poprzez wywołanie komendy \lstinline|./gradlew app:buildLexer| z poziomu głównego katalogu projektu kompilatora.
 
 \section{Analiza syntaktyczna}
-GNU Bison jest zaawansowanym generatorem kodu analizatorów syntaktycznych. Wspiera on generowanie kodu analizatora do języków C, C++, D i Java. 
+GNU Bison jest zaawansowanym generatorem kodu analizatorów syntaktycznych. Wspiera on generowanie kodu analizatora do języków C, C++, D i Java poprzez dostarczenie pliku definicji syntaktycznych. Gramatyka dla narzędzia GNU Bison opisywana jest za pośrednictwem notacji Backusa-Naura (ang. \english{Backus-Naur Form}). Definicje syntaktyczne umieszczone są w pliku \lstinline|app/src/main/resources/UCricketParser.y|, natomiast wyjściowy kod analizatora generowany jest do pliku \lstinline|app/src/main/java/pl/polsl/student/maciwal866/ucricket/UCricketParser.java|.
+
+Znacznik \lstinline|%token| odpowiada za definicję tokenów występujących w gramatyce. Tokeny te zwracane są w procesie analizy leksykanlnej przez analizator leksykalny do analizatora syntaktycznego. Można je (kod źródłowy \ref{lst:parser-tokeny}) zaobserwować w specyfikacji leksylanej, prezentowanej w kodzie źródłowym \ref{lst:lexer-reguły}, w odwołaniach do interfejsu \lstinline|UCricketParser.Lexer|.
+\begin{lstlisting}[caption={Definicja tokentów w analizatorze syntaktycznym}, label={lst:parser-tokeny}]
+%token IDENTIFIER INTEGER FLOAT IMPORT SCOPE IF WHILE FUNC VAR PTR RETURN TRUE FALSE EQUAL_EQUAL BANG_EQUAL LESS_EQUAL GREATER_EQUAL ASSIGN_ADDRESS
+\end{lstlisting} 
+Za pomocą znacznika \lstinline|%nterm| określa się typ klas wykorzystywancyh do budowy danych symboli nieterminalnych drzewa syntaktycznego. Kod źródłowy \ref{lst:parser-nterms} przedstawia definicję symboli nieterminalnych występujących w języku uCricket.
+Operator \lstinline|%start| pozwala na wskazanie, który symbol nieterminalny jest symbolem początkowym gramatyki.
+Operatory \lstinline|%left| i \lstinline|%right| służą do zarządzania priorytetem operacji w gramatyce. Kolejność definicji wskazuje poziom priorytetów od najniższego do najwyższego. Kod źródłowy \ref{lst:parser-priorytety} przedstawia definicję priorytetów operacji, jakie wsytępują w języku uCricket.
+W znacznikach \lstinline|%%| zawarta jest faktyczna definicja gramatyki. Definiowanie gramatyki odbywa się przy użyciu notacji Backusa-Naura poprzez podanie nazwy symbolu, dwukropka, definicji gramatyki dla danego symbolu, klamr zawierających akcję przypisaną do symbolu, opcjonalnego znaku \lstinline/|/ odpowiedzialnego za definicję alternatywy i znaku średnika. Akcje definiowane w symbolach trafiają w zmodyfikowanej formie bezpośrednio do kodu wynikowego generowanego przez GNU Bison. Modyfikacji poddawane są wyrażenia rozpoczynające się od znaku dolara. Wyrażenie \lstinline|$$| odpowiada zwracanej przez definiowany symbol elementu drzewa syntaktycznego, natomiast wyrażenia z liczbą odpowiadają indeksowi symbola gramatycznego definiowanego w symbolu nadrzędnym. Kod źródłowy \ref{lst:parser-gramatyka} przedstawia definicję gramatyki instrukcji (ang. \english{statements}) i wyrażeń (ang. \english{expressions}).
+
 \section{Analiza semantyczna}
 
 \section{Generowanie kodu pośredniego}
