@@ -1,5 +1,30 @@
 \chapter{Weryfikacja i walidacja}
 \label{ch:06}
+Weryfikacja pracy kompilatora pod kątem poprawności generowanego kody wynikowego wymagała podzielenia procesu testowania na kilka etapów zależnych od implementowanej części kompilatora. W ich skład wchodzą:
+\begin{itemize}
+\item kontrola poprawności pracy analizy leksykalnej i syntaktycznej,
+\item kontrola poprawności generowanego drzewa syntaktycznego,
+\item weryfikacja pracy analizatora semantycznego,
+\item weryfikacja poprawności generowanego kodu pośredniego,
+\item weryfikacja poprawności generowanego kodu wynikowego dla docelowej platformy.
+\end{itemize}
+Ponadto, kod wynikowy był testowany na płytce rozwojowej Arduino Pro Mini wyposażonej w mikrokontroler ATmega328P.
+\section{Kontrola analizatora leksykalnego i syntaktycznego}
+Wykorzystanie języka Java do budowy kompilatora pozwoliło na łatwe kontrolowanie poprawności implementacji poprzez uprzednie zdefiniowanie interfejsów i klas. W efekcie, przy użyciu błędnych klas w definicjach leksykalnych lub syntaktycznych, kompilator języka Java zgłaszał stosowne błędy o niezgodności typów. Podejście to było pomocne szczególnie w trakcie implementacji gramatyki języka, ze względu na wymóg stosowania ściśle wybranych klas w konstruktorach elementów drzewa syntaktycznego.
+
+Narzędzia JFlex i GNU Bison udostępniają dodatkowe techniki pomagające w rozwiązywaniu problemów. JFlex implementuje system kontroli poprawności składni zgłaszający odpowiednie wyjątki w przypadku błędów w definicji. Ponadto dzięki trybowi pracy niezależnej (ang. \english{standalone}), możliwe było zweryfikowanie poprawności generowanych tokenów poprzez podanie ich na wejściu programu.
+GNU Bison prócz mechanizmowi zgłaszania wyjątków w trakcie budowania kompilatora, pozwala także na wygenerowanie reprezentacji reguł języka w formie tekstowej. Dzięki temu możliwa była identyfikacja konflików w implementowanej gramatyce i ich naprawa. Reprezentacja tekstowa była przydatna w szczególności podczas naprawy błędów związanych ze złym priorytetem operacji arytmetycznych.
+
+\section{Poprawność drzewa syntaktycznego}
+W celu sprawdzenia poprawności generowanego drzewa syntaktycznego przez analizator syntaktyczny wykorzystano wbudowany w środowisko programistyczne VSCodium debuger. Ze względu na obiektowe podejście do problemu budowy drzewa syntaktycznego, narzędzie to pozwoliło na łatwe przeglądanie aktualnie wygenerowanej struktury drzewa w formie listy. Proces kontroli drzewa syntaktycznego przedstawia rysunek \ref{fig:vscodium-debug-ast}.
+
+\begin{figure}
+\centering
+	\includegraphics[width=1\textwidth]{graf/vscodium-debug-ast.png}
+	\caption{Proces kontroli drzewa syntaktycznego za pomocą debugera wbudowanego w środowisko VSCodium.}
+\label{fig:vscodium-debug-ast}
+\end{figure}
+
 \begin{itemize}
 \item sposób testowania w ramach pracy (np. odniesienie do modelu V)
 \item organizacja eksperymentów
