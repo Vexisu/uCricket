@@ -2,22 +2,28 @@
 \label{ch:05}
 Kompilacja kodu podzielona jest na wiele etapów. Pozwala to na uproszenie skomplikowanych procesów i podzielenie ich odpowiedzialności. W skład procesów odbywających się w trakcie kompilacji wchodzą:
 \begin{itemize}
+\item analiza
+\begin{itemize}
 \item analiza leksykalna -- podział kodu programu na tokeny na podstawie zdefiniowanej gramatyki leksykalnej\ksremark{cytowanie},
-\item analiza syntaktyczna -- budowa drzewa składni abstracyjnej\ksremark{cytowanie} (ang. \english{abstract syntax tree} na podstawie gramatyki syntaktycznej, poprzez konsumpcję tokenów\ksremark{cytowanie},
+\item analiza syntaktyczna -- budowa drzewa składni abstracyjnej\ksremark{cytowanie} (ang. \english{abstract syntax tree}) na podstawie gramatyki syntaktycznej \ksremark{bez «syntaktycznej», gramatyka to opis składni, czyli syntaksis}, poprzez konsumpcję tokenów\ksremark{cytowanie},
 \item analiza semantyczna -- kontrola drzewa składni syntaktycznej pod kątem m.in.: spójności typów danych, dozwolonych operacji, zdefiniowanych funkcji i zmiennych,
 \item generowanie kodu pośredniego -- zamiana drzewa syntaktycznego na uniwersalny kod pośredni,
+\end{itemize}
+\item synteza
+\begin{itemize}
 \item optymalizacja -- proces modyfikacji kodu pośredniego zmniejszający zużycie zasobów i zwiększający szybkość wykonywania programu docelowego bez zmiany jego zachowania,
 \item generowanie kodu docelowego -- zamiana kodu pośredniego do kodu instrukcji zrozumiałych dla platformy docelowej.
+\end{itemize}
 \end{itemize}
 
 \section{Analiza leksykalna}
 Do zaprojektowania analizatora leksykalnego wykorzystano narzędzie JFlex. Konsumuje ono specyfikację leksykalną zawartą w pliku definicji i generuje kod na jego podstawie kod analizatora leksykalnego w języku Java. Specyfikacja leksykalna znajduje się w pliku \lstinline|app/src/main/resources/UCricketLexer.y|. Wygenerowany kod analizatora leksykalnego umieszony zostaje w pliku \lstinline|app/src/main/java/pl/polsl/student/maciwal866/ucricket/UCricketLexer.java|.
 
-Plik specyfikacji leksykalnej zaczyna się od konfiguracji narzędzia JFlex. Kod źródłowy \ref{lst:lexer-pakiet}, umieszczony w pierwszej linijce definicji, określa pakiet języka Java, w jakim znajduje się kod analizatora.
-\begin{lstlisting}[caption={Definicja pakietu dla analizatora leksykalnego}, label={lst:lexer-pakiet}]
+Plik specyfikacji leksykalnej zaczyna się od konfiguracji narzędzia JFlex. Kod źródłowy, umieszczony w pierwszej linijce definicji, określa pakiet języka Java, w jakim znajduje się kod analizatora:
+\begin{lstlisting}
 package pl.polsl.student.maciwal866.ucricket;
 \end{lstlisting}
-Kod umieszczony w znacznikach, składających się z dwóch procentów, zawiera główną konfigurację narzędzia JFlex (kod zródłowy \ref{lst:lexer-konfiguracja}). Konfiguracja zawiera następujące elemnty:
+Kod umieszczony w znacznikach, składających się z dwóch procentów \lstinline|%%|, zawiera główną konfigurację narzędzia JFlex (kod zródłowy \ref{lst:lexer-konfiguracja}). Konfiguracja zawiera następujące elemnty:
 \begin{itemize}
 \item operatora \lstinline|%unicode| zmieniającego domyślne kodowanie znaków na Unicode,
 \item operatora \lstinline|%standalone| pozwalającego na uruchomienie analizatora leksykalnego jako niezależny program, ułatwiając wyszukiwanie błędów,
@@ -29,27 +35,28 @@ Kod umieszczony w znacznikach, składających się z dwóch procentów, zawiera 
 \item definicji wyrażeń regularnych wraz z ich identyfikatorami.
 \end{itemize}
 Do poprawnej pracy analizatora leksykalnego wymagane jest przesłonięcie dwóch metod. Metoda \lstinline|yyerror(String msg)| odpowiada za raportowanie błędów napotkanych w trakcie procesu analizy. Metoda \lstinline|getLVal()| jest metodą dziedziczoną z interfejsu \lstinline|Lexer| klasy analizatora syntaktycznego i jest ona wywoływana w trakcie jego pracy.
-Reguły leksykalne opisane zostały pod blokiem konfiguracyjnym. Kod źródłowy \ref{lst:lexer-reguły} przedstawia wybrane reguły definiujące tokeny jednoznakowe, tokeny wieloznakowe ,słowa kluczowe i wyrażenia regularne. Na podstawie tych reguł generowane są tokeny przechwytywane przez analizator syntaktyczny.
+Reguły leksykalne opisane zostały pod blokiem konfiguracyjnym. Kod źródłowy \ref{lst:lexer-reguły} przedstawia wybrane reguły definiujące tokeny jednoznakowe, tokeny wieloznakowe, słowa kluczowe i wyrażenia regularne. Na podstawie tych reguł generowane są tokeny przechwytywane przez analizator syntaktyczny.
 Generowanie kodu analizatora leksykalnego obydwa się poprzez wywołanie komendy \lstinline|./gradlew app:buildLexer| z poziomu głównego katalogu projektu kompilatora.
 
 \section{Analiza syntaktyczna}
-GNU Bison jest zaawansowanym generatorem kodu analizatorów syntaktycznych. Wspiera on generowanie kodu analizatora do języków C, C++, D i Java poprzez dostarczenie pliku definicji syntaktycznych. Gramatyka dla narzędzia GNU Bison opisywana jest za pośrednictwem notacji Backusa-Naura (ang. \english{Backus-Naur Form}). Definicje syntaktyczne umieszczone są w pliku \lstinline|app/src/main/resources/UCricketParser.y|, natomiast wyjściowy kod analizatora generowany jest do pliku \lstinline|app/src/main/java/pl/polsl/student/maciwal866/ucricket/UCricketParser.java|.
+GNU Bison \cytowanie\ jest zaawansowanym generatorem kodu analizatorów syntaktycznych. Wspiera on generowanie kodu analizatora do języków C, C++, D i Java poprzez dostarczenie pliku definicji syntaktycznych. Gramatyka dla narzędzia GNU Bison opisywana jest za pośrednictwem notacji Backusa-Naura (ang. \english{Backus-Naur Form}). Definicje syntaktyczne umieszczone są w pliku \lstinline|app/src/main/resources/UCricketParser.y|, natomiast wyjściowy kod analizatora generowany jest do pliku \lstinline|app/src/main/java/pl/polsl/student/maciwal866/ucricket/UCricketParser.java|.
 
-Znacznik \lstinline|%token| odpowiada za definicję tokenów występujących w gramatyce. Tokeny te zwracane są w procesie analizy leksykanlnej przez analizator leksykalny do analizatora syntaktycznego. Można je (kod źródłowy \ref{lst:parser-tokeny}) zaobserwować w specyfikacji leksylanej, prezentowanej w kodzie źródłowym \ref{lst:lexer-reguły}, w odwołaniach do interfejsu \lstinline|UCricketParser.Lexer|.
-\begin{lstlisting}[caption={Definicja tokentów w analizatorze syntaktycznym}, label={lst:parser-tokeny}]
+Znacznik \lstinline|%token| odpowiada za definicję tokenów występujących w gramatyce. Tokeny te zwracane są w procesie analizy leksykalnej przez analizator leksykalny do analizatora syntaktycznego. Można je zaobserwować w specyfikacji leksykalnej, prezentowanej w kodzie źródłowym \ref{lst:lexer-reguły}, w odwołaniach do interfejsu \lstinline|UCricketParser.Lexer|:
+\begin{lstlisting}
 %token IDENTIFIER INTEGER FLOAT IMPORT SCOPE IF WHILE FUNC VAR PTR RETURN TRUE FALSE EQUAL_EQUAL BANG_EQUAL LESS_EQUAL GREATER_EQUAL ASSIGN_ADDRESS
 \end{lstlisting} 
 Za pomocą znacznika \lstinline|%nterm| określa się typ klas wykorzystywancyh do budowy danych symboli nieterminalnych drzewa syntaktycznego. Kod źródłowy \ref{lst:parser-nterms} przedstawia definicję symboli nieterminalnych występujących w języku uCricket.
 Operator \lstinline|%start| pozwala na wskazanie, który symbol nieterminalny jest symbolem początkowym gramatyki.
-Operatory \lstinline|%left| i \lstinline|%right| służą do zarządzania priorytetem operacji w gramatyce. Kolejność definicji wskazuje poziom priorytetów od najniższego do najwyższego. Kod źródłowy \ref{lst:parser-priorytety} przedstawia definicję priorytetów operacji, jakie wsytępują w języku uCricket.
-W znacznikach \lstinline|%%| zawarta jest faktyczna definicja gramatyki. Definiowanie gramatyki odbywa się przy użyciu notacji Backusa-Naura poprzez podanie nazwy symbolu, dwukropka, definicji gramatyki dla danego symbolu, klamr zawierających akcję przypisaną do symbolu, opcjonalnego znaku \lstinline/|/ odpowiedzialnego za definicję alternatywy i znaku średnika. Akcje definiowane w symbolach trafiają w zmodyfikowanej formie bezpośrednio do kodu wynikowego generowanego przez GNU Bison. Modyfikacji poddawane są wyrażenia rozpoczynające się od znaku dolara. Wyrażenie \lstinline|$$| odpowiada zwracanej przez definiowany symbol elementu drzewa syntaktycznego, natomiast wyrażenia z liczbą odpowiadają indeksowi symbola gramatycznego definiowanego w symbolu nadrzędnym. Celem akcji jest tworzenie obiektów reprezentujących gałęzie drzewa syntaktycznego. Kod źródłowy \ref{lst:parser-gramatyka} przedstawia definicję gramatyki instrukcji (ang. \english{statements}) i wyrażeń (ang. \english{expressions}). 
+Operatory \lstinline|%left| i \lstinline|%right| służą do zarządzania priorytetem operacji w gramatyce \ksremark{i łącznością – dlatego jest left i right}. Kolejność definicji wskazuje poziom priorytetów od najniższego do najwyższego. Kod źródłowy \ref{lst:parser-priorytety} przedstawia definicję priorytetów operacji, jakie wsytępują w języku uCricket.
+W znacznikach \lstinline|%%| zawarta jest faktyczna definicja gramatyki. Definiowanie gramatyki odbywa się przy użyciu notacji Backusa-Naura poprzez podanie nazwy symbolu, dwukropka, definicji gramatyki \ksremark{produkcji, nie gramatyki} dla danego symbolu, klamr zawierających akcję \ksremark{semantyczną} przypisaną do symbolu \ksremark{To jest translacja sterowana składnią.}, opcjonalnego znaku \lstinline/|/ odpowiedzialnego za definicję alternatywy i znaku średnika. Akcje definiowane w symbolach trafiają w zmodyfikowanej formie bezpośrednio do kodu wynikowego generowanego przez GNU Bison. Modyfikacji poddawane są wyrażenia rozpoczynające się od znaku dolara. Wyrażenie \lstinline|$$| odpowiada zwracanej przez definiowany symbol elementu drzewa syntaktycznego \ksremark{po prostu lewej stronie produkcji}, natomiast wyrażenia z liczbą odpowiadają indeksowi symbola \ksremark{symbolu} \ksremark{prawej strony produkcji} gramatycznego definiowanego w symbolu nadrzędnym. Celem akcji jest tworzenie obiektów reprezentujących gałęzie drzewa syntaktycznego. Kod źródłowy \ref{lst:parser-gramatyka} przedstawia definicję gramatyki instrukcji (ang. \english{statements}) i wyrażeń (ang. \english{expressions}).
+\ksremark{Tu by się przydał przykład produkcji z akcją semantyczną. Jakiś prosty np. exp : exp '+' exp { ... } }
 W celu wygenerowania kodu analizatora dla języka, na podstawie istniejących definicji, należy użyć polecenia \lstinline|./gradlew app:buildParser|.
 
-GNU Bison dla przedstawionej konfiguracji generuje analizator LALR(1) (ang. \english{look ahead, right-to-left}). Jest to jeden z typów analizatorów o mniejszej złożoności pamięciowej i większej elastyczności.
+GNU Bison dla przedstawionej konfiguracji generuje analizator LALR(1) (ang. \english{look ahead, right-to-left} \ksremark{\english{lookahead left-to-right rightmost (derivation)}}). Jest to jeden z typów analizatorów o mniejszej złożoności pamięciowej i większej elastyczności \cytowanie.
 
 \section{Analiza semantyczna}
 
-Proces analizy semantycznej odbywa się na poziomie klas drzewa syntaktycznego implementowanych w języku Java. Gałęzie drzewa syntaktycznego opierają się na dziedziczeniu odpowiednich interfejsów, które zwiększają ich funkcjonalność i definiują ich zachowanie. Interfejs \lstinline|ASTNode| określa, że dana klasa może być użyta jako gałąź struktury drzewa. Ponadto, klasy poddawane procesowi analizy semantycznej dziedziczą po interfejsie \lstinline|Resolvable|. Dostarcza on metodę \lstinline|resolve(Scope parent)| odpowiedzialną za proces analizy semantycznej. Zwraca ona także typ danych, zwracany przez wyrażenie, określany w trakcie analizy semantycznej. Proces analizy semantycznej odpowiada za:
+Proces analizy semantycznej odbywa się na poziomie klas drzewa syntaktycznego implementowanych w języku Java. Gałęzie drzewa syntaktycznego opierają się na dziedziczeniu odpowiednich interfejsów, które zwiększają ich funkcjonalność i definiują ich zachowanie. Interfejs \lstinline|ASTNode| określa, że dana klasa może być użyta jako gałąź struktury drzewa. Ponadto, klasy poddawane procesowi analizy semantycznej dziedziczą po interfejsie \lstinline|Resolvable|. Dostarcza on metodę \lstinline|resolve(Scope parent)| odpowiedzialną za proces analizy semantycznej. Zwraca ona także typ danych, zwracany przez wyrażenie, określany w trakcie analizy semantycznej. \ksremark{Czy tu jest użyty wzorzec projektowy interpreter?} \ksremark{Tu by się bardzo przydał diagram klas UML, oczywiście tylko kilku klas wystarczy, żeby przedstawić ideę.} Proces analizy semantycznej odpowiada za:
 \begin{itemize}
 \item sprawdzanie istnienia zmiennych, funkcji i przestrzeni nazw w przypadku ich wywoływania,
 \item weryfikację wolnych identyfikatorów w przypadku tworzenia zmiennych, funkcji i przestrzeni nazw,
@@ -58,7 +65,7 @@ Proces analizy semantycznej odbywa się na poziomie klas drzewa syntaktycznego i
 \item wiązanie pośrednie gałęzi pomiędzy strukturami definiującymi zmienne i funkcje w celu optymalizacji procesu kompilacji,
 \item dynamiczne wykluczenie fragmentów drzewa syntaktycznego nieużywanych przez program w celu minimalizacji czasu kompilacji.
 \end{itemize}
-W przypadku niespełnienia któregoś z wymagań w procesie wytwarzania kodu, analizator semantyczny zgłosi odpowiedni wyjątek i przerwie proces kompilacji. Kod źródłowy \ref{lst:resolver-function-call} przedstawia implementację metody \lstinline|resolve(Scope parent)| w klasie \lstinline|FunctionCallExpression|. W procesie prezentowanej metody wykonywane są:
+W przypadku niespełnienia któregoś z wymagań w procesie wytwarzania kodu, analizator semantyczny zgłosi odpowiedni wyjątek i przerwie proces kompilacji. Kod źródłowy \ref{lst:resolver-function-call} przedstawia implementację metody \lstinline|resolve(Scope parent)| w klasie \mbox{\lstinline|FunctionCallExpression|.} W procesie prezentowanej metody wykonywane są:
 \begin{itemize}
 \item weryfikacja zgodności typów przekazywanych argumentów do wywołania funkcji,
 \item sprawdzenie istnienia i dowiązanie obiektu funkcji do wyrażenia wywołania,
@@ -82,7 +89,7 @@ public Object resolve(Scoped parent) {
 \end{lstlisting}
 
 \section{Generowanie kodu pośredniego}
-Generowanie kodu pośredniego odbywa się z wykorzystaniem biblioteki LLVM wraz z definicjami JavaCPP Presets dla LLVM. W procesie uczestniczy metoda \lstinline|solve(LLVMBuilderRef builder, LLVMModuleRef module, LLVMContextRef context)| dziedziczona z interfejsów, odpowiednio dla instrukcji i wyrażeń, \lstinline|Statement| i \lstinline|Expression|. Podział ten jest spowodowany obecnością referencji do struktury danych \lstinline|LLVMValueRef| zwracanej przez wyrażenia. Kod źródłowy \ref{lst:ir-solve} prezentuje metodę \lstinline|solve()| definiującą reprezentację kodu pośredniego dla wywołania funkcji w języku uCricket. W tym procesie wyróżnia się:
+Generowanie kodu pośredniego odbywa się z wykorzystaniem biblioteki LLVM wraz z~definicjami JavaCPP Presets dla LLVM. W procesie uczestniczy metoda \lstinline|solve(LLVMBuilderRef builder, LLVMModuleRef module, LLVMContextRef context)| dziedziczona z interfejsów, odpowiednio dla instrukcji i wyrażeń, \lstinline|Statement| i \lstinline|Expression|. Podział ten jest spowodowany obecnością referencji do struktury danych \lstinline|LLVMValueRef| zwracanej przez wyrażenia. Kod źródłowy \ref{lst:ir-solve} prezentuje metodę \lstinline|solve()| definiującą reprezentację kodu pośredniego dla wywołania funkcji w języku uCricket. W tym procesie wyróżnia się:
 \begin{itemize}
 \item wyszukanie zdefiniowanej kodu pośredniego funkcji i oddelegowanie budowniczego w przypadku jej nieistnienia,
 \item budowę struktur odpowiedzialnych za reprezentacje argumentów przekazywanych do funkcji,
@@ -123,20 +130,20 @@ Kompilator, w takcie generowania kodu pośredniego, stosuje domyślne optymaliza
 
 \section{Generowanie kodu docelowego}
 Za generowaniu kodu docelowego dla platformy AVR odpowiada narzędzie \lstinline|avr-gcc|. Przekazywany jest do niego kod języka Assembly wygenerowany przez LLVM wraz z odpowiednimi flagami definiującymi platformę docelową. Kod źródłowy \ref{lst:gcc-compile} przedstawia komendę budującą kod binarny programu dla mikrokontrolera ATmega328P. Możliwe jest także podanie flag optymalizacyjnych kod wynikowy. W zależności od używanego programatora, wymagana jest konwersja pliku binarnego na format odpowiadający danym narzędziom.
-\begin{lstlisting}[caption={Komenda kompilująca kod wynikowy z LLVM do kodu binarnego dla ATmega328P}, label={lst:gcc-compile}]
+\begin{lstlisting}[caption={Komenda kompilująca kod wynikowy z LLVM do kodu binarnego dla ATmega328P.}, label={lst:gcc-compile}]
 avr-gcc -mmcu=atmega328p -o output.bin output.s
 \end{lstlisting}
 
-Jeśli „Specyfikacja wewnętrzna”:
-\begin{itemize}
-\item przedstawienie idei
-\item architektura systemu
-\item opis struktur danych (i organizacji baz danych)
-\item komponenty, moduły, biblioteki, przegląd ważniejszych klas (jeśli występują)
-\item przegląd ważniejszych algorytmów (jeśli występują)
-\item szczegóły implementacji wybranych fragmentów, zastosowane wzorce projektowe
-\item diagramy UML
-\end{itemize}
+%Jeśli „Specyfikacja wewnętrzna”:
+%\begin{itemize}
+%\item przedstawienie idei
+%\item architektura systemu
+%\item opis struktur danych (i organizacji baz danych)
+%\item komponenty, moduły, biblioteki, przegląd ważniejszych klas (jeśli występują)
+%\item przegląd ważniejszych algorytmów (jeśli występują)
+%\item szczegóły implementacji wybranych fragmentów, zastosowane wzorce projektowe
+%\item diagramy UML
+%\end{itemize}
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
 % Pakiet minted wymaga importu: \usepackage{minted}                 %
