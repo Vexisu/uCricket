@@ -10,8 +10,6 @@ Kompilacja kodu podzielona jest na wiele etapów. Pozwala to na uproszenie skomp
 \item generowanie kodu docelowego -- zamiana kodu pośredniego do kodu instrukcji zrozumiałych dla platformy docelowej.
 \end{itemize}
 
-\section{Wymagania do budowy kompilatora}
-
 \section{Analiza leksykalna}
 Do zaprojektowania analizatora leksykalnego wykorzystano narzędzie JFlex. Konsumuje ono specyfikację leksykalną zawartą w pliku definicji i generuje kod na jego podstawie kod analizatora leksykalnego w języku Java. Specyfikacja leksykalna znajduje się w pliku \lstinline|app/src/main/resources/UCricketLexer.y|. Wygenerowany kod analizatora leksykalnego umieszony zostaje w pliku \lstinline|app/src/main/java/pl/polsl/student/maciwal866/ucricket/UCricketLexer.java|.
 
@@ -44,15 +42,90 @@ Znacznik \lstinline|%token| odpowiada za definicję tokenów występujących w g
 Za pomocą znacznika \lstinline|%nterm| określa się typ klas wykorzystywancyh do budowy danych symboli nieterminalnych drzewa syntaktycznego. Kod źródłowy \ref{lst:parser-nterms} przedstawia definicję symboli nieterminalnych występujących w języku uCricket.
 Operator \lstinline|%start| pozwala na wskazanie, który symbol nieterminalny jest symbolem początkowym gramatyki.
 Operatory \lstinline|%left| i \lstinline|%right| służą do zarządzania priorytetem operacji w gramatyce. Kolejność definicji wskazuje poziom priorytetów od najniższego do najwyższego. Kod źródłowy \ref{lst:parser-priorytety} przedstawia definicję priorytetów operacji, jakie wsytępują w języku uCricket.
-W znacznikach \lstinline|%%| zawarta jest faktyczna definicja gramatyki. Definiowanie gramatyki odbywa się przy użyciu notacji Backusa-Naura poprzez podanie nazwy symbolu, dwukropka, definicji gramatyki dla danego symbolu, klamr zawierających akcję przypisaną do symbolu, opcjonalnego znaku \lstinline/|/ odpowiedzialnego za definicję alternatywy i znaku średnika. Akcje definiowane w symbolach trafiają w zmodyfikowanej formie bezpośrednio do kodu wynikowego generowanego przez GNU Bison. Modyfikacji poddawane są wyrażenia rozpoczynające się od znaku dolara. Wyrażenie \lstinline|$$| odpowiada zwracanej przez definiowany symbol elementu drzewa syntaktycznego, natomiast wyrażenia z liczbą odpowiadają indeksowi symbola gramatycznego definiowanego w symbolu nadrzędnym. Kod źródłowy \ref{lst:parser-gramatyka} przedstawia definicję gramatyki instrukcji (ang. \english{statements}) i wyrażeń (ang. \english{expressions}).
+W znacznikach \lstinline|%%| zawarta jest faktyczna definicja gramatyki. Definiowanie gramatyki odbywa się przy użyciu notacji Backusa-Naura poprzez podanie nazwy symbolu, dwukropka, definicji gramatyki dla danego symbolu, klamr zawierających akcję przypisaną do symbolu, opcjonalnego znaku \lstinline/|/ odpowiedzialnego za definicję alternatywy i znaku średnika. Akcje definiowane w symbolach trafiają w zmodyfikowanej formie bezpośrednio do kodu wynikowego generowanego przez GNU Bison. Modyfikacji poddawane są wyrażenia rozpoczynające się od znaku dolara. Wyrażenie \lstinline|$$| odpowiada zwracanej przez definiowany symbol elementu drzewa syntaktycznego, natomiast wyrażenia z liczbą odpowiadają indeksowi symbola gramatycznego definiowanego w symbolu nadrzędnym. Celem akcji jest tworzenie obiektów reprezentujących gałęzie drzewa syntaktycznego. Kod źródłowy \ref{lst:parser-gramatyka} przedstawia definicję gramatyki instrukcji (ang. \english{statements}) i wyrażeń (ang. \english{expressions}). 
+W celu wygenerowania kodu analizatora dla języka, na podstawie istniejących definicji, należy użyć polecenia \lstinline|./gradlew app:buildParser|.
+
+GNU Bison dla przedstawionej konfiguracji generuje analizator LALR(1) (ang. \english{look ahead, right-to-left}). Jest to jeden z typów analizatorów o mniejszej złożoności pamięciowej i większej elastyczności.
 
 \section{Analiza semantyczna}
 
+Proces analizy semantycznej odbywa się na poziomie klas drzewa syntaktycznego implementowanych w języku Java. Gałęzie drzewa syntaktycznego opierają się na dziedziczeniu odpowiednich interfejsów, które zwiększają ich funkcjonalność i definiują ich zachowanie. Interfejs \lstinline|ASTNode| określa, że dana klasa może być użyta jako gałąź struktury drzewa. Ponadto, klasy poddawane procesowi analizy semantycznej dziedziczą po interfejsie \lstinline|Resolvable|. Dostarcza on metodę \lstinline|resolve(Scope parent)| odpowiedzialną za proces analizy semantycznej. Zwraca ona także typ danych, zwracany przez wyrażenie, określany w trakcie analizy semantycznej. Proces analizy semantycznej odpowiada za:
+\begin{itemize}
+\item sprawdzanie istnienia zmiennych, funkcji i przestrzeni nazw w przypadku ich wywoływania,
+\item weryfikację wolnych identyfikatorów w przypadku tworzenia zmiennych, funkcji i przestrzeni nazw,
+\item statyczną kontrolę typów danych w trakcie kompilacji,
+\item weryfikację kompatybilności typów danych w przypadku ich przemiennego użycia,
+\item wiązanie pośrednie gałęzi pomiędzy strukturami definiującymi zmienne i funkcje w celu optymalizacji procesu kompilacji,
+\item dynamiczne wykluczenie fragmentów drzewa syntaktycznego nieużywanych przez program w celu minimalizacji czasu kompilacji.
+\end{itemize}
+W przypadku niespełnienia któregoś z wymagań w procesie wytwarzania kodu, analizator semantyczny zgłosi odpowiedni wyjątek i przerwie proces kompilacji. Kod źródłowy \ref{lst:resolver-function-call} przedstawia implementację metody \lstinline|resolve(Scope parent)| w klasie \lstinline|FunctionCallExpression|. W procesie prezentowanej metody wykonywane są:
+\begin{itemize}
+\item weryfikacja zgodności typów przekazywanych argumentów do wywołania funkcji,
+\item sprawdzenie istnienia i dowiązanie obiektu funkcji do wyrażenia wywołania,
+\item oznaczenie funkcji jako wywoływanej,
+\item zwrócenie typu danych zwracanego przez funkcję.
+\end{itemize}
+\begin{lstlisting}[caption={Metoda resolve(Scope parent) klasy FunctionCallExpression}, label={lst:resolver-function-call}]
+@Override
+public Object resolve(Scoped parent) {
+    var argumentTypes = new ValueType[0];
+    if (arguments != null && arguments.resolve(parent) instanceof ValueType[] resolvedArgumentTypes) {
+        argumentTypes = resolvedArgumentTypes;
+    }
+    linkedFunction = parent.getFunction(functionName, argumentTypes);
+    if (this.linkedFunction == null) {
+        throw new FunctionNotFoundException(functionName, argumentTypes);
+    }
+    linkedFunction.setCalled(true);
+    return linkedFunction.getType();
+}
+\end{lstlisting}
+
 \section{Generowanie kodu pośredniego}
+Generowanie kodu pośredniego odbywa się z wykorzystaniem biblioteki LLVM wraz z definicjami JavaCPP Presets dla LLVM. W procesie uczestniczy metoda \lstinline|solve(LLVMBuilderRef builder, LLVMModuleRef module, LLVMContextRef context)| dziedziczona z interfejsów, odpowiednio dla instrukcji i wyrażeń, \lstinline|Statement| i \lstinline|Expression|. Podział ten jest spowodowany obecnością referencji do struktury danych \lstinline|LLVMValueRef| zwracanej przez wyrażenia. Kod źródłowy \ref{lst:ir-solve} prezentuje metodę \lstinline|solve()| definiującą reprezentację kodu pośredniego dla wywołania funkcji w języku uCricket. W tym procesie wyróżnia się:
+\begin{itemize}
+\item wyszukanie zdefiniowanej kodu pośredniego funkcji i oddelegowanie budowniczego w przypadku jej nieistnienia,
+\item budowę struktur odpowiedzialnych za reprezentacje argumentów przekazywanych do funkcji,
+\item definicję funkcji na poziomie budowniczego reprezentacji kodu pośredniego.
+\end{itemize}
+
+\begin{lstlisting}[caption={Metoda solve(LLVMBuilderRef builder, LLVMModuleRef module, LLVMContextRef context) klasy FunctionCallExpression}, label={lst:ir-solve}]
+    @Override
+    public LLVMValueRef solve(LLVMBuilderRef builder, LLVMModuleRef module, LLVMContextRef context) {
+        if (linkedFunction.getLlvmFunction() == null) {
+            System.out.println("Delegating function build process to " + functionName + "().");
+            var delegatedBuilder = LLVMCreateBuilderInContext(context);
+            linkedFunction.solve(delegatedBuilder, module, context);
+            LLVMDisposeBuilder(delegatedBuilder);
+        }
+        var argumentExpressions = new Expression[0];
+        if (arguments != null) {
+            argumentExpressions = arguments.collect();
+        }
+        var llvmArguments = new PointerPointer<LLVMTypeRef>(argumentExpressions.length);
+        for (int i = 0; i < argumentExpressions.length; i++) {
+            llvmArguments.put(argumentExpressions[i].solve(builder, module, context));
+        }
+        return LLVMBuildCall2(builder, linkedFunction.getLlvmFunctionType(), linkedFunction.getLlvmFunction(),
+                llvmArguments, argumentExpressions.length,
+                linkedFunction.getType().equals(ValueType.NONE) ? "" : functionName + "_ret");
+    }
+\end{lstlisting}
 
 \section{Optymalizacja}
+Optymalizacja odbywa się w trzech etapach kompilacji:
+\begin{itemize}
+\item analizy semantycznej -- wykluczenie fragmentów kody nie używanych w takcie pracy programu,
+\item generowania kodu pośredniego -- optymalizacja wykonywanych operacji i redukcja wyrażeń możliwych do obliczenia bez potrzeby uruchamiania programu,
+\item generowania kodu docelowego -- stosowanie przez kompilator kodu pośredniego optymalizacji specyficznych dla platformy.
+\end{itemize}
+Kompilator, w takcie generowania kodu pośredniego, stosuje domyślne optymalizacje włączone w narzędziu LLVM. W procesie generowania kodu docelowego, użytkownik ma możliwość zdefiniowania poziomu optymalizacji poprzez przekazanie do narzędzia \lstinline|avr-gcc| odpowiedniej flagi optymalizacji \lstinline|-Ox|, gdzie \lstinline|x| odpowiada poziomom optymalizacji zdefiniowanych w dokumentacji GNU GCC.
 
 \section{Generowanie kodu docelowego}
+Za generowaniu kodu docelowego dla platformy AVR odpowiada narzędzie \lstinline|avr-gcc|. Przekazywany jest do niego kod języka Assembly wygenerowany przez LLVM wraz z odpowiednimi flagami definiującymi platformę docelową. Kod źródłowy \ref{lst:gcc-compile} przedstawia komendę budującą kod binarny programu dla mikrokontrolera ATmega328P. Możliwe jest także podanie flag optymalizacyjnych kod wynikowy. W zależności od używanego programatora, wymagana jest konwersja pliku binarnego na format odpowiadający danym narzędziom.
+\begin{lstlisting}[caption={Komenda kompilująca kod wynikowy z LLVM do kodu binarnego dla ATmega328P}, label={lst:gcc-compile}]
+avr-gcc -mmcu=atmega328p -o output.bin output.s
+\end{lstlisting}
 
 Jeśli „Specyfikacja wewnętrzna”:
 \begin{itemize}
