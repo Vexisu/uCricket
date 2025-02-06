@@ -16,13 +16,68 @@ Narzędzia JFlex i GNU Bison udostępniają dodatkowe techniki pomagające w roz
 GNU Bison prócz mechanizmowi zgłaszania wyjątków w trakcie budowania kompilatora, pozwala także na wygenerowanie reprezentacji reguł języka w formie tekstowej. Dzięki temu możliwa była identyfikacja konflików w implementowanej gramatyce i ich naprawa. Reprezentacja tekstowa była przydatna w szczególności podczas naprawy błędów związanych ze złym priorytetem operacji arytmetycznych.
 
 \section{Poprawność drzewa syntaktycznego}
-W celu sprawdzenia poprawności generowanego drzewa syntaktycznego przez analizator syntaktyczny wykorzystano wbudowany w środowisko programistyczne VSCodium debuger. Ze względu na obiektowe podejście do problemu budowy drzewa syntaktycznego, narzędzie to pozwoliło na łatwe przeglądanie aktualnie wygenerowanej struktury drzewa w formie listy. Proces kontroli drzewa syntaktycznego przedstawia rysunek \ref{fig:vscodium-debug-ast}.
+W celu sprawdzenia poprawności generowanego drzewa syntaktycznego przez analizator syntaktyczny wykorzystano wbudowany w środowisko programistyczne VSCodium debuger. Ze względu na obiektowe podejście do problemu budowy drzewa syntaktycznego, narzędzie to pozwoliło na łatwe przeglądanie aktualnie wygenerowanej struktury drzewa w formie listy. Proces kontroli drzewa syntaktycznego przedstawia rysunek \ref{fig:vscodium-debug-ast}. Proces ten wymagał napisania odpowiednich scenariuszy testowych i krokowe przejście narzędziem debugującym przez program kompilatora. W trakcie procesu weryfikowano zgodność struktur drzewa wraz ze stanami zmiennych wiążących między sobą elementy drzewa i poprawność zgłaszanych wyjątków w przypadku napotkania stanów niedowzowlonych.
 
 \begin{figure}
 \centering
 	\includegraphics[width=1\textwidth]{graf/vscodium-debug-ast.png}
 	\caption{Proces kontroli drzewa syntaktycznego za pomocą debugera wbudowanego w środowisko VSCodium.}
 \label{fig:vscodium-debug-ast}
+\end{figure}
+
+\section{Poprawność generowanego kodu pośredniego}
+Narzędzie LLVM posiada wbudowany system kontroli poprawności budowanej reprezentacji pośredniej. Odpowiada za to odpowiedna funkcje \lstinline|LLVMVerifyModule()| dostarczana przez API (ang. \english{application programming interface}), przedstawiona w kodzie źródłowym \ref{lst:ir-verify}. Wykorzystanie jej w połączeniu z funkcją \lstinline|LLVMDisposeMessage()| pozwala na weryfikację błędów w budowanej reprezentacji pośredniej. W szczególnych przypadkach, wymagane było krokowe przejście przez program narzędziem do debugowania, np. podczas przekazania nieodpowiedniej referencji typu zawartej w klasie \lstinline|LLVMTypeRef|, powodując tym samym błąd naruszenia ochrony pamięci.
+
+\begin{lstlisting}[caption={Kod wywołujący kontrolę generowanej reprezentacji pośredniej.}, label={lst:ir-verify}]
+var moduleMessage = new PointerPointer<BytePointer>(1);
+LLVMVerifyModule(module, 0, moduleMessage);
+LLVMDisposeMessage(moduleMessage.get(BytePointer.class)); 
+\end{lstlisting}
+
+Kolejnym mechanizmem pozwalającym na sprawdzenie poprawności kodu pośredniego było wygenerowanie jego reprezentacji w formie tekstowej przy użyciu funkcji \lstinline|LLVMDumpModule()|. Przekazuje ona na wyjście programu kompilatora odpowiednio sformatowaną reprezentację kodu pośredniego, którą można porównać z przygotowanym kodem testowym. Rysunek \ref{fig:ir-module-dump} przedstawia wygenerowaną reprezentację pośrednią wraz z testowanym kodem.
+
+\begin{figure}
+\centering
+	\includegraphics[width=1\textwidth]{graf/ir-module-dump.png}
+	\caption{Testowy kod źródłowy wraz z jego reprezentacją pośrednią wygenerowaną przez LLVM.}
+	\label{fig:ir-module-dump}
+\end{figure}
+
+\section{Poprawność kodu dla platformy wynikowej}
+W trakcie generowania kodu wynikowego z poziomu narzędzia LLVM otrzymywany jest kod w języku Assembly. Jest to ostateczna czytelna forma programu dostępna dla użytkownika kompilatora. Na tym etapie kompilacji możliwe było sprawdzenie poprawności pogramu pod względem zarządzania pamięcią i wykonywanych instrukcji na procesorze mikrokontrolera. Kod języka Assembly jest dużo bardziej szczegółowy niż reprezentacja pośrednia dostarczana z narzędzia LLVM. Rysunek \ref{fig:compiled-asm-vs-ir} przedstawia finalny kod wygenerwoany przez LLVM wraz z jego reprezentacją pośrednią. 
+
+\begin{figure}
+	\includegraphics[width=1\textwidth]{graf/compiled-asm-vs-ir.png}
+	\caption{Kod wynikowy w języku Assembly wraz z jego reprezentacją pośrednią.}
+	\label{fig:compiled-asm-vs-ir}
+\end{figure}
+
+Kod binarny dla platformy docelowej uzyskany zostaje poprzez kompilację przy użyciu narzędzia avr-gcc. Testowanie pliku binarnego wymaga użycia odpowiedniego narzędzia pozwalającego na odczytanie instrukcji zakodowanych w formacie zrozumiałym dla mikrokontrolera. Do tego zadania użyto narzędzie Cutter. Jego głównym zastosowaniem jest inżyniera wsteczna kodu binarnego. Oferuje ono także debugowanie skompilowanych programów poprzez wbudowany symulator. Instrukcje programu prezentowane są wraz z odpowiednimi komentarzami akcji. Możliwe jest też przedstawienie kodu jako graf przepływu (rysunek \ref{fig:cutter-graph}). Dzięki niemu możliwa była krokowa analiza zachowania programu wraz z podglądem pamięci i rejestrów symulowanego mikrokontrolera. Rysunek \ref{fig:cutter-debug} prezentuje proces debugowania kodu wynikowego w programie Cutter. 
+
+\begin{figure}
+	\includegraphics[width=1\textwidth]{graf/cutter-graph.png}
+	\caption{Kod wynikowy w formie grafu prepływu prezentowanego w programie Cutter.}
+	\label{fig:cutter-graph}
+\end{figure}
+
+\begin{figure}
+	\includegraphics[width=1\textwidth]{graf/cutter-debug.png}
+	\caption{Proces debugowania kodu wynikowego w programie Cutter.}
+	\label{fig:cutter-debug}
+\end{figure}
+
+Program wynikowy został także przetestowany na platformie docelowej skłającej się z płytki rozwojowej Arduino Mini Pro posiadającej mikrokontroler ATmega328P. Prezentowany program wymagał także skonstruowanie układu z diod, przełączników i odpowiednich komponentów pasywnych. Rysunki \ref{fig:schematic} i \ref{fig:electronics} prezentują schemat i układ na którym testowano program. Programowanie mikrokontrolera odbyło się przy użyciu programatora USBasp.
+
+\begin{figure}
+	\textit{Tutaj zostanie dodany schemat}
+	\caption{Schemat układu wykorzystanego do przetestowania programu.}
+	\label{fig:schematic}
+\end{figure}
+
+\begin{figure}
+	\textit{Tutaj zostanie dodane zdjęcie układu}
+	\caption{Układ przeznaczony do testowania programu.}
+	\label{fig:electronics}
 \end{figure}
 
 \begin{itemize}
