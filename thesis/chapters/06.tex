@@ -9,14 +9,16 @@ Weryfikacja pracy kompilatora pod kątem poprawności generowanego kody wynikowe
 \item weryfikacja poprawności generowanego kodu wynikowego dla docelowej platformy.
 \end{itemize}
 Ponadto kod wynikowy był testowany na płytce rozwojowej Arduino Pro Mini wyposażonej w mikrokontroler ATmega328P.
+
 \section{Kontrola analizatora leksykalnego i syntaktycznego}
 Wykorzystanie języka Java do budowy kompilatora pozwoliło na łatwe kontrolowanie poprawności implementacji poprzez uprzednie zdefiniowanie interfejsów i klas. W efekcie, przy użyciu błędnych klas w definicjach leksykalnych lub syntaktycznych, kompilator języka Java zgłaszał stosowne błędy o niezgodności typów. Podejście to było pomocne szczególnie w trakcie implementacji gramatyki języka, ze względu na wymóg stosowania ściśle wybranych klas w konstruktorach elementów drzewa syntaktycznego.
 
 Narzędzia JFlex i GNU Bison udostępniają dodatkowe techniki pomagające w rozwiązywaniu problemów. JFlex implementuje system kontroli poprawności składni zgłaszający odpowiednie wyjątki w przypadku błędów w definicji. Ponadto dzięki trybowi pracy niezależnej (ang. \english{standalone}), możliwe było zweryfikowanie poprawności generowanych tokenów poprzez podanie ich na wejściu programu.
 GNU Bison prócz mechanizmowi zgłaszania wyjątków w trakcie budowania kompilatora, pozwala także na wygenerowanie reprezentacji reguł języka w formie tekstowej. Dzięki temu możliwa była identyfikacja konflików w implementowanej gramatyce i ich naprawa. Reprezentacja tekstowa była przydatna w szczególności podczas naprawy błędów związanych ze złym priorytetem operacji arytmetycznych.
+\ksremark{W Bisonie da się sprawdzić, czy są konflikty w gramatyce. Sprawdził Pan to?}
 
 \section{Poprawność drzewa syntaktycznego}
-W celu sprawdzenia poprawności generowanego drzewa syntaktycznego przez analizator syntaktyczny wykorzystano wbudowany w środowisko programistyczne VSCodium debuger. Ze względu na obiektowe podejście do problemu budowy drzewa syntaktycznego, narzędzie to pozwoliło na łatwe przeglądanie aktualnie wygenerowanej struktury drzewa w formie listy. Proces kontroli drzewa syntaktycznego przedstawia rysunek \ref{fig:vscodium-debug-ast}. Proces ten wymagał napisania odpowiednich scenariuszy testowych i krokowe przejście narzędziem debugującym przez program kompilatora. W trakcie procesu weryfikowano zgodność struktur drzewa wraz ze stanami zmiennych wiążących między sobą elementy drzewa i poprawność zgłaszanych wyjątków w przypadku napotkania stanów niedowzowlonych.
+W celu sprawdzenia poprawności generowanego drzewa syntaktycznego przez analizator syntaktyczny wykorzystano wbudowany w środowisko programistyczne VSCodium debuger. Ze względu na obiektowe podejście do problemu budowy drzewa syntaktycznego, narzędzie to pozwoliło na łatwe przeglądanie aktualnie wygenerowanej struktury drzewa w formie listy. Proces kontroli drzewa syntaktycznego przedstawia rysunek \ref{fig:vscodium-debug-ast}. Proces ten wymagał napisania odpowiednich scenariuszy testowych i krokowe przejście narzędziem debugującym przez program kompilatora. W trakcie procesu weryfikowano zgodność struktur drzewa wraz ze stanami zmiennych wiążących między sobą elementy drzewa i poprawność zgłaszanych wyjątków w przypadku napotkania stanów niedozwolonych.
 
 \begin{figure}
 \centering
@@ -26,7 +28,7 @@ W celu sprawdzenia poprawności generowanego drzewa syntaktycznego przez analiza
 \end{figure}
 
 \section{Poprawność generowanego kodu pośredniego}
-Narzędzie LLVM posiada wbudowany system kontroli poprawności budowanej reprezentacji pośredniej. Odpowiada za to odpowiedna funkcje \lstinline|LLVMVerifyModule()| dostarczana przez API (ang. \english{application programming interface}), przedstawiona w kodzie źródłowym \ref{lst:ir-verify}. Wykorzystanie jej w połączeniu z funkcją \lstinline|LLVMDisposeMessage()| pozwala na weryfikację błędów w budowanej reprezentacji pośredniej. W szczególnych przypadkach, wymagane było krokowe przejście przez program narzędziem do debugowania, np. podczas przekazania nieodpowiedniej referencji typu zawartej w klasie \lstinline|LLVMTypeRef|, powodując tym samym błąd naruszenia ochrony pamięci.
+Narzędzie LLVM posiada wbudowany system kontroli poprawności budowanej reprezentacji pośredniej. Odpowiada za to odpowiednia funkcja \lstinline|LLVMVerifyModule()| dostarczana przez API (ang. \english{application programming interface}), przedstawiona w kodzie źródłowym \ref{lst:ir-verify}. Wykorzystanie jej w połączeniu z funkcją \lstinline|LLVMDisposeMessage()| pozwala na weryfikację błędów w budowanej reprezentacji pośredniej. W szczególnych przypadkach, wymagane było krokowe przejście przez program narzędziem do debugowania, np. podczas przekazania nieodpowiedniej referencji typu zawartej w klasie \lstinline|LLVMTypeRef|, powodując tym samym błąd naruszenia ochrony pamięci.
 
 \begin{lstlisting}[caption={Kod wywołujący kontrolę generowanej reprezentacji pośredniej.}, label={lst:ir-verify}]
 var moduleMessage = new PointerPointer<BytePointer>(1);
@@ -34,7 +36,7 @@ LLVMVerifyModule(module, 0, moduleMessage);
 LLVMDisposeMessage(moduleMessage.get(BytePointer.class)); 
 \end{lstlisting}
 
-Kolejnym mechanizmem pozwalającym na sprawdzenie poprawności kodu pośredniego było wygenerowanie jego reprezentacji w formie tekstowej przy użyciu funkcji \lstinline|LLVMDumpModule()|. Przekazuje ona na wyjście programu kompilatora odpowiednio sformatowaną reprezentację kodu pośredniego, którą można porównać z przygotowanym kodem testowym. Rysunek \ref{fig:ir-module-dump} przedstawia wygenerowaną reprezentację pośrednią wraz z testowanym kodem.
+Kolejnym mechanizmem pozwalającym na sprawdzenie poprawności kodu pośredniego było wygenerowanie jego reprezentacji w formie tekstowej przy użyciu funkcji \mbox{\lstinline|LLVMDumpModule()|.} Przekazuje ona na wyjście programu kompilatora odpowiednio sformatowaną reprezentację kodu pośredniego, którą można porównać z przygotowanym kodem testowym. Rysunek \ref{fig:ir-module-dump} przedstawia wygenerowaną reprezentację pośrednią wraz z testowanym kodem.
 
 \begin{figure}
 \centering
