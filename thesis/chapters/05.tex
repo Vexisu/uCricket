@@ -38,6 +38,8 @@ Do poprawnej pracy analizatora leksykalnego wymagane jest przesłonięcie dwóch
 Reguły leksykalne opisane zostały pod blokiem konfiguracyjnym. Kod źródłowy \ref{lst:lexer-reguły} przedstawia wybrane reguły definiujące tokeny jednoznakowe, tokeny wieloznakowe, słowa kluczowe i wyrażenia regularne. Na podstawie tych reguł generowane są tokeny przechwytywane przez analizator syntaktyczny.
 Generowanie kodu analizatora leksykalnego obydwa się poprzez wywołanie komendy \lstinline|./gradlew app:buildLexer| z poziomu głównego katalogu projektu kompilatora.
 
+\ksremark{Zgrabny przykład jednej reguły z flexa, np. linia 2 i 7 i tyle.}
+
 \section{Analiza syntaktyczna}
 GNU Bison \cytowanie\ jest zaawansowanym generatorem kodu analizatorów syntaktycznych. Wspiera on generowanie kodu analizatora do języków C, C++, D i Java poprzez dostarczenie pliku definicji syntaktycznych. Gramatyka dla narzędzia GNU Bison opisywana jest za pośrednictwem notacji Backusa-Naura (ang. \english{Backus-Naur Form}). Definicje syntaktyczne umieszczone są w pliku \lstinline|app/src/main/resources/UCricketParser.y|, natomiast wyjściowy kod analizatora generowany jest do pliku \lstinline|app/src/main/java/pl/polsl/student/maciwal866/ucricket/UCricketParser.java|.
 
@@ -65,14 +67,15 @@ Proces analizy semantycznej odbywa się na poziomie klas drzewa syntaktycznego i
 \item wiązanie pośrednie gałęzi pomiędzy strukturami definiującymi zmienne i funkcje w celu optymalizacji procesu kompilacji,
 \item dynamiczne wykluczenie fragmentów drzewa syntaktycznego nieużywanych przez program w celu minimalizacji czasu kompilacji.
 \end{itemize}
-W przypadku niespełnienia któregoś z wymagań w procesie wytwarzania kodu, analizator semantyczny zgłosi odpowiedni wyjątek i przerwie proces kompilacji. Kod źródłowy \ref{lst:resolver-function-call} przedstawia implementację metody \lstinline|resolve(Scope parent)| w klasie \mbox{\lstinline|FunctionCallExpression|.} W procesie prezentowanej metody wykonywane są:
+W przypadku niespełnienia któregoś z wymagań w procesie wytwarzania kodu, analizator semantyczny zgłosi odpowiedni wyjątek i przerwie proces kompilacji. Kod źródłowy na rys.  \ref{lst:resolver-function-call} przedstawia implementację metody \lstinline|resolve(Scope parent)| w klasie \mbox{\lstinline|FunctionCallExpression|.} W procesie prezentowanej metody wykonywane są:
 \begin{itemize}
 \item weryfikacja zgodności typów przekazywanych argumentów do wywołania funkcji,
 \item sprawdzenie istnienia i dowiązanie obiektu funkcji do wyrażenia wywołania,
 \item oznaczenie funkcji jako wywoływanej,
 \item zwrócenie typu danych zwracanego przez funkcję.
 \end{itemize}
-\begin{lstlisting}[caption={Metoda resolve(Scope parent) klasy FunctionCallExpression}, label={lst:resolver-function-call}]
+\begin{figure}
+\begin{lstlisting}
 @Override
 public Object resolve(Scoped parent) {
     var argumentTypes = new ValueType[0];
@@ -87,8 +90,11 @@ public Object resolve(Scoped parent) {
     return linkedFunction.getType();
 }
 \end{lstlisting}
+\caption{Metoda resolve(Scope parent) klasy FunctionCallExpression} \label{lst:resolver-function-call}
+\end{figure}
 
-\section{Generowanie kodu pośredniego}
+
+\section{Generowanie kodu pośredniego} \ksremark{odtąd}
 Generowanie kodu pośredniego odbywa się z wykorzystaniem biblioteki LLVM wraz z~definicjami JavaCPP Presets dla LLVM. W procesie uczestniczy metoda \lstinline|solve(LLVMBuilderRef builder, LLVMModuleRef module, LLVMContextRef context)| dziedziczona z interfejsów, odpowiednio dla instrukcji i wyrażeń, \lstinline|Statement| i \lstinline|Expression|. Podział ten jest spowodowany obecnością referencji do struktury danych \lstinline|LLVMValueRef| zwracanej przez wyrażenia. Kod źródłowy \ref{lst:ir-solve} prezentuje metodę \lstinline|solve()| definiującą reprezentację kodu pośredniego dla wywołania funkcji w języku uCricket. W tym procesie wyróżnia się:
 \begin{itemize}
 \item wyszukanie zdefiniowanej kodu pośredniego funkcji i oddelegowanie budowniczego w przypadku jej nieistnienia,

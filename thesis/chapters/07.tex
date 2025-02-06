@@ -1,6 +1,6 @@
 \chapter{Podsumowanie i wnioski}
 
-W ramach pracy dyplomowej powstał język programowania uCricket wraz z dedykowanym dla niego kompilatorem. Kompilator pozwala na kompilację kodu i uruchomienie go na platformie docelowej w postaci mikrokontrolera ATmega328P firmy Microchip.
+W ramach pracy dyplomowej powstał język programowania uCricket wraz z dedykowanym dla niego \ksremark{pełnym} kompilatorem. Kompilator pozwala na kompilację kodu i uruchomienie go na platformie docelowej w postaci mikrokontrolera ATmega328P firmy Microchip.
 Język programowania jest kompletny w sensie Turinga i pozwala programiście na:
 \begin{itemize}
 \item definiowanie funkcji,
@@ -13,22 +13,13 @@ Język programowania jest kompletny w sensie Turinga i pozwala programiście na:
 \item pracę z wieloma plikami źródłowymi
 \item komentowanie kodu.
 \end{itemize}
-Kompilar języka uCricket posiada podstawowe optymalizacje zmniejszające złożoność pamięciową i obliczeniową programu wynikowego. Wykonuje on analizę kodu i redukuje go o nieużywane funkcje i zmienne. 
+\ksremark{Kompilator składa się z analizatora leksyklanego, ... . Leksykalny – narzędzie, składniowy – jaki narzędzie (translacja sterowana składnia, LALR(1), ) i semantyczny (co sprawdza?). }
+
+Kompilator języka uCricket posiada podstawowe \ksremark{jakie?} optymalizacje zmniejszające złożoność pamięciową i obliczeniową programu wynikowego. Wykonuje on analizę kodu i redukuje go o nieużywane funkcje i zmienne. 
 Dzięki wykorzystaniu narzędzi JFlex i GNU Bison możliwe jest proste rozszerzanie funkcjonalności języka. Ponadto, narzędzie LLVM wykonuje dodatkowe optymalizację kodu, specyficzne dla platformy docelowej, i pozwala na dodanie kolejnych platform wspieranych przez kompilator.
 
 W dalszym toku pracy, projekt języka programowania może zostać rozwinięty o dodatkowe elementy gramatyczne, np.: wsparcie dla tablic, definicję kodu ewaluowane w ramach procesu kompilacji, dodatkowe operacje na wskaźnikach, wsparcie dla przekazywania referencji zmiennych między funkcjami.
 Funkcjonalność kompilatora może zostać poszerzona o wsparcie dla innych modeli mikrokontrolerów i architektur. W konsekwencji dalszego rozwoju narzędzi infrastruktury kompilatorów LLVM, istnieje możliwość rezygnacji z wykorzystania narzędzia avr-gcc i integrację dodatkowych funkcjonalności LLVM do kompilatora języka uCricket. W momencie powstawania pracy, nie powstały jeszcze definicję interfejsu programistycznego dla zbioru dodatkowych narzędzi infrastruktury LLVM.
 
 Proces projektowania oraz rozwoju języka programowania i kompilatora był procesem bardzo złożonym. Wymagał on zaznajomienia się z wieloma dziedzinami informatyki. Temat projektu poruszył zagadnienia języków formalnych, struktur danych, budowy kompilatorów, architektury komputerów, wraz z poddziedziną mikrokontrolerów i systemów wbudowanych, oraz inżynierii wstecznej. Nauczył on także sposobu organizacji pracy z długoplanowym myśleniem o konsekwencjach podejmowanych decyzji projektowych.
-
-
-
-\ksremark{Zawsze na końcu.}
-\ksremark{Pierwszy akapit: W ramach pracy dyplomowej powstało … Jakie cechy? Jakie własności? }
-
-\begin{itemize}
-\item uzyskane wyniki w świetle postawionych celów i zdefiniowanych wyżej wymagań
-\item kierunki ewentualnych danych prac (rozbudowa funkcjonalna …)
-\item problemy napotkane w trakcie pracy
-\end{itemize}
 
