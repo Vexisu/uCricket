@@ -1,6 +1,6 @@
 \chapter{Podsumowanie i wnioski}
-
-W ramach pracy dyplomowej powstał język programowania uCricket wraz z dedykowanym dla niego \ksremark{pełnym} kompilatorem. Kompilator pozwala na kompilację kodu i uruchomienie go na platformie docelowej w postaci mikrokontrolera ATmega328P firmy Microchip.
+\label{ch:07}
+W ramach pracy dyplomowej powstał język programowania uCricket wraz z dedykowanym dla niego pełnym kompilatorem. Kompilator pozwala na kompilację kodu i uruchomienie go na platformie docelowej w postaci mikrokontrolera ATmega328P firmy Microchip.
 Język programowania jest kompletny w sensie Turinga i pozwala programiście na:
 \begin{itemize}
 \item definiowanie funkcji,
@@ -13,9 +13,11 @@ Język programowania jest kompletny w sensie Turinga i pozwala programiście na:
 \item pracę z wieloma plikami źródłowymi
 \item komentowanie kodu.
 \end{itemize}
-\ksremark{Kompilator składa się z analizatora leksyklanego, ... . Leksykalny – narzędzie, składniowy – jaki narzędzie (translacja sterowana składnia, LALR(1), ) i semantyczny (co sprawdza?). }
 
-Kompilator języka uCricket posiada podstawowe \ksremark{jakie?} optymalizacje zmniejszające złożoność pamięciową i obliczeniową programu wynikowego. Wykonuje on analizę kodu i redukuje go o nieużywane funkcje i zmienne. 
+Kompilator składa się z analizatora leksykalnego, analizatora syntaktycznego, analizatora semantycznego i generatora kodu pośredniego.
+Analizator leksykalny dostarczany jest przez narzędzie JFlex. Przeproawdza on analizę leksykalną pliku wejściowego kodu źródłowego i generuje na ich podstawie tokeny. Analizator syntaktyczny opiera się na bibliotece GNU Bison, wykonując translację sterowaną składnią, wykorzystując metodę LALR(1). Analiza semantyczna została zaimplementowana w języku Java. Weryfikuje ona poprawność programu pod względem zgodności identyfikatorów i typów. Generator kodu pośredniego generuje kod programu możliwy do konwersji do pliku wykonywalnego dla mikrokontrolera ATmega328P.
+
+Kompilator języka uCricket posiada optymalizacje, implementowane w kodzie kompilatora, dotarczane przez LLVM oraz GCC, zmniejszające złożoność pamięciową i obliczeniową programu wynikowego. Wykonuje on analizę kodu i redukuje go o nieużywane funkcje i zmienne. 
 Dzięki wykorzystaniu narzędzi JFlex i GNU Bison możliwe jest proste rozszerzanie funkcjonalności języka. Ponadto, narzędzie LLVM wykonuje dodatkowe optymalizację kodu, specyficzne dla platformy docelowej, i pozwala na dodanie kolejnych platform wspieranych przez kompilator.
 
 W dalszym toku pracy, projekt języka programowania może zostać rozwinięty o dodatkowe elementy gramatyczne, np.: wsparcie dla tablic, definicję kodu ewaluowane w ramach procesu kompilacji, dodatkowe operacje na wskaźnikach, wsparcie dla przekazywania referencji zmiennych między funkcjami.

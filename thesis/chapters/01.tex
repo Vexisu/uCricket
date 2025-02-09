@@ -1,17 +1,22 @@
 \chapter{Wstęp}
 \label{ch:wstep}
 
-\ksremark{test bibliografii: \cite{bib:artykul,bib:internet,bib:konferencja,bib:ksiazka}.}
+Wytwarzanie oprogramowania dla systemów wbudowanych wymaga wiedzy specjalistycznej na wysokim poziomie. W przypadku tworzenia projektów amatorskich, przodującymi technologiami są płytki rozwojowe oparte o mikrokontrolery AVR serii ATmega. Ograniczenia tej architektury, tj. mała ilość pamięci operacyjnej i programowej, skłaniają programistów do korzystania z niskopoziomowych języków oraz bibliotek. Te czynniki są dużym utrudnieniem dla nowicjuszy, co w dużej mierze prowadzi do zniechęcenia do rozwoju w kierunku systemów wbudowanych, wydłuża czas realizacji projektów i zwiększa liczbę powstających błędów w wytwarzanym oprogramowaniu.
 
-Wytwarzanie oprogramowania dla systemów wbudowanych wymaga wiedzy specjalistycznej na wysokim poziomie. W przypadku tworzenia projektów amatorskich, przodującymi technologiami są płytki rozwojowe oparte o mikrokontrolery AVR serii ATMega. Ograniczenia tej architektury, tj. mała ilość pamięci operacyjnej i programowej, skłaniają programistów do korzystania z niskopoziomowych języków oraz bibliotek. Te czynniki są dużym utrudnieniem dla nowicjuszy, co w dużej mierze prowadzi do zniechęcenia do rozwoju w kierunku systemów wbudowanych, wydłuża czas realizacji projektów i zwiększa liczbę powstających błędów w wytwarzanym oprogramowaniu.
+Celem tej pracy jest opracowanie języka programowania wraz z kompilatorem. Język ma zalety języków wysokopoziomowych, ułatwiającego pracę z mikrokontrolerami AVR. Docelowym układem, dla którego generowany oraz testowany będzie kod wynikowy, jest mikrokontroler ATmega328P, znany szeroko z występowania w płytkach rozwojowych Arduino Uno.
 
-Celem tej pracy jest opracowanie języka programowania \ksremark{ wraz z kompilatorem. Język ma } zalety języków wysokopoziomowych, ułatwiającego pracę z mikrokontrolerami AVR. Docelowym układem, dla którego generowany oraz testowany będzie kod wynikowy, jest mikrokontroler ATMega328, znany szeroko z występowania w płytkach rozwojowych Arduino Uno. Ze względu na rozmiar rodziny mikrokontrolerów AVR, kompilator będzie umożliwiał wprowadzenie parametrów konfiguracyjnych, pozwalając tym samym na wsparcie dla większości członków tej rodziny mikrokontrolerów. 
+Język programowania uCricket będzie posiadał funkcjonalności znane z współcześnie wykorzystywanych języków programowania ułatwiających wytwarzanie oprogramowania dla systemów wbudowanych. Ponadto, ma on implementować mechanizmy zapobiegające występowaniu błędów w trakcie implementacji kodu, mające miejsce w przypadku użycia języków niskopoziomowych.
 
-\ksremark{Jakie cechy będzie miał język? Jak będzie zbudowany kompilator (3 analizatory), tył kompilator (optymalizacje)}
+Kompilator będzie zbudowany z następujących części:
+\begin{itemize}
+\item analizatora leksykalnego,
+\item analizatora syntaktycznego,
+\item analizatora semantycznego,
+\item generatora kodu pośredniego.
+\end{itemize}
+W procesie kompilacji kodu, kompilator będzie dokonywał stosownych optymalizacji, mających na celu redukcję złożoności pamięciowej i czasowej programów wynikowych.
 
-Opis rozdziałów będzie gotowy po bliższym przygotowaniu listy rozdziałów :)
-
-\ksremark{Praca składa się z następujących rozdziałów. Języki programowania dla mk  przybliza rozzdiał \ref{ch:02} ... }
+Praca dyplomowa składa się z następujących rozdziałów. Języki programowania dla mikrokontrolerów AVR \ref{ch:02} przybliża historię platformy AVR, prezentuje teraźniejsze wykorzystanie mikrokontrolerów w projektach hobbystycznych oraz omawia istniejące rozwiązania. Wymagania i narzędzia \ref{ch:03} przedstawia wymagania i założenia kierujące rozwojem projektu. Omawia także narzędzia wykorzystane przy implementacji i przeprowadzonych testach kompilatora. Specyfikacja zewnętrzna \ref{ch:04} prezentuje sposób użycia praktyczne wykorzystanie implementowanych przez kompilator funkcjonalności. Specyfikacja wewnętrzna \ref{ch:05} omawia zagadnienia teoretyczne występujące w procesie wytwarzania języków programowania oraz opisuje proces implementacji kompilatora języka uCricket. Weryfikacja i walidacja \ref{ch:06} przedstawia metodologię wykorzystaną podczas testowania poprawności pracy kompilatora. Podsumowanie i wnoski \ref{ch:07} podsumowuje wyniki pracy związanej z tematem pracy dyplomowej. Omawia także możliwe do objęcia cele związane z przyszłym rozwojem języka programowania i kompilatora.
 
 %\begin{itemize}
 %\item wprowadzenie w problem/zagadnienie

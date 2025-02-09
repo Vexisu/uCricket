@@ -1,12 +1,13 @@
 \chapter{Wymagania i narzędzia}
-\label{ch:wymagania-i-narzedzia}
+\label{ch:03}
+
 Zaprojektowanie języka programowania i kompilatora wymaga podjęcia odpowiednich decyzji projektowych i doboru adekwatnych narzędzi. Dotyczy to składni, sprawdzenia jej poprawności, transformacji do kodu maszynowego oraz ostatecznego tesowania w środowisku wirtualnym i docelowym.
 \section{Wymagania projektowe}
 
 Język programowania, będący tematem pracy, musi spełniać szereg założeń, pozwalających na wytwarzanie oprogramowania dla systemów wbudowanych z ograniczoną ilością zasobów pamięciowych i obliczeniowych. Ponadto język ma być zrozumiały dla początkujących programistów poprzez zastosowanie odpowiedniej semantyki i słów kluczowych.
 
 \subsection{Wymagania funkcjonalne}
-Spełnienie poniższych wymagań pozwoli na zaprojektowanie języka programowania, którego wykorzystanie będzie możliwe w budowie oprogramowania dla systemów wbudowanych. \ksremark{Wśród wymagań funkcjonalnych należy wymienić:}
+Spełnienie poniższych wymagań pozwoli na zaprojektowanie języka programowania, którego wykorzystanie będzie możliwe w budowie oprogramowania dla systemów wbudowanych. Wśród wymagań funkcjonalnych należy wymienić:
 \begin{itemize}
 \item kompilowalność do kodu maszynowego, specyficznego dla danej platformy,
 \item dostęp do sprzętowych zasobów niskiego poziomu np.: adresy bezpośrednie pamięci, wskaźniki, zapis w rejestrach,
@@ -27,12 +28,12 @@ Głownymi celami, którymi motywowany jest ten projekt są:
 \ksremark{Jak Pan zmierzy stopień spełnienia wymagań niefunkcjonalnych?}
 
 \subsection{Istniejące rozwiązania}
-Oficjalnie dostępne narzędzia dla mikrokontrolerów AVR, zapewniane przez firmę Microchip, pozwalają na programowanie w językach C, C++ i Assembly. Po mimo istnienia wspomnianych alternatyw, są one głównie stosowanymi narzędziami, \nocomma\ z powodu swojej dojrzałości.
+Oficjalnie dostępne narzędzia dla mikrokontrolerów AVR, zapewniane przez firmę Microchip, pozwalają na programowanie w językach C, C++ i Assembly. Po mimo istnienia wspomnianych alternatyw, są one głównie stosowanymi narzędziami z powodu swojej dojrzałości.
 Dzięki wykorzystaniu oficjalnej dystrybucji kompilatora GCC jako bazy, możliwe jest korzystanie z najnowszych standardów dostępnych w nim języków, wraz z identyczną składnią stosowaną w przypadku innych platform.
 
-Zestaw bibliotek \lstinline|avr-gcc| dostarcza najpotrzebniejszych definicji elemntów mikrokontrolerów, wraz z wyróżnieniem ich model. Przykładowo, plik nagłówkowy \lstinline|avr/io.h| zarządza makrodefinicjami dla portów wejścia/wyjścia różnych modeli mikrokontrolerów. W przypadku mikrokontrolera ATmega328P, zestaw makrodefinicji znajduje się w pliku \lstinline|avr/iom328p.h|. Zawiera on zgodne z oficjalną dokumentacją makrodefinicje adresów portów we/wy, odpowiadających im bitów, rejestrów dostępu do rozszerzeń sprzętowych takich jak: przerwań, zarządzalnych zegarów, konwerterów analogowo-cyfrowych, sprzętowych interfejsów SPI/UART/TWI i wiele innych.
+Zestaw bibliotek \lstinline|avr-gcc| dostarcza najpotrzebniejszych definicji elemntów mikrokontrolerów, wraz z wyróżnieniem ich model. Przykładowo, plik nagłówkowy \lstinline|avr/io.h| zarządza makrodefinicjami dla portów wejścia/wyjścia różnych modeli mikrokontrolerów. W przypadku mikrokontrolera ATmega328P, zestaw makrodefinicji znajduje się w pliku \lstinline|avr/iom328p.h|. Zawiera on zgodne z oficjalną dokumentacją makrodefinicje adresów portów we/wy, odpowiadających im bitów, rejestrów dostępu do rozszerzeń sprzętowych takich jak: przerwań, zarządzalnych zegarów, konwerterów analogowo-cyfrowych, sprzętowych interfejsów SPI/UART/TWI i wiele innych \cite{ATmega328P8bitAVR}.
 
-\ksremark{Coś jest nie tak z tym zdaniem $\to$} Przykładowym użyciem oficjalnej biblioteki jest zaprogramowanie programu włączającego korespondujący diod podpięte do rejestru~C względem przełączników na rejestrze~D \ksremark{(rys. \ref{fig:lst:1})}.
+Rysunek \ref{fig:lst:c-example} przedstawia przykładowy program włączający korespondujące diody podpięte do rejestru~C względem przełączników na rejestrze~D. Do implementacji tego programu wykorzystano plik nagłówkowy \lstinline|avr/io.h| dołączony do zbioru oficjalnych bibliotek dla mikrokontrolerów AVR.
 \begin{figure}
 \centering
 \begin{lstlisting}
@@ -47,60 +48,63 @@ int main(){
 	}
 }
 \end{lstlisting}
-\caption{Podpis do uzupełnienia.}
-\label{fig:lst:1}
+\caption{Przykładowy program w języku C, wykorzystujący plik nagłówkowy \lstinline|avr/io.h|.}
+\label{fig:lst:c-example}
 \end{figure}
 
 Możliwe jest także korzystanie w bibliotek dostarczanych przez Arduino. Wymaga to jednak odpowiedniej konfiguracji platformy docelowej i środowiska programistycznego.
 
 \subsection{Język uCricket}
-\ksremark{Tutaj pisze Pan o cechach swojego języka. Trzeba się tutaj bardziej pochwalić. Dodałem przykładowo subsubsekcje. Proszę zobaczyć, czy tak może być.}
 Język uCricket ma na celu zminimalizowanie popełnianych przez początkujących programistów błędów pojawiających się w trakcie wytwarzania oprogramowania poprzez zapewnienie stosownych mechanizmów prewencji. 
 \subsubsection{Ściślejsza kontrola typów}
 Jednym z takich mechanizmów jest dużo ściślejsza kontrola typów danych. Języki C/C++, w swoim  mechanizmie typowania, traktują wartości numeryczne i logiczne jako jeden typ, który można stosować zamiennie, co może prowadzić do niejasnego zachowania programu. 
-\ksremark{przykład}
+
+\begin{lstlisting}
+var<Integer> var1 = true; // Przypisanie wartosci boolowskiej do zmiennej liczbowej zlasza blad.
+var<Boolean> var2 = 1; // Przypisanie wartosci liczbowej do zmiennej boolowskiej zglasza blad.
+\end{lstlisting}
 \subsubsection{Zwiększenie czytelności języka}
-Czytelność języka, w porównaniu do oficjalnych rozwiązań, starano się także rozwiązać poprzez dodanie odpowiednich słów kluczowych, definiujących elementy złożone, w formie słów kluczowych, reprezentujących ich znaczenie:
+Czytelność języka, w porównaniu do oficjalnych rozwiązań, starano się także rozwiązać poprzez dodanie odpowiednich słów kluczowych, definiujących elementy złożone, w formie słów kluczowych, reprezentujących ich znaczenie (kod źródłowy na rys. \ref{fig:lst:ucricket-example}):
 \begin{itemize}
 \item \lstinline|scope| -- definicja odseparowanej przestrzeni nazw,
 \item \lstinline|func| -- definicja funkcji,
 \item \lstinline|var| -- definicja zmiennej,
 \item \lstinline|ptr| -- definicja wskaźnika.
 \end{itemize}
-\ksremark{przykład}
+
 \subsubsection{Przestrzenie nazw}
 Kod języka uCricket wymaga stosowania przestrzeni nazw, z myślą redukcji powtórzeń i konfliktów nazw, w szczególności przy dołączaniu kolejnych plików źródłowych. Zapewnia to większą elastyczność w nazywaniu elementów oraz ich separację poprzez dodanie warstwy abstrakcji. Użycie przestrzeni nazw nie wpływa na rozmiar kodu wynikowego.
 
-Poniżej zamieszczony zostaje \ksremark{Nie piszemy «poniżej», «powyżej», bo nie wiadomo, gdzie \LaTeX\ umieści rysunki, tabele, pseudokody itd. Dlatego będzie lepiej napisać: «Rys. \ref{fig:lst:2} przedstawia»} przykładowy program wraz z fragmentem biblioteki \lstinline|AvrIO.uchirp| dołączonej do projektu. Program włącza diody podłączone do rejestru C, kiedy zostaną wciśnięte korespondujące przyciski na porcie D.
+Rysunek \ref{fig:lst:ucricket-example} przykładowy program wraz z fragmentem biblioteki \lstinline|AvrIO.uchirp| dołączonej do projektu. Program włącza diody podłączone do rejestru C, kiedy zostaną wciśnięte korespondujące przyciski na porcie D.
 \begin{figure}
 \centering
 \begin{lstlisting}
 // lib/avr/AvrIO.uchirp
 scope AvrIO {
-    ptr<Byte> PINC <- 38;   @*\ksremark{Proszę skomentować.}*@
-    ptr<Byte> DDRC <- 39;   @*\ksremark{Proszę skomentować.}*@
-    ptr<Byte> PORTC <- 40;   @*\ksremark{Proszę skomentować.}*@
-    ptr<Byte> PIND <- 41;   @*\ksremark{Proszę skomentować.}*@
-    ptr<Byte> DDRD <- 42;   @*\ksremark{Proszę skomentować.}*@
-    ptr<Byte> PORTD <- 43;   @*\ksremark{Proszę skomentować.}*@
+    ptr<Byte> PINC <- 38; // Znacznik z przypisanym adresem rejestru PINC
+    ptr<Byte> DDRC <- 39; // Znacznik z przypisanym adresem rejestru DDRC
+    ptr<Byte> PORTC <- 40; // Znacznik z przypisanym adresem rejestru PORTC
+    ptr<Byte> PIND <- 41; // Znacznik z przypisanym adresem rejestru PIND
+    ptr<Byte> DDRD <- 42; // Znacznik z przypisanym adresem rejestru DDRD
+    ptr<Byte> PORTD <- 43; // Znacznik z przypisanym adresem rejestru PORTC
 }
 
 // main.uchirp
-import lib:avr:AvrIO;     @*\ksremark{Proszę skomentować.}*@
+import lib:avr:AvrIO; // Dolaczenie pliku zrodlowego lib/avr/AvrIO.uchirp
 
 scope Main {
 	func main() {
-		AvrIO:DDRC = 255;   @*\ksremark{Proszę skomentować.}*@
-		AvrIO:DDRD = 0;   @*\ksremark{Proszę skomentować.}*@
+		AvrIO:DDRC = 255; Zmiana kierunku pinow we/wy na wyjscie
+		AvrIO:DDRD = 0; Zmiana kierunku pinow we/wy na wejscie
 		while(true) 
         {
-			AvrIO:PORTC = AvrIO:PIND;	@*\ksremark{Proszę skomentować.}*@
+			AvrIO:PORTC = AvrIO:PIND; Przepisanie stanu pinow rejestru D do C
 		}
 	}
 }
 \end{lstlisting}
-\caption{podpis do uzupełnienia}
-\label{fig:lst:2}
+\caption{Przykładowy program w języku uCricket.}
+\label{fig:lst:ucricket-example}
 \end{figure}
 
 \section{Narzędzia}
@@ -108,14 +112,13 @@ scope Main {
 Do zaprojektowania i implementacji języka programowania uCricket wykorzystano następujące narzędzia:
 \begin{itemize}
 \item Java -- język programowania cechujący się obiektowością, czytelną składnią i zaawansowaną kontrolę typów, ułatwia on pracę z wieloma typami dziedziczącymi między sobą;
-\item JFlex -- narzędzie generujące kod analizatora leksykalnego w języku Java, pozwala na korzystanie z wyrażeń regularnych, specyfikacja leksykalna definiowana jest w oddzielnym pliku \cytowanie;
+\item JFlex -- narzędzie generujące kod analizatora leksykalnego w języku Java, pozwala na korzystanie z wyrażeń regularnych, specyfikacja leksykalna definiowana jest w oddzielnym pliku \cite{JFlexFeatures};
 \item GNU Bison -- zaawansowane narzędzie generujące kod analizatora składniowego na podstawie specyfikacji gramatycznej. Powszechnie wykorzystywany jako narzędzie pomocniczne w implmementacji kompilatorów. Posiada wsparcie dla języka Java;
-\item LLVM -- zestaw bibliotek i narzędzi pozwalających na generowanie kodu pośredniego poprzez udostępnione interfejsy programistyczne. Wspiera wiele platform, m.in: x86, ARM, PowerPC, AVR. Dostarcza także mechanizmy optymalizacji kodu wynikowego \cytowanie;
+\item LLVM -- zestaw bibliotek i narzędzi pozwalających na generowanie kodu pośredniego poprzez udostępnione interfejsy programistyczne. Wspiera wiele platform, m.in: x86, ARM, PowerPC, AVR. Dostarcza także mechanizmy optymalizacji kodu wynikowego \cite{LLVMCompilerInfrastructurea};
 \item JavaCPP Presets LLVM -- biblioteka-most udostępniająca interfejsy dla biblioteki LLVM języka C poprzez wykorzystanie JNI (Java Native Interface);
 \item avr-gcc -- kompilator języka C dla mikrokontrolerów AVR. Stosowany jest jako generator kodu maszynowego dla kodu generowanego przez LLVM;
 \item avrdude -- program pozwalający na programowanie mikrokontrolerów AVR;
 \item Cutter -- platforma do inżynierii wstecznej pomagająca w analizie wygenerowanego kodu maszynowego. Pracuje w oparciu o Rizin Framework;
-\item AVR Simulator -- symulator mikrokontrolera ATmega328P działający w przeglądarce;
 \item Arduino Pro Mini -- płytka rozwojowa z mikrokontrolerem ATmega328P;
 \item USBasp -- programator mikrokontrolerów AVR.
 \end{itemize}

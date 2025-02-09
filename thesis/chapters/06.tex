@@ -15,7 +15,7 @@ Wykorzystanie języka Java do budowy kompilatora pozwoliło na łatwe kontrolowa
 
 Narzędzia JFlex i GNU Bison udostępniają dodatkowe techniki pomagające w rozwiązywaniu problemów. JFlex implementuje system kontroli poprawności składni zgłaszający odpowiednie wyjątki w przypadku błędów w definicji. Ponadto dzięki trybowi pracy niezależnej (ang. \english{standalone}), możliwe było zweryfikowanie poprawności generowanych tokenów poprzez podanie ich na wejściu programu.
 GNU Bison prócz mechanizmowi zgłaszania wyjątków w trakcie budowania kompilatora, pozwala także na wygenerowanie reprezentacji reguł języka w formie tekstowej. Dzięki temu możliwa była identyfikacja konflików w implementowanej gramatyce i ich naprawa. Reprezentacja tekstowa była przydatna w szczególności podczas naprawy błędów związanych ze złym priorytetem operacji arytmetycznych.
-\ksremark{W Bisonie da się sprawdzić, czy są konflikty w gramatyce. Sprawdził Pan to?}
+\ksremark{W Bisonie da się sprawdzić, czy są konflikty w gramatyce. Sprawdził Pan to?} \textit{Tak}
 
 \section{Poprawność drzewa syntaktycznego}
 W celu sprawdzenia poprawności generowanego drzewa syntaktycznego przez analizator syntaktyczny wykorzystano wbudowany w środowisko programistyczne VSCodium debuger. Ze względu na obiektowe podejście do problemu budowy drzewa syntaktycznego, narzędzie to pozwoliło na łatwe przeglądanie aktualnie wygenerowanej struktury drzewa w formie listy. Proces kontroli drzewa syntaktycznego przedstawia rysunek \ref{fig:vscodium-debug-ast}. Proces ten wymagał napisania odpowiednich scenariuszy testowych i krokowe przejście narzędziem debugującym przez program kompilatora. W trakcie procesu weryfikowano zgodność struktur drzewa wraz ze stanami zmiennych wiążących między sobą elementy drzewa i poprawność zgłaszanych wyjątków w przypadku napotkania stanów niedozwolonych.
@@ -82,13 +82,13 @@ Program wynikowy został także przetestowany na platformie docelowej skłające
 	\label{fig:electronics}
 \end{figure}
 
-\begin{itemize}
-\item sposób testowania w ramach pracy (np. odniesienie do modelu V)
-\item organizacja eksperymentów
-\item przypadki testowe zakres testowania (pełny/niepełny)
-\item wykryte i usunięte błędy
-\item opcjonalnie wyniki badań eksperymentalnych
-\end{itemize}
+%\begin{itemize}
+%\item sposób testowania w ramach pracy (np. odniesienie do modelu V)
+%\item organizacja eksperymentów
+%\item przypadki testowe zakres testowania (pełny/niepełny)
+%\item wykryte i usunięte błędy
+%\item opcjonalnie wyniki badań eksperymentalnych
+%\end{itemize}
 
 %\begin{table}
 %\centering

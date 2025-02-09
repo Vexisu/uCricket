@@ -1,5 +1,6 @@
 \chapter{Źródła}
-\begin{lstlisting}[caption={Sekcja konfiguracyjna narzędzia JFlex}, label={lst:lexer-konfiguracja}]
+\begin{figure}
+\begin{lstlisting}
 %%
 %unicode
 %standalone
@@ -30,8 +31,12 @@ FLOAT = \d*\.\d+d
 
 %%
 \end{lstlisting}
+\caption{Sekcja konfiguracyjna narzędzia JFlex}
+\label{fig:lst:lexer-konfiguracja}
+\end{figure}
 
-\begin{lstlisting}[caption={Definicje reguł analizatora leksykalnego}, label={lst:lexer-reguły}]
+\begin{figure}
+\begin{lstlisting}
 /* reguly tokenow jednoznakowych */
 "+" {return '+';}
 "-" {return '-';}
@@ -56,8 +61,12 @@ func {return UCricketParser.Lexer.FUNC;}
     return UCricketParser.Lexer.INTEGER;
 }
 \end{lstlisting}
+\caption{Definicje reguł analizatora leksykalnego}
+\label{fig:lst:lexer-reguły}
+\end{figure}
 
-\begin{lstlisting}[caption={Definicja symboli nieterminalnych analizatora syntaktycznego}, label={lst:parser-nterms}]
+\begin{figure}
+\begin{lstlisting}
 %nterm <ValueType> returnedType
 %nterm <StatementChain> statements
 %nterm <Statement> statement
@@ -70,16 +79,24 @@ func {return UCricketParser.Lexer.FUNC;}
 %nterm <Scope.ScopeContent> scopeContent
 %nterm <Function.ArgumentChain> argumentChain
 \end{lstlisting}
+\caption{Definicja symboli nieterminalnych analizatora syntaktycznego}
+\label{fig:lst:parser-nterms}
+\end{figure}
 
-\begin{lstlisting}[caption={Definicja priorytetów operacji w analizatorze syntaktycznym}, label={lst:parser-priorytety}]
+\begin{figure}
+\begin{lstlisting}
 %left EQUAL_EQUAL BANG_EQUAL LESS_EQUAL GREATER_EQUAL '<' '>' 
 %left '&' '|' '^'
 %left '+' '-'
 %left '*' '/'
 %right ARITHM_NEGATION LOGICAL_NEGATION
 \end{lstlisting}
+\caption{Definicja priorytetów operacji w analizatorze syntaktycznym}
+\label{fig:lst:parser-priorytety}
+\end{figure}
 
-\begin{lstlisting}[caption={Przykładowy fragment gramatyki definiowanej w języku uCricket}, label={lst:parser-gramatyka}]
+\begin{figure}
+\begin{lstlisting}
 %%
 ...
 statements:
@@ -140,6 +157,9 @@ unary:
 ...
 %%
 \end{lstlisting}
+\caption{Przykładowy fragment gramatyki definiowanej w języku uCricket}
+\label{fig:lst:parser-gramatyka}
+\end{figure}
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
 % Pakiet minted wymaga odkomentowania w pliku config/settings.tex   %

@@ -1,6 +1,6 @@
 \chapter{Specyfikacja zewnętrzna}
 \label{ch:04}
-Języki programowania składają się z części abstrakcyjnej nazywanej semantyką oraz kompilatora. Semantyka opisuje \comma\ w jaki sposób należy pisać programy, natomiast kompilator zamienia program napisany w danym języku programowania na kod zrozumiały dla docelowej maszyny. \ksremark{Jeszcze gdzieś tutaj pojawia się gramatyka.}
+Języki programowania składają się z części abstrakcyjnych nazywanych semantyką i gramatyką, oraz kompilatora. Semantyka i gramatyka opisuje, w jaki sposób należy zgodne z wymaganiami programy, natomiast kompilator zamienia program napisany w danym języku programowania na kod zrozumiały dla docelowej maszyny.
 \section{Kompilator}
 Dla każdego języka programowania powstaje dedykowane narzędzie odpowiedzialne za interpretację, sprawdzenie poprawności i wygenerowanie kodu wynikowego programu napisanego przez programistę.
 \subsection{Wymagania}
@@ -19,7 +19,7 @@ Uruchomienie kompilatora odbywa się poprzez przekazanie maszynie wirtualnej pro
 \begin{lstlisting}
 java -jar uCricket.jar [glowny_plik_zrodlowy]
 \end{lstlisting}
-Kompilator zwraca w pliku \lstinline|output.s| \ksremark{Czy da się wygenerować plik o innej nazwie?} \textit{(Nie)} program w języku assembly. Do zbudowania pliku binarnego, wykorzystywany jest \lstinline|avr-gcc|. Poniższe polecenie generuje plik \lstinline|output.bin| przeznaczony dla mikrokontrolera ATmega328P.
+Kompilator zwraca w pliku \lstinline|output.s| program w języku assembly. Do zbudowania pliku binarnego, wykorzystywany jest \lstinline|avr-gcc|. Poniższe polecenie generuje plik \lstinline|output.bin| przeznaczony dla mikrokontrolera ATmega328P.
 \begin{lstlisting}
 avr-gcc -mmcu=atmega328p -o output.bin output.s
 \end{lstlisting}
@@ -27,34 +27,32 @@ W celu wygenerowania pliku przeznaczonego do programowania przez narzędzie \lst
 \begin{lstlisting}
 avr-objcopy -j .text -j .data -O ihex output.bin output.hex
 \end{lstlisting}
-Programowanie mikrokontrolera kodem wynikowym możliwe jest dzięki wykonaniu poniższej komendy. W danym przykładzie użyty został programator USBasp wraz z mikrokontrolerem ATmega328P.
+Programowanie mikrokontrolera kodem wynikowym możliwe jest dzięki wykonaniu poniższej komendy. W danym przykładzie użyty został programator USBasp wraz z mikrokontrolerem ATmega328P. W celu uzyskania uprawnień zapisu do pliku urządzenia programatora wymagana jest ich elewacja przy użyciu polecenia \lstinline|sudo|.
 \begin{lstlisting}
 sudo avrdude -p atmega328p -c usbasp -P usb -F -U flash:w:output.hex:i
 \end{lstlisting}
-\ksremark{Tak z ciekawości: to trzeba uruchamiać z sudo?}
-\textit{Tak, ze względu na uprawnienia zapisu do urządzeń w /dev.} \ksremark{Proszę to zatem napisać.}
 
 \section{Język programowania}
-Korzystanie z języków programowania wymaga znajomości ściśle zdefiniowanej semantyki oraz obsługiwanych typów danych i dozwolonych operatorów \ksremark{Jeszcze jest składnia.}. 
+Korzystanie z języków programowania wymaga znajomości ściśle zdefiniowanej semantyki i gramatyki oraz obsługiwanych typów danych i dozwolonych operatorów.
 \subsection{Konwencja nazewnicza identyfikatorów}
 Nazywanie elementów definiowanych przez użytkownika wymaga ścisłego używania nazw zgodnych z konwencją zapisu identyfikatorów. Identyfikatory przyjmują znaki alfanumeryczne, włącznie z dużymi i małymi literami, nie mogą zaczynać się cyfrą. Dana konwencja nazewnicza opisywana jest przez wyrażenie regularne \lstinline|[a-zA-Z][a-zA-Z0-9]*|.
 
 \subsection{Pliki źródłowe}
-Nazwy plików źródłowych muszą spełniać wymagania zapisu identyfikatorów. Nazwy te są wykorzystywane do identyfikacji plików źródłowych podczas dołączania źródeł między sobą i są niezależne od nazw przestrzeni (scopes \ksremark{ang. \english{scopes}}). Rozszerzeniem dla plików źródłowych jest \lstinline|.uchirp|.
+Nazwy plików źródłowych muszą spełniać wymagania zapisu identyfikatorów. Nazwy te są wykorzystywane do identyfikacji plików źródłowych podczas dołączania źródeł między sobą i są niezależne od nazw przestrzeni (ang. \english{scopes}). Rozszerzeniem dla plików źródłowych jest \lstinline|.uchirp|.
 
 \subsection{Typy danych}
-Język programowania wspiera kilka głównych typów danych wykorzystywanych w innych językach programowania. Typy danych muszą być ściśle definiowane w trakcie trakcie ich używania. W innym przypadku, kompilator przerwie proces kompilacji w trakcie analizy statycznej. Tabela \ref{tbl:typy-danych} przedstawia typy danych wspierane przez język programowania. \ksremark{Jakie są zakresy tych typów?}
+Język programowania wspiera kilka głównych typów danych wykorzystywanych w innych językach programowania. Typy danych muszą być ściśle definiowane w trakcie trakcie ich używania. W innym przypadku, kompilator przerwie proces kompilacji w trakcie analizy statycznej. Tabela \ref{tbl:typy-danych} przedstawia typy danych wspierane przez język programowania.
 
 \begin{table}
 \centering
 \caption{Typy danych obsługiwane przez język uCricket}
-\begin{tabular}{@{}llll@{}}
+\begin{tabular}{@{}lllll@{}}
 \toprule
-typ danych & słowa & definicja wartości & opis \\ \midrule
-Boolean \ksremark{lstinline dla typów danych} & 1 & true/false & \begin{tabular}[c]{@{}l@{}}przechowuje wartość logiczną.\\ wykorzystywany w instrukcjach warunkowych\\ i pętlach.\end{tabular} \\
-Byte & 1 & 1b, 127b & typ liczby całkowitej ośmiobitowej. \\
-Integer & 2 & 1, 32767 & typ liczby całkowitej szesnastobitowej. \\
-Float & 4 & 1.0, 123.456 & \begin{tabular}[c]{@{}l@{}}typ liczy zmienno-przecinkowej\\ trzydziestodwubitowej.\end{tabular} \\ \bottomrule
+typ danych & słowa & zakres & opis \\ \midrule
+\lstinline|Boolean| & 1 & true/false & \begin{tabular}[c]{@{}l@{}}przechowuje wartość logiczną.\\ wykorzystywany w instrukcjach\\ warunkowych i pętlach.\end{tabular} \\
+\lstinline|Byte| & 1 & [-127, 127] & typ liczby całkowitej ośmiobitowej. \\
+\lstinline|Integer| & 2 & [-32767, 32767] & typ liczby całkowitej szesnastobitowej. \\
+\lstinline|Float| & 4 & \begin{tabular}[c]{@{}l@{}}wg. standardu IEEE 754\\ dla czterech słów \cite{kahanIEEEStandard7541997}\end{tabular} & \begin{tabular}[c]{@{}l@{}}typ liczy zmienno-przecinkowej\\ trzydziestodwubitowej.\end{tabular} \\ \bottomrule
 \end{tabular}
 \label{tbl:typy-danych}
 \end{table}
@@ -62,7 +60,7 @@ Float & 4 & 1.0, 123.456 & \begin{tabular}[c]{@{}l@{}}typ liczy zmienno-przecink
 Zmienne mogą być definiowane jako globalne oraz lokalne w obszarze bloków funkcji, zmiennych i pętli . Typowanie zmiennych jest zawsze wymagane. Nie wymaga ono natomiast przypisania wartości. Definiowanie zmiennych odbywa się w następujący sposób:
 \begin{lstlisting}
 var<Boolean> boolValue = true;
-var<Byte> byteValue = 12b;   @*\ksremark{Co oznacza `b' po `12'?}*@
+var<Byte> byteValue = 12;
 var<Integer> unassignedIntValue;
 \end{lstlisting}
 W trakcie przypisywania wartości do zmiennej możliwe jest użycie wyrażenia arytmetyczno-logicznego. Pozwala to także na zmianę wartości zmiennej z użyciem jej wcześniejszej wartości.
@@ -71,7 +69,7 @@ var<Integer> i = 1;
 i = i + 1; // Inkrementacja wartosci zmiennej i
 \end{lstlisting}
 \subsubsection{Zakresy zmiennych}
-Pamięć alokowana przez zmienne jest zwalniana, gdy część wykonywana programu przesunie się poza klamry \ksremark{Może: po wyjściu z zakresu?}, np. po wyjściu z instrukcji warunkowej. Nie możliwe jest także odwoływanie się do zmiennych lokalnych wpisanych w klamry \ksremark{poza zakresem?}.
+Pamięć alokowana przez zmienne jest zwalniana, gdy część wykonywana programu przesunie się poza klamry, np. po wyjściu z zakresu instrukcji warunkowej. Nie możliwe jest także odwoływanie się do zmiennych lokalnych poza ich zakresem.
 \begin{lstlisting}
 if (true){
 	var<Integer> i = 0;
@@ -86,19 +84,19 @@ ptr<Integer> i = 0;
 i = i + 1;
 \end{lstlisting}
 Z perspektywy programisty operacje na wskaźnikach wyglądają tak samo jak operacje na zmiennych.
-\ksremark{Czy jest możliwe utworzenie drugiego wskaźnika do tego samego obszaru pamięci?}
+\ksremark{Czy jest możliwe utworzenie drugiego wskaźnika do tego samego obszaru pamięci?} \textit{(Tak)}
 
-Wskaźniki umożliwiają także na przypisanie oraz zmianę wartości bez alokacji pamięci właściwej. Wykorzystywany jest do tego operator \lstinline|<-| służący do przypisywania i zmiany adresów zmiennych wskaźnikowych. Poniższy przykład przedstawia przypisanie wartości do portów wejścia-wyjścia mikrokontrolera ATmega328P.
+Wskaźniki umożliwiają także na przypisanie oraz zmianę wartości bez alokacji pamięci właściwej. Wykorzystywany jest do tego operator \lstinline|<-| służący do przypisywania i zmiany adresów zmiennych wskaźnikowych. Poniższy przykład przedstawia przypisanie wartości do portów wejścia-wyjścia mikrokontrolera ATmega328P. Adresy dla portów B (\lstinline|PORTB|) i C (\lstinline|PORTC|) równe są ich lokalizacji w przestrzeni adresowej mikrokontrolera\cite{ATmega328P8bitAVR}.
 \begin{lstlisting}
-ptr<Byte> port <- 37; // Utworzenie wskaznika z adresem portu B @*\ksremark{37 oznacza port B? Trzeba to jawnie napisać. Podobnie niżej dla C.}*@
-port = 255; // Ustawienie wszystkich bitow na wartosc 1
-port <- 40; // Zmiana adresu na adres portu C
-port = 0; // Ustawienie wszystkich bitow na wartosc 0
+ptr<Byte> port <- 37; // Utworzenie wskaznika z adresem portu B.
+port = 255; // Ustawienie wszystkich bitow na wartosc 1.
+port <- 40; // Zmiana adresu na adres portu C.
+port = 0; // Ustawienie wszystkich bitow na wartosc 0.
 \end{lstlisting}
 Operator \lstinline|<-| może być wykorzystywany tylko ze wskaźnikami. Jest to spowodowane różnicami działania wskaźników i zmiennych. Wskaźniki używają adresów pośrednich, zmienne natomiast przechowują swoje wartości w adresach bezpośrednich generowanych w trakcie procesu kompilacji.
 
 \subsection{Operatory arytmetyczno-logiczne}
-Język programowania uCricket implementuje wiele operatorów aryt\-me\-ty\-cz\-no-lo\-gi\-cz\-nych. Tabela \ref{tbl:operatory-arytmetyczno-logiczne} opisuje zbór operatorów obsługiwanych przez język wraz z przyjmowanymi typami danych. Tabela \ref{tbl:priorytety-operatorow} zawiera hierarchię priorytetów operatorów arytmetyczno-logicznych (ang. \english{precedence}). \ksremark{Może połączyć tabele \ref{tbl:operatory-arytmetyczno-logiczne} i \ref{tbl:priorytety-operatorow}?}
+Język programowania uCricket implementuje wiele operatorów aryt\-me\-ty\-cz\-no-lo\-gi\-cz\-nych. Tabela \ref{tbl:operatory-arytmetyczno-logiczne} opisuje zbór operatorów obsługiwanych przez język wraz z przyjmowanymi typami danych. Tabela \ref{tbl:priorytety-operatorow} zawiera hierarchię priorytetów operatorów arytmetyczno-logicznych (ang. \english{precedence}). \ref{tbl:operatory-arytmetyczno-logiczne} i \ref{tbl:priorytety-operatorow}.
 
 \begin{table}
 \centering
@@ -146,7 +144,7 @@ priorytet & operatory & komentarz \\ \midrule
 Aby zapewnić możliwość łatwego i czytelnego definiowania zachowań programu, języki programowania implementują różnego sposoby definiowania kontroli przepływu. Język uCricket implementuje następujące instrukcje pozwalające na taką kontrolę.
 
 \subsubsection{Instrukcje warunkowe}
-Instrukcja warunkowa pozwala na separacje bloku kodu i nadanie mu warunku, który spowoduje jego wykonanie. Definicja funkcji warunkowej odbywa się poprzez użycie słowa kluczowego \lstinline|if|, nawiasów okrągłych obejmujących warunek i nawiasów klamrowych zawierających blok kodu. Warunek musi zwracać wartość typu boolowskiego. \ksremark{Czy jest else?} \textit{Nie}
+Instrukcja warunkowa pozwala na separacje bloku kodu i nadanie mu warunku, który spowoduje jego wykonanie. Definicja funkcji warunkowej odbywa się poprzez użycie słowa kluczowego \lstinline|if|, nawiasów okrągłych obejmujących warunek i nawiasów klamrowych zawierających blok kodu. Warunek musi zwracać wartość typu boolowskiego.
 \begin{lstlisting}
 if (true) {
 	// Code
@@ -177,7 +175,7 @@ func foo() {
 }
 \end{lstlisting}
 
-Funkcje mogą przyjmować argumenty. Wartości przekazywane do funkcji są kopiowane do nowych zmiennych, definiowanych w nawiasach okrągłych.
+Funkcje mogą przyjmować argumenty. Wartości przekazywane do funkcji są kopiowane do nowych zmiennych, definiowanych w nawiasach okrągłych. W przypadku przekazania do funkcji wskaźnika, przepisana zostanie wartość, na którą wskazuje wskaźnik.
 \begin{lstlisting}
 func foo(Byte byteBar, Integer intBar) {
 	// Code
@@ -190,8 +188,7 @@ func<Integer> add(Integer x, Integer y) {
 	return x + y;
 }
 \end{lstlisting}
-\ksremark{Czy istnieje przekazywanie wartości przez referencję?}
-\textit{Nie, ze względu na zmiany wziązane ze wskaźnikami.} \ksremark{To trzeba napisać jawnie.}
+
 \subsection{Przestrzenie nazw}
 Przestrzenie nazw pozwalają na separację funkcji i zmiennych globalnych w obrębie kodu. Ich stosowanie jest wymagane. Możliwe jest umieszczenie wielu przestrzeni nazw w jednym pliku źródłowym. Definiowanie przestrzeni nazw odbywa się w następujący sposób:
 \begin{lstlisting}
@@ -224,14 +221,14 @@ scope Aux {
 	}
 }
 \end{lstlisting}
-\ksremark{Można użyć przestrzeni nazw, która będzie zdefiniowana później?}
+\ksremark{Można użyć przestrzeni nazw, która będzie zdefiniowana później?} \textit{Tak}
 
 \subsection{Praca z wieloma plikami źródłowymi}
 Pliki źródłowe mogą być łączone między sobą poprzez użycie słowa kluczowego \lstinline|import|:
 \begin{lstlisting}
 import katalog1:katalog2:NazwaPliku;
 \end{lstlisting}
-Katalogi w składni instrukcji \lstinline|import| oddzielane są dwukropkami \ksremark{Dlaczego nie można użyć `/'?} \textit{Decyzja czysto projektowa dla spójności. Każdy element jest jakąś częścią w drzewie ($katalog:plik:Scope:zmiennaLubFunkcja$). \ksremark{Napisałbym to zatem, żeby było jasne, dlaczego tak jest.}} i muszą spełniać wymagania zapisu identyfikatorów. Nazwę pliku źródłowego należy przekazywać do instrukcji bez rozszerzenia, jest ono dodawane w trakcie skanowania plików źródłowych. 
+Katalogi w składni instrukcji \lstinline|import| oddzielane są dwukropkami i muszą spełniać wymagania zapisu identyfikatorów. Decyzję o zastąpieniu ukośnika występującą w składni drzewa katalogów podjęto w celu uspójnienia składni języka względem operatorów dostępu do przestrzeni nazw oraz zawartych w nich zmiennych i funkcji. Nazwę pliku źródłowego należy przekazywać do instrukcji bez rozszerzenia, jest ono dodawane w trakcie skanowania plików źródłowych. 
 
 \subsection{Komentarze}
 Dodawanie komentarzy do kodu odbywa się poprzez dodanie przed tekstem dwóch ukośników. Może on zostać dodany w dowolnym miejscu kodu. Komentarz kończy znak nowej linii.
