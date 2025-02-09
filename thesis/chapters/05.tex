@@ -1,12 +1,12 @@
 \chapter{Specyfikacja wewnętrzna}
 \label{ch:05}
-Kompilacja kodu podzielona jest na wiele etapów. Pozwala to na uproszenie skomplikowanych procesów i podzielenie ich odpowiedzialności. W skład procesów odbywających się w trakcie kompilacji wchodzą:
+Kompilacja kodu podzielona jest na wiele etapów. Pozwala to na uproszenie skomplikowanych procesów i podzielenie ich odpowiedzialności. W skład procesów odbywających się w trakcie kompilacji wchodzą \cite{Aho2022Kompilatory}:
 \begin{itemize}
 \item analiza
 \begin{itemize}
-\item analiza leksykalna -- podział kodu programu na tokeny na podstawie zdefiniowanej gramatyki leksykalnej\cite{appelModernCompilerImplementation2002},
-\item analiza syntaktyczna -- budowa drzewa składni abstracyjnej\cite{appelModernCompilerImplementation2002} (ang. \english{abstract syntax tree}) na podstawie gramatyki, poprzez konsumpcję tokenów\cite{appelModernCompilerImplementation2002},
-\item analiza semantyczna -- kontrola drzewa składni syntaktycznej pod kątem m.in.: spójności typów danych, dozwolonych operacji, zdefiniowanych funkcji i zmiennych\cite{nystromCraftingInterpreters2021},
+\item analiza leksykalna -- podział kodu programu na tokeny na podstawie zdefiniowanej gramatyki leksykalnej \cite{appelModernCompilerImplementation2002},
+\item analiza syntaktyczna -- budowa drzewa składni abstracyjnej \cite{appelModernCompilerImplementation2002} (ang. \english{abstract syntax tree}) na podstawie gramatyki, poprzez konsumpcję tokenów \cite{appelModernCompilerImplementation2002},
+\item analiza semantyczna -- kontrola drzewa składni syntaktycznej pod kątem m.in.: spójności typów danych, dozwolonych operacji, zdefiniowanych funkcji i zmiennych \cite{nystromCraftingInterpreters2021},
 \item generowanie kodu pośredniego -- zamiana drzewa syntaktycznego na uniwersalny kod pośredni,
 \end{itemize}
 \item synteza
@@ -43,7 +43,7 @@ Generowanie kodu analizatora leksykalnego obydwa się poprzez wywołanie komendy
 \end{lstlisting}
 
 \section{Analiza syntaktyczna}
-GNU Bison \cite{BisonGNUProject} jest zaawansowanym generatorem kodu analizatorów syntaktycznych. Wspiera on generowanie kodu analizatora do języków C, C++, D i Java poprzez dostarczenie pliku definicji syntaktycznych. Gramatyka dla narzędzia GNU Bison opisywana jest za pośrednictwem notacji Backusa-Naura (ang. \english{Backus-Naur Form}). Definicje syntaktyczne umieszczone są w pliku \lstinline|app/src/main/resources/UCricketParser.y|, natomiast wyjściowy kod analizatora generowany jest do pliku \lstinline|app/src/main/java/pl/polsl/student/maciwal866/ucricket/UCricketParser.java|.
+GNU Bison  \cite{BisonGNUProject} jest zaawansowanym generatorem kodu analizatorów syntaktycznych. Wspiera on generowanie kodu analizatora do języków C, C++, D i Java poprzez dostarczenie pliku definicji syntaktycznych. Gramatyka dla narzędzia GNU Bison opisywana jest za pośrednictwem notacji Backusa-Naura (ang. \english{Backus-Naur Form}). Definicje syntaktyczne umieszczone są w pliku \lstinline|app/src/main/resources/UCricketParser.y|, natomiast wyjściowy kod analizatora generowany jest do pliku \lstinline|app/src/main/java/pl/polsl/student/maciwal866/ucricket/UCricketParser.java|.
 
 Znacznik \lstinline|%token| odpowiada za definicję tokenów występujących w gramatyce. Tokeny te zwracane są w procesie analizy leksykalnej przez analizator leksykalny do analizatora syntaktycznego. Można je zaobserwować w specyfikacji leksykalnej, prezentowanej w kodzie źródłowym na rys. \ref{fig:lst:lexer-reguły}, w odwołaniach do interfejsu \lstinline|UCricketParser.Lexer|:
 \begin{lstlisting}
@@ -62,11 +62,11 @@ binary:
 
 W celu wygenerowania kodu analizatora dla języka, na podstawie istniejących definicji, należy użyć polecenia \lstinline|./gradlew app:buildParser|.
 
-GNU Bison dla przedstawionej konfiguracji generuje analizator LALR(1) (ang. \english{lookahead left-to-right rightmost (derivation)}). Jest to jeden z typów analizatorów o mniejszej złożoności pamięciowej i większej elastyczności \cite{baqaiComparisonParsingTechniques}.
+GNU Bison dla przedstawionej konfiguracji generuje analizator LALR(1) (ang. \english{lookahead left-to-right rightmost (derivation)}). Jest to jeden z typów analizatorów o mniejszej złożoności pamięciowej i większej elastyczności  \cite{baqaiComparisonParsingTechniques}.
 
 \section{Analiza semantyczna}
 
-Proces analizy semantycznej odbywa się na poziomie klas drzewa syntaktycznego implementowanych w języku Java. Do implementacji analizatora semantycznego wykorzystano wzorzec projektowy interpretera. Gałęzie drzewa syntaktycznego opierają się na dziedziczeniu odpowiednich interfejsów, które zwiększają ich funkcjonalność i definiują ich zachowanie. Interfejs \lstinline|ASTNode| określa, że dana klasa może być użyta jako gałąź struktury drzewa. Ponadto, klasy poddawane procesowi analizy semantycznej dziedziczą po interfejsie \lstinline|Resolvable|. Dostarcza on metodę \lstinline|resolve(Scope parent)| odpowiedzialną za proces analizy semantycznej. Zwraca ona także typ danych, zwracany przez wyrażenie, określany w trakcie analizy semantycznej. Rysunek \ref{fig:ast-uml} przedstawia graf dziedziczenia interfejsów i klas drzewa syntaktycznego. Proces analizy semantycznej odpowiada za:
+Proces analizy semantycznej odbywa się na poziomie klas drzewa syntaktycznego implementowanych w języku Java. Do implementacji analizatora semantycznego wykorzystano wzorzec projektowy interpretera. Gałęzie drzewa syntaktycznego opierają się na dziedziczeniu odpowiednich interfejsów, które zwiększają ich funkcjonalność i definiują ich zachowanie. Interfejs \lstinline|ASTNode| określa, że dana klasa może być użyta jako gałąź struktury drzewa. Ponadto, klasy poddawane procesowi analizy semantycznej dziedziczą po interfejsie \lstinline|Resolvable|. Dostarcza on metodę \lstinline|resolve(Scope parent)| odpowiedzialną za proces analizy semantycznej. Zwraca ona także typ danych, zwracany przez wyrażenie, określany w trakcie analizy semantycznej. Rysunek \ref{fig:ast-uml} przedstawia graf \ksremark{diagram} dziedziczenia interfejsów i klas drzewa syntaktycznego \ksremark{Z tego diagramu nie wynika, że mamy drzewo. Żeby było drzewo, któryś z elementów powinien mieć wskaźnik (referencję) na ASTNode (lub inną klasę / interfejs). Czyli powinna pojawić się agregacja. Czy jest klasa dla scope?}. Proces analizy semantycznej odpowiada za:
 \begin{itemize}
 \item sprawdzanie istnienia zmiennych, funkcji i przestrzeni nazw w przypadku ich wywoływania,
 \item weryfikację wolnych identyfikatorów w przypadku tworzenia zmiennych, funkcji i przestrzeni nazw,
@@ -133,6 +133,7 @@ W przypadku niespełnienia któregoś z wymagań w procesie wytwarzania kodu, an
 \caption{Graf dziedziczenia interfejsów i klas drzewa syntaktycznego.}
 \label{fig:ast-uml}
 \end{figure}
+\ksremark{Rys. \ref{fig:ast-uml}: graf → diagram.}
 
 \begin{figure}
 \begin{lstlisting}
