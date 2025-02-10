@@ -73,11 +73,11 @@ Ada, pomimo swojej niskiej popularności, posiada rozbudowane wsparcie dla mikro
 \subsection{Java i Python}
 Języki Python oraz Java nie są wykorzystywane w programowaniu mikrokontrolerów AVR. Pomimo przyjazności tych języków dla początkujących programistów i istnienia ich implementacji dla danej platformy, zasoby i architektura bardzo ograniczają wykorzystanie interpreterów i maszyn wirtualnych działających w czasie rzeczywistym. Wersje dla mikrokontrolerów AVR nie dostają już także aktualizacji.
 
-\section{Analiza języków programowania}
+\section{Kompilatory}
 Kompilatory są złożonymi systemami przeprowadzającymi tłumaczenie plików wejściowych z kodem źródłowym do kodu binarnego instrukcji wykonywanych przez platformę docelową.
 
 \subsection{Ramowa budowa kompilatora}
-Ze względu na poziom skomplikowania procesu kompilacji kodu, dzieli się go na mniejsze procesy. Najczęściej wyróżnianymi procesami są analiza leksykalna, analiza składniowa, analiza semantyczna, optymalizacja, generowanie kodu pośredniego, generowanie kodu wynikowego.
+Ze względu na poziom skomplikowania procesu kompilacji kodu, dzieli się go na mniejsze procesy. Najczęściej wyróżnianymi procesami są analiza leksykalna, analiza składniowa, analiza semantyczna, optymalizacja, generowanie kodu pośredniego, generowanie kodu wynikowego \cite{Aho2022Kompilatory}.
 \subsubsection{Przód kompilatora}
 Część przednia kompilatora jest elementem niezależnym od platformy docelowej. Definiuje ona składnię i zachowania związane z pisanym przez programistę kodem.
 

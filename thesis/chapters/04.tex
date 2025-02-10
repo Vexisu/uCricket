@@ -50,9 +50,9 @@ Język programowania wspiera kilka głównych typów danych wykorzystywanych w i
 \toprule
 typ danych & słowa & zakres & opis \\ \midrule
 \lstinline|Boolean| & 1 & true/false & \begin{tabular}[c]{@{}l@{}}przechowuje wartość logiczną.\\ wykorzystywany w instrukcjach\\ warunkowych i pętlach.\end{tabular} \\
-\lstinline|Byte| & 1 & [-127, 127] & typ liczby całkowitej ośmiobitowej. \\
-\lstinline|Integer| & 2 & [-32767, 32767] & typ liczby całkowitej szesnastobitowej. \\
-\lstinline|Float| & 4 & \begin{tabular}[c]{@{}l@{}}wg. standardu IEEE 754\\ dla czterech słów \cite{kahanIEEEStandard7541997}\end{tabular} & \begin{tabular}[c]{@{}l@{}}typ liczy zmienno-przecinkowej\\ trzydziestodwubitowej.\end{tabular} \\ \bottomrule
+\lstinline|Byte| & 1 & $[-127, 127]$ & typ liczby całkowitej ośmiobitowej. \\
+\lstinline|Integer| & 2 & $[-32767, 32767]$ & typ liczby całkowitej szesnastobitowej. \\
+\lstinline|Float| & 4 & \begin{tabular}[c]{@{}l@{}}wg standardu IEEE 754\\ dla czterech słów \cite{kahanIEEEStandard7541997}\end{tabular} & \begin{tabular}[c]{@{}l@{}}typ liczy zmienno-przecinkowej\\ trzydziestodwubitowej.\end{tabular} \\ \bottomrule
 \end{tabular}
 \label{tbl:typy-danych}
 \end{table}
@@ -143,7 +143,7 @@ priorytet & operatory & komentarz \\ \midrule
 Aby zapewnić możliwość łatwego i czytelnego definiowania zachowań programu, języki programowania implementują różnego sposoby definiowania kontroli przepływu. Język uCricket implementuje następujące instrukcje pozwalające na taką kontrolę.
 
 \subsubsection{Instrukcje warunkowe}
-Instrukcja warunkowa pozwala na separacje bloku kodu i nadanie mu warunku, który spowoduje jego wykonanie. Definicja funkcji warunkowej odbywa się poprzez użycie słowa kluczowego \lstinline|if|, nawiasów okrągłych obejmujących warunek i nawiasów klamrowych zawierających blok kodu. Warunek musi zwracać wartość typu boolowskiego.
+Instrukcja warunkowa pozwala na separacje bloku kodu i nadanie mu warunku, który spowoduje jego wykonanie. Definicja instrukcji warunkowej odbywa się poprzez użycie słowa kluczowego \lstinline|if|, nawiasów okrągłych obejmujących warunek i nawiasów klamrowych zawierających blok kodu. Warunek musi zwracać wartość typu boolowskiego.
 \begin{lstlisting}
 if (true) {
 	// Code
