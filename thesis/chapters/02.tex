@@ -99,8 +99,13 @@ Do narzędzi umożliwiających generowanie analizatorów wstępujących zalicza 
 Analiza semantyczna odpowiada za weryfikację poprawności semantycznej kodu źródłowego. Proces ten wykorzystuje translację sterowaną składnią. Proces ten może być wywoływany przez redukcje lub podczas przechodzenia przez drzewo syntaktyczne. W takcie weryfikacji sprawdzana jest między innymi poprawność wywoływanych funkcji, kompatybilność typów danych z wykonywanymi na nich operacjami, obecność i dostępność zmiennych.
 
 \subsubsection{Tył kompilatora}
-Tylnia część kompilatora jest ściśle związana z platformą docelową dla której kompilowany jest kod wynikowy. 
-\ksremark{AST → generowanie kodu, optymalizacje itd}
+Tylnia część kompilatora jest ściśle związana z platformą docelową dla której kompilowany jest kod wynikowy. W obrębie tej części kompilatora odbywają się procesy związane z generowaniem kodu pośredniego, optymalizacji i generowaniem kodu wynikowego.
+
+Generowanie kodu pośredniego polega na tłumaczeniu abstrakcyjnego drzewa syntaktycznego (ang. \english{abstract syntax tree}) na kod pośredni. Forma kodu pośredniego jest zbliżona strukturalnie do instrukcji wykonywanych przez platfomy docelowe. Kod pośredni może zostać zapisany w postaciach takich jak postać trójadresowa (ang. \english{three-address code}, postać ogólnych instrukcji (ang. \english{generic intermediate representation}) lub wirtualnu kod maszynowy (ang. \english{intermediate assembly}). Kod taki jest podatny na łatwą analizę i optymalizację.
+
+Proces optymalizacji poddaje kod pośredni modyfikacjom nie zmieniającym zachowania programu przy jednoczesnej redukcji jego złożoności. W trakcie procesu optymalizacji może zostać zmieniona kolejność wykonywania instrukcji, zredukowana ilość zbędnych operacji wraz z przeliczeniem wartości statycznych, wykluczenie nieużywanych fragmentów kodu.
+
+Ostatnim procesem w pracy kompilatora jest tłumaczenie kodu pośredniego do kodu maszynowego platformy docelowej. Kod docelowy przyjmuje formę kodu binarnego. Składa się on z instrukcji maszynowych, ściśle sprecyzowanych przez dokumentację architektury sprzętowej. W trakcie generowania kodu maszynowego mogą zostać zastosowane dodatkowe optymalizacje uwzględniające specyfikę platformy docelowej np.: zamiana grupy instrukcji na mniejszą ilość instrukcji złożonych, przesunięcie adresów alokacji zmiennych w celu wykorzystania szybszej adresacji pośredniej.
 
 %\begin{itemize}
 %\item sformułowanie problemu
