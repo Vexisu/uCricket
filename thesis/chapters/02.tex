@@ -73,22 +73,33 @@ Ada, pomimo swojej niskiej popularności, posiada rozbudowane wsparcie dla mikro
 \subsection{Java i Python}
 Języki Python oraz Java nie są wykorzystywane w programowaniu mikrokontrolerów AVR. Pomimo przyjazności tych języków dla początkujących programistów i istnienia ich implementacji dla danej platformy, zasoby i architektura bardzo ograniczają wykorzystanie interpreterów i maszyn wirtualnych działających w czasie rzeczywistym. Wersje dla mikrokontrolerów AVR nie dostają już także aktualizacji.
 
-\subsection{Analiza języków programowania}
-
-
-\ksremark{}
+\section{Analiza języków programowania}
+Kompilatory są złożonymi systemami przeprowadzającymi tłumaczenie plików wejściowych z kodem źródłowym do kodu binarnego instrukcji wykonywanych przez platformę docelową.
 
 \subsection{Ramowa budowa kompilatora}
-\ksremark{Jak jest zbudowany kompilator?}
-subsection{Przód kompilatora}
-subsection{analiza leksykalna}
-\ksremark{Po co? Jakie algorytmy? regex, na podstawie których tworzonych jest automat skończony (niedeterministyczny lub deterministyczny) Jaki narzędzia?  flex, jflex ...  }
-subsection{Analiza składniowa}
-\ksremark{Po co? Jakie algorytmy? analizatory wstępujące LALR(1), SLR, kanoniczny LR(1); analizator zstępujący LL(1)  Jaki narzędzia? bison, ... }
-subsection{Analiza semantyczna}
-translacja sterowana składnią   redukcja wywołuje akcję semantyczną
+Ze względu na poziom skomplikowania procesu kompilacji kodu, dzieli się go na mniejsze procesy. Najczęściej wyróżnianymi procesami są analiza leksykalna, analiza składniowa, analiza semantyczna, optymalizacja, generowanie kodu pośredniego, generowanie kodu wynikowego.
+\subsubsection{Przód kompilatora}
+Część przednia kompilatora jest elementem niezależnym od platformy docelowej. Definiuje ona składnię i zachowania związane z pisanym przez programistę kodem.
 
-subsection{Tył kompilatora}
+Pierwszym procesem wykonywanym po uruchomieniu kompilatora jest analiza leksykalna. Dzieli on kod źródłowy na zbiory znaków zwane leksemami, a następnie kategoryzuje je w zależności od ich znaczenia np. identyfikatory, słowa kluczowe, dane liczbowe. W wyniku kategoryzacji otrzymywane są tokeny. Budowanie definicji leksykalnej odbywa się poprzez wyznaczenie pojedyńczych leksemów lub zdefiniowanie wyrażenia regularnego. Efektem definicji jest wygenerowanie niedeterministycznego lub deterministrycznego automatu skończonego. Powstało wiele implementacji narzędzi odpowedzialnych za budowę analizatorów leksykalnych takie jak lex, flex, jflex.
+
+Proces analizy składniowej odbywa się poprzez konsumpcję tokenów wygenerowanych przez analizator leksykalny, w wyniku czego budowane jest drzewo syntaktyczne. Analizatory składniowe mogą być zbudowane w oparciu o algorytmy wstępujące i zstępujące. Do rodziny algorytmów wstępujących zaliczamy:
+\begin{itemize}
+\item kanoniczny LR(1) (ang. \english{canonical RL, CLR}) -- algorytm kanoniczny od lewej do prawej z odwróconym prawostronnie wyprowadzeniem (ang. \english{canonical left-to-right, rightmost derivation in reverse}),
+\item uproszczony LR(1) (ang. \english{simple LR, SLR}) -- uproszczony algorytm od lewej do prawej z odwróconym prawostronnie wyprowadzeniem (ang. \english{simple left-to-right, rightmost derivation in reverse}),
+\item LALR(1) -- algorytm z wyprzedzeniem od lewej do prawej z prawostronnym rozwinięciem (ang. \english{look-ahead left-to-right rightmost (deriviation)}).
+\end{itemize}
+W rodzinie algorytmów zstępujących znajdują się:
+\begin{itemize}
+\item zstępowanie rekurencyjne (ang. \english{recursive descent}),
+\item LL(1) -- algorytm od lewej do prawej z lewostronnym wyprowadzeniem (ang. \english{left-to-right leftmost (derivation)}).
+\end{itemize}
+Do narzędzi umożliwiających generowanie analizatorów wstępujących zalicza się yacc, hyacc, GNU Bison. Wygeneowanie analizatora zstępującego możliwe jest z wykorzystaniem narzędzia ANTLR.
+
+Analiza semantyczna odpowiada za weryfikację poprawności semantycznej kodu źródłowego. Proces ten wykorzystuje translację sterowaną składnią. Proces ten może być wywoływany przez redukcje lub podczas przechodzenia przez drzewo syntaktyczne. W takcie weryfikacji sprawdzana jest między innymi poprawność wywoływanych funkcji, kompatybilność typów danych z wykonywanymi na nich operacjami, obecność i dostępność zmiennych.
+
+\subsubsection{Tył kompilatora}
+Tylnia część kompilatora jest ściśle związana z platformą docelową dla której kompilowany jest kod wynikowy. 
 \ksremark{AST → generowanie kodu, optymalizacje itd}
 
 %\begin{itemize}
