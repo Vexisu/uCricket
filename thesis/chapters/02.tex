@@ -56,7 +56,18 @@ Wraz ze wzrostem popularności mikrokontrolerów AVR powstały także alternatyw
 \subsection{C/C++}
 Głównie stosowanym językiem podczas wytwarzania oprogramowania dla mikrokontrolerów AVR jest język C ze względu na dostępność bibliotek oraz mały i szybki kod wynikowy. Język C++, ze względu na swoją budowę i skomplikowanie, jest wykorzystywany dużo rzadziej. Wymaga także większej ilości zasobów do pracy w porównaniu do C. C++ pozwala na korzystanie z bibliotek napisanych dla języka C oraz stosowanie technik programowania obiektowego.
 \subsection{Rust}
-Rosnącą popularność w ostatnich latach zdobywa język Rust \cite{gasibaThinkThisBeginning2023}. Zawdzięcza on ją zaawansowanym technikom zapobiegania występowania problemów, jakie mogą powstać w trakcie zarządzania pamięcią i obsługi wielowątkowości, oraz swojej wydajności. Wprowadza on także wiele nietypowych rozwiązań w implementacji kodu w postaci lukru składniowego (ang. \english{syntactic sugar}), co może okazać się utrudnieniem dla osób początkujących \ksremark{Może jakiś przykład?}. Początkowo pierwsza implementacja języka Rust i bibliotek dla mikrokontrolerów AVR była rozwijana jako oddzielny projekt pod nazwą AVR-Rust \cite{AvrrustRustlegacyforkDeprecated}. Z czasem jednak baza kompilatora została włączona w główny kompilator \cite{RFCMergingAvrrust}.
+Rosnącą popularność w ostatnich latach zdobywa język Rust \cite{gasibaThinkThisBeginning2023}. Zawdzięcza on ją zaawansowanym technikom zapobiegania występowania problemów, jakie mogą powstać w trakcie zarządzania pamięcią i obsługi wielowątkowości, oraz swojej wydajności. Wprowadza on także wiele nietypowych rozwiązań w implementacji kodu w postaci lukru składniowego (ang. \english{syntactic sugar}), co może okazać się utrudnieniem dla osób początkujących. Przykładowym zachowaniem języka Rust, które może powodować problemy u początkujących programistów jest definiowanie funkcji zwracającej wartości. Określenie zwracanej wartości odbywa się poprzez usunięcie średnika znajdującego się na końcu instrukcji, zamieniając je na wyrażenie\cite{rustFunctions} (kod źródłowy na rys. \ref{fig:lst:rust-fn}). Początkowo pierwsza implementacja języka Rust i bibliotek dla mikrokontrolerów AVR była rozwijana jako oddzielny projekt pod nazwą AVR-Rust \cite{AvrrustRustlegacyforkDeprecated}. Z czasem jednak baza kompilatora została włączona w główny kompilator \cite{RFCMergingAvrrust}.
+
+\begin{figure}
+\begin{lstlisting}
+fn sum(x: i32, y: i32) -> i32 {
+	x + y // Dodanie srednika spowoduje blad kompilacji.
+}
+\end{lstlisting}
+\caption{Funkcja w języku Rust zwracająca sumę z dwóch zmiennych.}
+\label{fig:lst:rust-fn}
+\end{figure}
+
 \subsection{Ada}
 Ada, pomimo swojej niskiej popularności, posiada rozbudowane wsparcie dla mikrokontrolerów AVR poprzez zestaw bibliotek AVR-Ada \cite{AVRAdaWikiHome}. Wsparcie języka Ada dostarczane jest poprzez integrację z GNU GCC. Dziś język ten nie cieszy się wysoką popularnością \cite{SOBRAL201930Y}. Może to być szczególnym utrudnieniem dla początkujących programistów, dla których znalezienie aktualnych zasobów pozwalających na naukę programowania danej platformy jest bardzo trudne.
 \subsection{Java i Python}

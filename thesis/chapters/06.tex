@@ -14,8 +14,7 @@ Ponadto kod wynikowy był testowany na płytce rozwojowej Arduino Pro Mini wypos
 Wykorzystanie języka Java do budowy kompilatora pozwoliło na łatwe kontrolowanie poprawności implementacji poprzez uprzednie zdefiniowanie interfejsów i klas. W efekcie, przy użyciu błędnych klas w definicjach leksykalnych lub syntaktycznych, kompilator języka Java zgłaszał stosowne błędy o niezgodności typów. Podejście to było pomocne szczególnie w trakcie implementacji gramatyki języka, ze względu na wymóg stosowania ściśle wybranych klas w konstruktorach elementów drzewa syntaktycznego.
 
 Narzędzia JFlex i GNU Bison udostępniają dodatkowe techniki pomagające w rozwiązywaniu problemów. JFlex implementuje system kontroli poprawności składni zgłaszający odpowiednie wyjątki w przypadku błędów w definicji. Ponadto dzięki trybowi pracy niezależnej (ang. \english{standalone}), możliwe było zweryfikowanie poprawności generowanych tokenów poprzez podanie ich na wejściu programu.
-GNU Bison prócz mechanizmowi zgłaszania wyjątków w trakcie budowania kompilatora, pozwala także na wygenerowanie reprezentacji reguł języka w formie tekstowej. Dzięki temu możliwa była identyfikacja konfliktów w implementowanej gramatyce i ich naprawa. Reprezentacja tekstowa była przydatna w szczególności podczas naprawy błędów związanych ze złym priorytetem operacji arytmetycznych.
-\ksremark{W Bisonie da się sprawdzić, czy są konflikty w gramatyce. Sprawdził Pan to?} \textit{Tak} \ksremark{Jaki jest wynik? Są, nie ma?}
+GNU Bison prócz mechanizmowi zgłaszania wyjątków w trakcie budowania kompilatora, pozwala także na wygenerowanie reprezentacji reguł języka w formie tekstowej. Dzięki temu możliwa była identyfikacja konfliktów w implementowanej gramatyce i ich naprawa. Reprezentacja tekstowa była przydatna w szczególności podczas naprawy błędów związanych ze złym priorytetem operacji arytmetycznych. Wszystkie konflikty w gramatyce zostały rozwiązane.
 
 \section{Poprawność drzewa syntaktycznego}
 W celu sprawdzenia poprawności generowanego drzewa syntaktycznego przez analizator syntaktyczny wykorzystano wbudowany w środowisko programistyczne VSCodium debuger. Ze względu na obiektowe podejście do problemu budowy drzewa syntaktycznego, narzędzie to pozwoliło na łatwe przeglądanie aktualnie wygenerowanej struktury drzewa w formie listy. Proces kontroli drzewa syntaktycznego przedstawia rysunek \ref{fig:vscodium-debug-ast}. Proces ten wymagał napisania odpowiednich scenariuszy testowych i krokowe przejście narzędziem debugującym przez program kompilatora. W trakcie procesu weryfikowano zgodność struktur drzewa wraz ze stanami zmiennych wiążących między sobą elementy drzewa i poprawność zgłaszanych wyjątków w przypadku napotkania stanów niedozwolonych.
@@ -68,16 +67,16 @@ Kod binarny dla platformy docelowej uzyskany zostaje poprzez kompilację przy u�
 	\label{fig:cutter-debug}
 \end{figure}
 
-Program wynikowy został także przetestowany na platformie docelowej skłającej się z~płytki rozwojowej Arduino Mini Pro posiadającej mikrokontroler ATmega328P. Prezentowany program wymagał także skonstruowanie układu z diod, przełączników i odpowiednich komponentów pasywnych. Rysunki \ref{fig:schematic} i \ref{fig:electronics} prezentują schemat i układ \comma\ na którym testowano program. Programowanie mikrokontrolera odbyło się przy użyciu programatora USBasp.
+Program wynikowy został także przetestowany na platformie docelowej skłającej się z~płytki rozwojowej Arduino Mini Pro posiadającej mikrokontroler ATmega328P. Prezentowany program wymagał także skonstruowanie układu z diod, przełączników i odpowiednich komponentów pasywnych. Rysunki \ref{fig:schematic} i \ref{fig:electronics} prezentują schemat i układ, na którym testowano program. Programowanie mikrokontrolera odbyło się przy użyciu programatora USBasp.
 
 \begin{figure}
-	\textit{Tutaj zostanie dodany schemat \ksremark{brak rysunku}}
+	\includegraphics[width=1\textwidth]{graf/schematic.png}
 	\caption{Schemat układu wykorzystanego do przetestowania programu.}
 	\label{fig:schematic}
 \end{figure}
 
 \begin{figure}
-	\textit{Tutaj zostanie dodane zdjęcie układu  \ksremark{brak rysunku}}
+	\includegraphics[width=1\textwidth]{graf/circuit.jpg}
 	\caption{Układ przeznaczony do testowania programu.}
 	\label{fig:electronics}
 \end{figure}

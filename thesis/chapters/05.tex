@@ -62,11 +62,11 @@ binary:
 
 W celu wygenerowania kodu analizatora dla języka, na podstawie istniejących definicji, należy użyć polecenia \lstinline|./gradlew app:buildParser|.
 
-GNU Bison dla przedstawionej konfiguracji generuje analizator LALR(1) (ang. \english{lookahead left-to-right rightmost (derivation)}). Jest to jeden z typów analizatorów o mniejszej złożoności pamięciowej i większej elastyczności  \cite{baqaiComparisonParsingTechniques}.
+GNU Bison dla przedstawionej konfiguracji generuje analizator LALR(1) (ang. \english{look-ahead left-to-right rightmost (derivation)}). Jest to jeden z typów analizatorów o mniejszej złożoności pamięciowej i większej elastyczności  \cite{baqaiComparisonParsingTechniques}.
 
 \section{Analiza semantyczna}
 
-Proces analizy semantycznej odbywa się na poziomie klas drzewa syntaktycznego implementowanych w języku Java. Do implementacji analizatora semantycznego wykorzystano wzorzec projektowy interpretera. Gałęzie drzewa syntaktycznego opierają się na dziedziczeniu odpowiednich interfejsów, które zwiększają ich funkcjonalność i definiują ich zachowanie. Interfejs \lstinline|ASTNode| określa, że dana klasa może być użyta jako gałąź struktury drzewa. Ponadto, klasy poddawane procesowi analizy semantycznej dziedziczą po interfejsie \lstinline|Resolvable|. Dostarcza on metodę \lstinline|resolve(Scope parent)| odpowiedzialną za proces analizy semantycznej. Zwraca ona także typ danych, zwracany przez wyrażenie, określany w trakcie analizy semantycznej. Rysunek \ref{fig:ast-uml} przedstawia graf \ksremark{diagram} dziedziczenia interfejsów i klas drzewa syntaktycznego \ksremark{Z tego diagramu nie wynika, że mamy drzewo. Żeby było drzewo, któryś z elementów powinien mieć wskaźnik (referencję) na ASTNode (lub inną klasę / interfejs). Czyli powinna pojawić się agregacja. Czy jest klasa dla scope?}. Proces analizy semantycznej odpowiada za:
+Proces analizy semantycznej odbywa się na poziomie klas drzewa syntaktycznego implementowanych w języku Java. Do implementacji analizatora semantycznego wykorzystano wzorzec projektowy interpretera. Gałęzie drzewa syntaktycznego opierają się na dziedziczeniu odpowiednich interfejsów, które zwiększają ich funkcjonalność i definiują ich zachowanie. Interfejs \lstinline|ASTNode| określa, że dana klasa może być użyta jako gałąź struktury drzewa. Ponadto, klasy poddawane procesowi analizy semantycznej dziedziczą po interfejsie \lstinline|Resolvable|. Dostarcza on metodę \lstinline|resolve(Scoped parent)| odpowiedzialną za proces analizy semantycznej. Zwraca ona także typ danych, zwracany przez wyrażenie, określany w trakcie analizy semantycznej. Rysunek \ref{fig:ast-uml} przedstawia diagram dziedziczenia interfejsów i klas drzewa syntaktycznego \ksremark{Z tego diagramu nie wynika, że mamy drzewo. Żeby było drzewo, któryś z elementów powinien mieć wskaźnik (referencję) na ASTNode (lub inną klasę / interfejs). Czyli powinna pojawić się agregacja. Czy jest klasa dla scope?}. Proces analizy semantycznej odpowiada za:
 \begin{itemize}
 \item sprawdzanie istnienia zmiennych, funkcji i przestrzeni nazw w przypadku ich wywoływania,
 \item weryfikację wolnych identyfikatorów w przypadku tworzenia zmiennych, funkcji i przestrzeni nazw,
@@ -86,6 +86,18 @@ W przypadku niespełnienia któregoś z wymagań w procesie wytwarzania kodu, an
 \centering
 \scalebox{0.7}{%
 \begin{tikzpicture}
+\begin{interface}{Scoped}{-9, 9}
+\operation{getParent() : Scoped}
+\operation{getPath() : String}
+\operation{getVariable(name : String) : VariableStatement}
+\operation{hasVariable(name : String) : boolean}
+\operation{hasResolvedVariable(name : String) : boolean}
+\operation{addVariable(statement : VariableStatement)}
+\operation{getFunction(name : String, argumentTypes : ValueType[]) : Function}
+\operation{hasFunction(name : String, argumentTypes : ValueType[]) : boolean}
+\operation{hasResolvedFunction(name : String, argumentTypes : ValueType[]) : boolean}
+\end{interface}
+
 \begin{interface}{Resolvable}{0,3}
 \operation{resolve(parent : Scoped) : Object}
 \end{interface}
@@ -106,34 +118,46 @@ W przypadku niespełnienia któregoś z wymagań w procesie wytwarzania kodu, an
 
 \begin{class}{IfStatement}{-9, -5}
 \implement{Statement}
+\implement{Scoped}
+\attribute{condition : Expression}
+\attribute{statements : StatementChain}
 \end{class}
 
-\begin{class}{AssignmentStatement}{-6, -7}
+\begin{class}{StatementChain}{-6, -9}
 \implement{Statement}
+\attribute{item : Statement}
+\attribute{next : StatementChain}
 \end{class}
 
-\begin{class}{PointerStatement}{-3, -9}
+\begin{class}{ExpressionStatement}{-3, -13}
 \implement{Statement}
+\attribute{expression : Expression}
 \end{class}
 
-\begin{class}{FunctionCallExpression}{3, -9}
+\begin{class}{FunctionCallExpression}{3, -13}
 \implement{Expression}
+\attribute{functionName : String}
+\attribute{arguments : ArgumentsExpression}
 \end{class}
 
-\begin{class}{BinaryExpression}{6, -7}
+\begin{class}{BinaryExpression}{6, -9}
 \implement{Expression}
+\attribute{leftExpression : expression }
+\attribute{rightExpression : expression }
+\attribute{operator : Operator}
 \end{class}
 
 \begin{class}{ValueExpression}{9, -5}
 \implement{Expression}
+\attribute{value : Object}
+\attribute{type : ValueType}
 \end{class}
 
 \end{tikzpicture}
 }
-\caption{Graf dziedziczenia interfejsów i klas drzewa syntaktycznego.}
+\caption{Diagram dziedziczenia interfejsów i klas drzewa syntaktycznego.}
 \label{fig:ast-uml}
 \end{figure}
-\ksremark{Rys. \ref{fig:ast-uml}: graf → diagram.}
 
 \begin{figure}
 \begin{lstlisting}

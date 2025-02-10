@@ -84,7 +84,6 @@ ptr<Integer> i = 0;
 i = i + 1;
 \end{lstlisting}
 Z perspektywy programisty operacje na wskaźnikach wyglądają tak samo jak operacje na zmiennych.
-\ksremark{Czy jest możliwe utworzenie drugiego wskaźnika do tego samego obszaru pamięci?} \textit{(Tak)}
 
 Wskaźniki umożliwiają także na przypisanie oraz zmianę wartości bez alokacji pamięci właściwej. Wykorzystywany jest do tego operator \lstinline|<-| służący do przypisywania i zmiany adresów zmiennych wskaźnikowych. Poniższy przykład przedstawia przypisanie wartości do portów wejścia-wyjścia mikrokontrolera ATmega328P. Adresy dla portów B (\lstinline|PORTB|) i C (\lstinline|PORTC|) równe są ich lokalizacji w przestrzeni adresowej mikrokontrolera\cite{ATmega328P8bitAVR}.
 \begin{lstlisting}
@@ -221,7 +220,6 @@ scope Aux {
 	}
 }
 \end{lstlisting}
-\ksremark{Można użyć przestrzeni nazw, która będzie zdefiniowana później?} \textit{Tak}
 
 \subsection{Praca z wieloma plikami źródłowymi}
 Pliki źródłowe mogą być łączone między sobą poprzez użycie słowa kluczowego \lstinline|import|:
