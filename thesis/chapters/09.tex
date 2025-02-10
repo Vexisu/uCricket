@@ -91,7 +91,7 @@ func {return UCricketParser.Lexer.FUNC;}
 %left '*' '/'
 %right ARITHM_NEGATION LOGICAL_NEGATION
 \end{lstlisting}
-\caption{Definicja priorytetów operacji w analizatorze syntaktycznym}
+\caption{Definicja priorytetów i łączności operacji w analizatorze syntaktycznym}
 \label{fig:lst:parser-priorytety}
 \end{figure}
 
@@ -126,6 +126,13 @@ pointerStatement:
     |   PTR returnedType IDENTIFIER ASSIGN_ADDRESS expression ';' { $$ = new PointerStatement($2, $<String>3, AssignmentType.ADDRESS, $5); }
 ;
 ...
+\end{lstlisting}
+\caption{Przykładowy fragment gramatyki definiowanej w języku uCricket (część 1)}
+\label{fig:lst:parser-gramatyka}
+\end{figure} 
+
+\begin{figure}
+\begin{lstlisting}
 expression:
         binary
     |   unary
@@ -148,6 +155,13 @@ binary:
     |   expression '|' expression { $$ = new BinaryExpression($1, BinaryExpression.Operator.OR, $3); }
     |   expression '^' expression { $$ = new BinaryExpression($1, BinaryExpression.Operator.XOR, $3); }
 ;
+\end{lstlisting}
+\caption{Przykładowy fragment gramatyki definiowanej w języku uCricket (część 2)}
+\label{fig:lst:parser-gramatyka:2}
+\end{figure} 
+
+\begin{figure}
+\begin{lstlisting}
 
 unary:
         '(' expression ')' { $$ = new UnaryExpression($2, UnaryExpression.Type.PARENTHESIS); }
@@ -157,8 +171,8 @@ unary:
 ...
 %%
 \end{lstlisting}
-\caption{Przykładowy fragment gramatyki definiowanej w języku uCricket}
-\label{fig:lst:parser-gramatyka}
+\caption{Przykładowy fragment gramatyki definiowanej w języku uCricket (część 3)}
+\label{fig:lst:parser-gramatyka:3}
 \end{figure}
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
